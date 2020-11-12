@@ -1,39 +1,86 @@
 import * as React from "react";
 import ForceGraph2D from 'react-force-graph-2d';
 
+
+var data = [];
 class ForceGraph extends React.Component{
-    
+  constructor(props) {
+    super(props);
+    this.state = {infectedVertices: []};
+  }
+
+  getMinContagiousSet = () => {
+    this.props.data.findMinimalContagiousSet(2)
+                  .then(infectedVerts => this.setState({
+                  infectedVertices: infectedVerts},
+                  () => {
+                    console.log(this.state);
+                  }
+    ))
+  };
+
+  getGreedyContagiousSet = () => {
+    this.props.data.findContagiousSetGreedily(2)
+                  .then(infectedVerts => this.setState({
+                  infectedVertices: infectedVerts},
+                  () => {
+                    console.log(this.state);
+                  }
+    ))
+  };
+
+  resetInfections = () => {
+    data = setUpData(this.props.data);
+    for(var v in data.nodes){
+      data.nodes[v].infected = false;
+    }
+    this.setState({
+      infectedVertices: []},
+      () => {
+        console.log(this.state);
+      })
+  };
+
+  percolationIteration = () => {
+    this.props.data.activateVertex(1);
+    this.props.data.activateVertex(2);
+    this.props.data.bootstrapPercolationIteration(2);
+    this.setState({
+      infectedVertices: Array.from(this.props.data.activeVertices)},
+      () => {
+        console.log(this.state);
+      }
+)
+  }
+
+
     render() {
-        var data = setUpData(this.props.data);
-        // data.nodes = [
-        //             {"id": "0", "infected": true},
-        //             {"id": "1", "infected": false},
-        //             {"id": "2", "infected": true},
-        //             {"id": "3", "infected": false},
-        //             {"id": "4", "infected": false},
-        //             {"id": "5", "infected": true},
-        //             {"id": "6", "infected": false}
-        //         ]
-        // data.links = [
-        //             {"source": "0", "target": "1"},
-        //             {"source": "0", "target": "2"},
-        //             {"source": "1", "target": "4"},
-        //             {"source": "2", "target": "3"},
-        //             {"source": "2", "target": "4"},
-        //             {"source": "2", "target": "5"},
-        //             {"source": "3", "target": "6"},
-        //             {"source": "4", "target": "5"}
-        //         ]
-        return <ForceGraph2D graphData={data}
+      data = setUpData(this.props.data);
+      for(var v in data.nodes){
+        data.nodes[v].infected = false;
+      }
+      var infected = Array.from(this.state.infectedVertices);
+      for(var v in infected){
+        data.nodes[v].infected = true;
+      }
+      console.log(infected);
+        return <div>
+          <button onClick={this.resetInfections}>Reset</button>
+          <button onClick={this.getMinContagiousSet}>Get Minimum Contagious Set</button>
+          <button onClick={this.getGreedyContagiousSet}>Get Contagious Set Greedily</button>
+          <button onClick={this.percolationIteration}>Bootstrap Percolate!</button>
+          <ForceGraph2D graphData={data}
                 nodeColor={d => d.infected ? "red" : "green"}
                 linkOpacity={0.5}	
                 linkWidth={3}
-                />;
+                />
+                </div>;
     }
 
 
   }
-function setUpData(data){
+
+  function setUpData(data){
   // constructing nodes data for simulation
     var nodes = []
     for(var i of data.getVertices()){
@@ -55,5 +102,7 @@ function setUpData(data){
     }
     return { nodes, links };
 }
+
+
 
 export default ForceGraph;

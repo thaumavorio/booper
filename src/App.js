@@ -9,6 +9,7 @@ var i = 0;
 var datas = []
 function App() {
   setUpGraphs();
+  console.log(datas[0]);
   var g = new Graph();
   const [data, setData] = useState(g);
 
@@ -20,6 +21,7 @@ function App() {
       setData(datas[i++%3]);
       if(i === datas.length) i = 0;
   }
+
 
   return (
     <div className="App">
