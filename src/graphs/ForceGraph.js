@@ -34,6 +34,7 @@ class ForceGraph extends React.Component{
     for(var v in data.nodes){
       data.nodes[v].infected = false;
     }
+    this.props.data.deactivateAllVertices();
     this.setState({
       infectedVertices: []},
       () => {

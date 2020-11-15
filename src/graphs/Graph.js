@@ -29,6 +29,10 @@ export default class Graph {
       return this.activeVertices.add(v);
     }
 
+    deactivateAllVertices() {
+      this.activeVertices.clear();
+    }
+
     bootstrapPercolationIteration(threshold) {
       const vertices = this.getVertices();
       const infectedVertices = new Set();
