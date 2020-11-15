@@ -31,6 +31,7 @@ export default class Graph {
 
     bootstrapPercolationIteration(threshold) {
       const vertices = this.getVertices();
+      const infectedVertices = new Set();
 
       for (let v of vertices) {
         console.log("Looking at", v);
@@ -53,8 +54,11 @@ export default class Graph {
 
         if (threshold <= count) {
           console.log("\tIt is thus infected.");
-          this.activeVertices.add(v);
+          infectedVertices.add(v);
         }
+      }
+      for(const vertex of infectedVertices) {
+        this.activateVertex(vertex);
       }
     }
 
