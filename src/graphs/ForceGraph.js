@@ -61,7 +61,7 @@ class ForceGraph extends React.Component{
         data.nodes[v].infected = false;
       }
       var infected = Array.from(this.state.infectedVertices);
-      for(var v in infected){
+      for(var v of infected){
         data.nodes[v].infected = true;
       }
       console.log(infected);
