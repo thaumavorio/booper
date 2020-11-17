@@ -9,6 +9,7 @@ let graph2 = graphs[1];
 let graph3 = graphs[2];
 
 class ForceGraph extends React.Component{
+
   state = {
       graph: graph2
   };
