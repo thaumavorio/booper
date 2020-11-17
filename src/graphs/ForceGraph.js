@@ -1,77 +1,57 @@
 import * as React from "react";
 import ForceGraph2D from 'react-force-graph-2d';
+import Graph from "./Graph";
 
 
-var data = [];
+let graphs = setUpGraphs();
+let graph1 = graphs[0];
+let graph2 = graphs[1];
+let graph3 = graphs[2];
+
 class ForceGraph extends React.Component{
-  constructor(props) {
-    super(props);
-    this.state = {infectedVertices: []};
-  }
+  state = {
+      graph: graph2
+  };
 
   getMinContagiousSet = () => {
-    this.props.data.findMinimalContagiousSet(2)
-                  .then(infectedVerts => this.setState({
-                  infectedVertices: infectedVerts},
-                  () => {
-                    console.log(this.state);
-                  }
+    this.state.graph.findMinimalContagiousSet(2)
+                      .then(infectedVerts => this.setState((state) => ({
+                      graph: state.graph.activateVertices(infectedVerts)}),
+                          () => { console.log(this.state.graph.getGraphData()) }
     ))
   };
 
-  getGreedyContagiousSet = () => {
-    this.props.data.findContagiousSetGreedily(2)
-                  .then(infectedVerts => this.setState({
-                  infectedVertices: infectedVerts},
-                  () => {
-                    console.log(this.state);
-                  }
-    ))
-  };
+    getGreedyContagiousSet = () => {
+        this.state.graph.findContagiousSetGreedily(2)
+            .then(infectedVerts => this.setState((state) => ({
+                graph: state.graph.activateVertices(infectedVerts)})
+            ))
+    };
 
   resetInfections = () => {
-    data = setUpData(this.props.data);
-    for(var v in data.nodes){
-      data.nodes[v].infected = false;
-    }
-    this.props.data.deactivateAllVertices();
-    this.setState({
-      infectedVertices: []},
-      () => {
-        console.log(this.state);
-      })
+    this.state.graph.deactivateAllVertices();
+    this.setState( (state) => ({
+      graph: state.graph
+    }));
   };
 
   percolationIteration = () => {
-    this.props.data.activateVertex(1);
-    this.props.data.activateVertex(2);
-    this.props.data.bootstrapPercolationIteration(2);
-    this.setState({
-      infectedVertices: Array.from(this.props.data.activeVertices)},
-      () => {
-        console.log(this.state);
-      }
-)
+    this.setState( function(state) {
+        return { graph: state.graph.bootstrapPercolationIteration(2) };
+      });
   }
 
 
     render() {
-      data = setUpData(this.props.data);
-      for(var v in data.nodes){
-        data.nodes[v].infected = false;
-      }
-      var infected = Array.from(this.state.infectedVertices);
-      for(var v of infected){
-        data.nodes[v].infected = true;
-      }
-      console.log(infected);
+      console.log(this.state.graph.getGraphData());
         return <div>
           <button onClick={this.resetInfections}>Reset</button>
           <button onClick={this.getMinContagiousSet}>Get Minimum Contagious Set</button>
           <button onClick={this.getGreedyContagiousSet}>Get Contagious Set Greedily</button>
           <button onClick={this.percolationIteration}>Bootstrap Percolate!</button>
-          <ForceGraph2D graphData={data}
+          <ForceGraph2D graphData={this.state.graph.getGraphData()}
                 nodeColor={d => d.infected ? "red" : "green"}
+                nodeLabel={d => d.id}
                 linkOpacity={0.5}	
                 linkWidth={3}
                 />
@@ -81,29 +61,72 @@ class ForceGraph extends React.Component{
 
   }
 
-  function setUpData(data){
-  // constructing nodes data for simulation
-    var nodes = []
-    for(var i of data.getVertices()){
-        var node = {}
-        node.id = i;
-        node.infected = false;
-        nodes[nodes.length] = node;
-    }
+function setUpGraphs(){
+    var graph1 = new Graph();
+    graph1.addVertex(0);
+    graph1.addVertex(1);
+    graph1.addVertex(2);
+    graph1.addVertex(3);
+    graph1.addVertex(4);
+    graph1.addVertex(5);
+    graph1.addVertex(6);
 
-    // constructing links data for simulation
-    var links = []
-    for(var i of data.getVertices()){
-        for(var j of data.getNeighbors(i)){
-            var link = {};
-            link.source = i;
-            link.target = j;
-            links[links.length] = link;
-        }
-    }
-    return { nodes, links };
+    graph1.activateVertex(1);
+    graph1.activateVertex(2);
+
+    graph1.addEdge(0, 1);
+    graph1.addEdge(0, 2);
+    graph1.addEdge(1, 4);
+    graph1.addEdge(2, 3);
+    graph1.addEdge(2, 4);
+    graph1.addEdge(2, 5);
+    graph1.addEdge(3, 6);
+    graph1.addEdge(4, 5);
+
+    var graph2 = new Graph();
+    graph2.addVertex(0);
+    graph2.addVertex(1);
+    graph2.addVertex(2);
+    graph2.addVertex(3);
+    graph2.addVertex(4);
+    graph2.addVertex(5);
+    graph2.addVertex(6);
+
+    graph2.activateVertex(0);
+    graph2.activateVertex(1);
+    graph2.activateVertex(5);
+    graph2.activateVertex(6);
+
+    graph2.addEdge(0, 3);
+    graph2.addEdge(1, 2);
+    graph2.addEdge(1, 4);
+    graph2.addEdge(2, 4);
+    graph2.addEdge(2, 3);
+    graph2.addEdge(2, 5);
+    graph2.addEdge(3, 6);
+
+    var graph3 = new Graph();
+    graph3.addVertex(0);
+    graph3.addVertex(1);
+    graph3.addVertex(2);
+    graph3.addVertex(3);
+    graph3.addVertex(4);
+    graph3.addVertex(5);
+    graph3.addVertex(6);
+
+    graph3.addEdge(0, 1);
+    graph3.addEdge(0, 2);
+    graph3.addEdge(1, 5);
+    graph3.addEdge(2, 3);
+    graph3.addEdge(2, 4);
+    graph3.addEdge(2, 5);
+    graph3.addEdge(2, 6);
+    graph3.addEdge(3, 6);
+    graph3.addEdge(4, 2);
+    graph3.addEdge(5, 6);
+
+    return [graph1, graph2, graph3];
 }
-
 
 
 export default ForceGraph;
