@@ -1,18 +1,22 @@
 import * as React from "react";
 import ForceGraph2D from 'react-force-graph-2d';
 import Graph from "./Graph";
+import update from 'immutability-helper';
 
 
 let graphs = setUpGraphs();
 let graph1 = graphs[0];
 let graph2 = graphs[1];
 let graph3 = graphs[2];
-
 class ForceGraph extends React.Component{
 
-  state = {
-      graph: graph2
-  };
+    constructor(props) {
+        super(props);
+        this.state = {
+            graph: graph1
+        };
+    }
+
 
   getMinContagiousSet = () => {
     this.state.graph.findMinimalContagiousSet(2)
@@ -37,14 +41,15 @@ class ForceGraph extends React.Component{
   };
 
   percolationIteration = () => {
-    this.setState( function(state) {
-        return { graph: state.graph.bootstrapPercolationIteration(2) };
+      const g = update(this.state.graph, {$set: this.state.graph.bootstrapPercolationIteration(2)})
+      this.setState( {
+              graph: g
       });
   }
 
 
     render() {
-      console.log(this.state.graph.getGraphData());
+      console.log("render graph data: " + JSON.stringify(this.state.graph.getGraphData().nodes));
         return <div>
           <button onClick={this.resetInfections}>Reset</button>
           <button onClick={this.getMinContagiousSet}>Get Minimum Contagious Set</button>
@@ -63,7 +68,7 @@ class ForceGraph extends React.Component{
   }
 
 function setUpGraphs(){
-    var graph1 = new Graph();
+    let graph1 = new Graph();
     graph1.addVertex(0);
     graph1.addVertex(1);
     graph1.addVertex(2);
@@ -84,7 +89,7 @@ function setUpGraphs(){
     graph1.addEdge(3, 6);
     graph1.addEdge(4, 5);
 
-    var graph2 = new Graph();
+    let graph2 = new Graph();
     graph2.addVertex(0);
     graph2.addVertex(1);
     graph2.addVertex(2);
@@ -106,7 +111,7 @@ function setUpGraphs(){
     graph2.addEdge(2, 5);
     graph2.addEdge(3, 6);
 
-    var graph3 = new Graph();
+    let graph3 = new Graph();
     graph3.addVertex(0);
     graph3.addVertex(1);
     graph3.addVertex(2);
