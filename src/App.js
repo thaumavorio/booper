@@ -10,8 +10,7 @@ var datas = []
 function App() {
   setUpGraphs();
   console.log(datas[0]);
-  var g = new Graph();
-  const [data, setData] = useState(g);
+  const [data, setData] = useState(datas[0]);
 
   useEffect(() => {
       changeData();

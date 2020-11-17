@@ -6,7 +6,9 @@ var data = [];
 class ForceGraph extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {infectedVertices: []};
+    this.props.data.activateVertex(1);
+    this.props.data.activateVertex(2);
+    this.state = {infectedVertices: [1, 2]};
   }
 
   getMinContagiousSet = () => {
@@ -43,8 +45,6 @@ class ForceGraph extends React.Component{
   };
 
   percolationIteration = () => {
-    this.props.data.activateVertex(1);
-    this.props.data.activateVertex(2);
     this.props.data.bootstrapPercolationIteration(2);
     this.setState({
       infectedVertices: Array.from(this.props.data.activeVertices)},
