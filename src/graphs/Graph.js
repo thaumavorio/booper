@@ -126,6 +126,7 @@ export default class Graph {
 
                 if (v < n && oldEdge !== undefined) {
                     edges.push({...oldEdge, ...edge});
+                    edges[edges.length - 1].index = edges.length - 1; // TODO: necessary?
                 } else if (v < n) {
                     edges.push(edge);
                 }
