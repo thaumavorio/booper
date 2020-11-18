@@ -104,17 +104,34 @@ export default class Graph {
     }
 
     // retrieves formatted graph data for ForceGraph
-    getGraphData() {
+    getGraphData(oldData = {nodes: [], links: []}) {
         let nodes = [];
         let edges = [];
         for (let v of this.getVertices()) {
-            nodes.push({"id": v, "infected": this.activeVertices.has(v.toString())});
+            let node = {"id": v, "infected": this.activeVertices.has(v.toString())};
+            let oldNode = oldData.nodes.find(nod => nod.id === v);
+
+            if (oldNode !== undefined) {
+                nodes.push({...oldNode, ...node});
+                nodes[nodes.length - 1].index = nodes.length - 1; // TODO: necessary?
+            } else {
+                nodes.push(node);
+            }
+        }
+
+        for (let v of this.getVertices()) { // TODO: convert to iterator over edges some day
             for (let n of this.getNeighbors(v)) {
-                if (v < n) {
-                    edges.push({"source": v, "target": n});
+                let edge = {"source": nodes[v], "target": nodes[n]};
+                let oldEdge = oldData.links.find(link => link.source.id === v && link.target.id === n);
+
+                if (v < n && oldEdge !== undefined) {
+                    edges.push({...oldEdge, ...edge});
+                } else if (v < n) {
+                    edges.push(edge);
                 }
             }
         }
+
         return {"nodes": nodes, "links": edges};
     }
   }

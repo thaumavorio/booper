@@ -9,11 +9,11 @@ let graph1 = graphs[0];
 let graph2 = graphs[1];
 let graph3 = graphs[2];
 class ForceGraph extends React.Component{
-
     constructor(props) {
         super(props);
         this.state = {
-            graph: graph1
+            graph: graph1,
+            forceData: graph1.getGraphData()
         };
     }
 
@@ -23,7 +23,7 @@ class ForceGraph extends React.Component{
           .then(infectedVerts => this.setState(function(state){
             const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
             g.activateVertices(infectedVerts);
-            return { graph: g};
+            return { graph: g, forceData: g.getGraphData(state.forceData) };
           }));
     };
 
@@ -32,32 +32,34 @@ class ForceGraph extends React.Component{
             .then(infectedVerts => this.setState(function(state){
                 const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
                 g.activateVertices(infectedVerts);
-                return { graph: g};
+                return { graph: g, forceData: g.getGraphData(state.forceData) };
             }));
     };
 
   resetInfections = () => {
     this.state.graph.deactivateAllVertices();
-    this.setState( (state) => ({
-      graph: state.graph
-    }));
+    this.setState(state =>
+            ({ graph: state.graph, forceData: state.graph.getGraphData(state.forceData) })
+    );
   };
 
   percolationIteration = () => {
       const g = update(this.state.graph, {$set: this.state.graph.bootstrapPercolationIteration(2)})
-      this.setState( {
-              graph: g
-      });
+      this.setState(state =>
+            ({ graph: g, forceData: g.getGraphData(state.forceData) })
+      );
   }
 
 
+
     render() {
+        console.log(this.state)
         return <div>
           <button onClick={this.resetInfections}>Reset</button>
           <button onClick={this.getMinContagiousSet}>Get Minimum Contagious Set</button>
           <button onClick={this.getGreedyContagiousSet}>Get Contagious Set Greedily</button>
           <button onClick={this.percolationIteration}>Bootstrap Percolate!</button>
-          <ForceGraph2D graphData={this.state.graph.getGraphData()}
+          <ForceGraph2D graphData={this.state.forceData}
                 nodeColor={d => d.infected ? "red" : "green"}
                 linkOpacity={0.5}
                 linkWidth={3}
