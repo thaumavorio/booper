@@ -3,24 +3,24 @@ export default class Graph {
       this.adj = new Map();
       this.activeVertices = new Set();
     }
-  
+
     addVertex(v) {
       this.adj.set(v, new Set());
     }
-  
+
     addEdge(u, v) {
       this.adj.get(u).add(v);
       this.adj.get(v).add(u);
     }
-  
+
     getVertices() {
       return this.adj.keys();
     }
-  
+
     getNeighbors(v) {
       return this.adj.get(v);
     }
-  
+
     getDegree(v) {
       return this.getNeighbors(v).size;
     }
@@ -33,7 +33,6 @@ export default class Graph {
     activateVertices(vs) {
         let v;
         for (v of vs) {
-            console.log("Activate Vertices call: " + v.toString());
             this.activateVertex(v);
         }
         return this;
@@ -107,10 +106,7 @@ export default class Graph {
     getGraphData() {
         let nodes = [];
         let edges = [];
-        console.log("getGraphData: " + Array.from(this.activeVertices));
-        console.log("getVertices: " + Array.from(this.getVertices()));
         for (let v of this.getVertices()) {
-            console.log("v: " + v);
             nodes.push({"id": v, "infected": this.activeVertices.has(v.toString())});
             for (let n of this.getNeighbors(v)) {
                 if (v < n) {

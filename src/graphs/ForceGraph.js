@@ -20,17 +20,18 @@ class ForceGraph extends React.Component{
 
   getMinContagiousSet = () => {
     this.state.graph.findMinimalContagiousSet(2)
-                      .then(infectedVerts => this.setState((state) => ({
-                      graph: state.graph.activateVertices(infectedVerts)}),
-                          () => { console.log(this.state.graph.getGraphData()) }
-    ))
-  };
+          .then(infectedVerts => this.setState(function(state){
+              const g = update(state.graph, {$set: state.graph.activateVertices(infectedVerts)})
+              return { graph: g};
+          }))
+    };
 
-    getGreedyContagiousSet = () => {
+  getGreedyContagiousSet = () => {
         this.state.graph.findContagiousSetGreedily(2)
-            .then(infectedVerts => this.setState((state) => ({
-                graph: state.graph.activateVertices(infectedVerts)})
-            ))
+            .then(infectedVerts => this.setState(function(state){
+                const g = update(state.graph, {$set: state.graph.activateVertices(infectedVerts)})
+                return { graph: g};
+            }))
     };
 
   resetInfections = () => {
@@ -49,7 +50,6 @@ class ForceGraph extends React.Component{
 
 
     render() {
-      console.log("render graph data: " + JSON.stringify(this.state.graph.getGraphData().nodes));
         return <div>
           <button onClick={this.resetInfections}>Reset</button>
           <button onClick={this.getMinContagiousSet}>Get Minimum Contagious Set</button>
@@ -57,8 +57,7 @@ class ForceGraph extends React.Component{
           <button onClick={this.percolationIteration}>Bootstrap Percolate!</button>
           <ForceGraph2D graphData={this.state.graph.getGraphData()}
                 nodeColor={d => d.infected ? "red" : "green"}
-                nodeLabel={d => d.id}
-                linkOpacity={0.5}	
+                linkOpacity={0.5}
                 linkWidth={3}
                 />
                 </div>;
