@@ -21,17 +21,19 @@ class ForceGraph extends React.Component{
   getMinContagiousSet = () => {
     this.state.graph.findMinimalContagiousSet(2)
           .then(infectedVerts => this.setState(function(state){
-              const g = update(state.graph, {$set: state.graph.activateVertices(infectedVerts)})
-              return { graph: g};
-          }))
+            const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
+            g.activateVertices(infectedVerts);
+            return { graph: g};
+          }));
     };
 
   getGreedyContagiousSet = () => {
         this.state.graph.findContagiousSetGreedily(2)
             .then(infectedVerts => this.setState(function(state){
-                const g = update(state.graph, {$set: state.graph.activateVertices(infectedVerts)})
+                const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
+                g.activateVertices(infectedVerts);
                 return { graph: g};
-            }))
+            }));
     };
 
   resetInfections = () => {
