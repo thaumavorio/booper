@@ -40,6 +40,7 @@ export default class Graph {
 
     deactivateAllVertices() {
       this.activeVertices.clear();
+      return this;
     }
 
     bootstrapPercolationIteration(threshold) {
