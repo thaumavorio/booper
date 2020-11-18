@@ -23,7 +23,7 @@ class ForceGraph extends React.Component{
           .then(infectedVerts => this.setState(function(state){
             const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
             g.activateVertices(infectedVerts);
-              return { graph: g};
+            return { graph: g};
           }));
     };
 
