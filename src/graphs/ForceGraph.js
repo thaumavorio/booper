@@ -2,7 +2,7 @@ import * as React from "react";
 import ForceGraph2D from 'react-force-graph-2d';
 import Graph from "./Graph";
 import update from 'immutability-helper';
-import { Button, ButtonGroup } from '@material-ui/core';
+import { Box, Button, ButtonGroup } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 
@@ -64,23 +64,27 @@ class ForceGraph extends React.Component{
 
   render() {
       return <div>
-          <ButtonGroup
-              orientation="vertical"
-              color = "Primary"
-              aria-label = "vertical contained primary button group"
-              variant = "text"
-          >
-              <Button color = "Primary" onClick={this.resetInfections}>Reset</Button>
-              <Button color = "Primary" onClick={this.getMinContagiousSet}>Get Minimum Contagious Set</Button>
-              <Button color = "Primary" onClick={this.getGreedyContagiousSet}>Get Contagious Set Greedily</Button>
-              <Button color = "Primary" onClick={this.percolationIteration}>Bootstrap Percolate!</Button>
-          </ButtonGroup>
-          <ForceGraph2D graphData={this.state.graph.getGraphData()}
-                nodeColor={d => d.infected ? "#f65868" : "#5375e2"}
-                linkOpacity={0.5}
-                linkWidth={3}
-                backgroundColor="#fefefe"
-                />
+          <Box display="flex" flexDirection="row">
+              <Box component="span" display="flex" flexWrap="wrap" alignContent="center" m={1} p={1}>
+                  <ButtonGroup
+                      orientation="vertical"
+                      color = "Primary"
+                      aria-label = "vertical contained primary button group"
+                      variant = "text"
+                  >
+                      <Button color = "Primary" onClick={this.resetInfections}>Reset</Button>
+                      <Button color = "Primary" onClick={this.getMinContagiousSet}>Get Minimum Contagious Set</Button>
+                      <Button color = "Primary" onClick={this.getGreedyContagiousSet}>Get Contagious Set Greedily</Button>
+                      <Button color = "Primary" onClick={this.percolationIteration}>Bootstrap Percolate!</Button>
+                  </ButtonGroup>
+              </Box>
+              <ForceGraph2D graphData={this.state.graph.getGraphData()}
+                    nodeColor={d => d.infected ? "#f65868" : "#5375e2"}
+                    linkOpacity={0.5}
+                    linkWidth={3}
+                    backgroundColor="#fefefe"
+                    />
+          </Box>
                 </div>;
   }
 
