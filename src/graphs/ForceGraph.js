@@ -65,43 +65,39 @@ class ForceGraph extends React.Component{
   render() {
       return <div>
           <Box display="flex" flexDirection="row">
-              <Box component="span" display="flex" flexWrap="wrap" alignContent="center" m={1} p={1}>
+              <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" alignContent="center" color="Secondary" m={1} p={1}>
+                  <br/>
+                  <br/>
+                  <h3>GRAPH SETTINGS</h3>
+                  <Button color = "Primary" variant="outlined" onClick={this.resetInfections}>Reset</Button>
+                  <br/>
+                  <br/>
+                  <Divider variant = "middle" color = "Secondary"/>
+                  <br/>
+                  <br/>
+                  <h3>CONTAGIOUS SETS</h3>
                   <ButtonGroup
-                      orientation="vertical"
+                      orientation="horizontal"
                       color = "Primary"
-                      aria-label = "vertical outlined primary button group"
+                      aria-label = "horizontal outlined primary button group"
                       variant = "outlined"
                   >
-                      <h3 color = "Secondary">GRAPH SETTINGS</h3>
-                      <Button color = "Primary" onClick={this.resetInfections}>Reset</Button>
-                      <br/>
-                      <br/>
-                      <Divider variant = "middle" color = "Secondary"/>
-                      <br/>
-                      <br/>
-                      <h3>CONTAGIOUS SETS</h3>
-                      <ButtonGroup
-                          orientation="horizontal"
-                          color = "Primary"
-                          aria-label = "horizontal outlined primary button group"
-                          variant = "outlined"
-                      >
-                          <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getMinContagiousSet}>Minimum Contagious Set</Button>
-                          <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>Greedy Contagious Set</Button>
-                      </ButtonGroup>
-                      <br/>
-                      <br/>
-                      <Divider variant = "middle" color = "Secondary"/>
-                      <br/>
-                      <br/>
-                      <h3>BOOTSTRAP PERCOLATION</h3>
-                      <Button color = "Primary" onClick={this.percolationIteration}>Percolation Step</Button>
+                      <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getMinContagiousSet}>Minimum Contagious Set</Button>
+                      <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>Greedy Contagious Set</Button>
                   </ButtonGroup>
+                  <br/>
+                  <br/>
+                  <Divider variant = "middle" color = "Secondary"/>
+                  <br/>
+                  <br/>
+                  <h3>BOOTSTRAP PERCOLATION</h3>
+                  <Button color = "Primary" variant="outlined" onClick={this.percolationIteration}>Percolation Step</Button>
               </Box>
               <ForceGraph2D graphData={this.state.forceData}
                     nodeColor={d => d.infected ? "#f65868" : "#5375e2"}
-                    linkOpacity={0.5}
-                    linkWidth={3}
+                    linkColor="#5c616e"
+                    linkOpacity={0.7}
+                    linkWidth={3.5}
                     backgroundColor="#fefefe"
               />
           </Box>

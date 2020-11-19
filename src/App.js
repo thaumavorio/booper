@@ -10,9 +10,7 @@ function App() {
     <div className="App">
         <ThemeProvider theme={theme}>
             <CssBaseline />
-                <Box component="span" m={1}>
-                    <ForceGraph/>
-                </Box>
+                <ForceGraph/>
         </ThemeProvider>
     </div>
   );
