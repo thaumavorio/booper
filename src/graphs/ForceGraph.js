@@ -98,7 +98,7 @@ class ForceGraph extends React.Component{
                       <Button color = "Primary" onClick={this.percolationIteration}>Percolation Step</Button>
                   </ButtonGroup>
               </Box>
-              <ForceGraph2D graphData={this.state.graph.getGraphData()}
+              <ForceGraph2D graphData={this.state.forceData}
                     nodeColor={d => d.infected ? "#f65868" : "#5375e2"}
                     linkOpacity={0.5}
                     linkWidth={3}
