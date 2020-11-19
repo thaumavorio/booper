@@ -2,7 +2,7 @@ import * as React from "react";
 import ForceGraph2D from 'react-force-graph-2d';
 import Graph from "./Graph";
 import update from 'immutability-helper';
-import { Box, Button, ButtonGroup } from '@material-ui/core';
+import { Box, Button, ButtonGroup, Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 
@@ -69,13 +69,33 @@ class ForceGraph extends React.Component{
                   <ButtonGroup
                       orientation="vertical"
                       color = "Primary"
-                      aria-label = "vertical contained primary button group"
-                      variant = "text"
+                      aria-label = "vertical outlined primary button group"
+                      variant = "outlined"
                   >
+                      <h3 color = "Secondary">GRAPH SETTINGS</h3>
                       <Button color = "Primary" onClick={this.resetInfections}>Reset</Button>
-                      <Button color = "Primary" onClick={this.getMinContagiousSet}>Get Minimum Contagious Set</Button>
-                      <Button color = "Primary" onClick={this.getGreedyContagiousSet}>Get Contagious Set Greedily</Button>
-                      <Button color = "Primary" onClick={this.percolationIteration}>Bootstrap Percolate!</Button>
+                      <br/>
+                      <br/>
+                      <Divider variant = "middle" color = "Secondary"/>
+                      <br/>
+                      <br/>
+                      <h3>CONTAGIOUS SETS</h3>
+                      <ButtonGroup
+                          orientation="horizontal"
+                          color = "Primary"
+                          aria-label = "horizontal outlined primary button group"
+                          variant = "outlined"
+                      >
+                          <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getMinContagiousSet}>Minimum Contagious Set</Button>
+                          <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>Greedy Contagious Set</Button>
+                      </ButtonGroup>
+                      <br/>
+                      <br/>
+                      <Divider variant = "middle" color = "Secondary"/>
+                      <br/>
+                      <br/>
+                      <h3>BOOTSTRAP PERCOLATION</h3>
+                      <Button color = "Primary" onClick={this.percolationIteration}>Percolation Step</Button>
                   </ButtonGroup>
               </Box>
               <ForceGraph2D graphData={this.state.graph.getGraphData()}

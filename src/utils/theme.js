@@ -20,7 +20,7 @@ let theme = createMuiTheme({
         },
         background: {
             main: '#fefefe'
-        }
+        },
     }
 })
 
