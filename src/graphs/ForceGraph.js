@@ -21,11 +21,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 class ForceGraph extends React.Component{
-
     constructor(props) {
         super(props);
         this.state = {
-            graph: graph1
+            graph: graph1,
+            forceData: graph1.getGraphData()
         };
     }
 
@@ -35,7 +35,7 @@ class ForceGraph extends React.Component{
           .then(infectedVerts => this.setState(function(state){
             const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
             g.activateVertices(infectedVerts);
-            return { graph: g};
+            return { graph: g, forceData: g.getGraphData(state.forceData) };
           }));
     };
 
@@ -44,22 +44,22 @@ class ForceGraph extends React.Component{
             .then(infectedVerts => this.setState(function(state){
                 const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
                 g.activateVertices(infectedVerts);
-                return { graph: g};
+                return { graph: g, forceData: g.getGraphData(state.forceData) };
             }));
     };
 
   resetInfections = () => {
     this.state.graph.deactivateAllVertices();
-    this.setState( (state) => ({
-      graph: state.graph
-    }));
+    this.setState(state =>
+            ({ graph: state.graph, forceData: state.graph.getGraphData(state.forceData) })
+    );
   };
 
   percolationIteration = () => {
       const g = update(this.state.graph, {$set: this.state.graph.bootstrapPercolationIteration(2)})
-      this.setState( {
-              graph: g
-      });
+      this.setState(state =>
+            ({ graph: g, forceData: g.getGraphData(state.forceData) })
+      );
   }
 
   render() {
@@ -103,9 +103,9 @@ class ForceGraph extends React.Component{
                     linkOpacity={0.5}
                     linkWidth={3}
                     backgroundColor="#fefefe"
-                    />
+              />
           </Box>
-                </div>;
+      </div>;
   }
 
 
