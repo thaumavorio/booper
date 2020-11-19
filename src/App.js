@@ -1,19 +1,21 @@
-import logo from './logo.svg';
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ForceGraph from './graphs/ForceGraph.js';
-import Graph from './graphs/Graph.js';
-
-
+import { Box, CssBaseline } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/core/styles";
+import theme from "./utils/theme";
 
 function App() {
-  return (
+    return (
     <div className="App">
-      <ForceGraph />
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+                <Box component="span" m={1}>
+                    <ForceGraph/>
+                </Box>
+        </ThemeProvider>
     </div>
   );
 }
-
-
 
 export default App;

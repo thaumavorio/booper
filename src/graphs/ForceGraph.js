@@ -2,6 +2,7 @@ import * as React from "react";
 import ForceGraph2D from 'react-force-graph-2d';
 import Graph from "./Graph";
 import update from 'immutability-helper';
+import {Button} from "@material-ui/core";
 
 
 let graphs = setUpGraphs();
@@ -50,20 +51,20 @@ class ForceGraph extends React.Component{
       });
   }
 
-
-    render() {
-        return <div>
-          <button onClick={this.resetInfections}>Reset</button>
-          <button onClick={this.getMinContagiousSet}>Get Minimum Contagious Set</button>
-          <button onClick={this.getGreedyContagiousSet}>Get Contagious Set Greedily</button>
-          <button onClick={this.percolationIteration}>Bootstrap Percolate!</button>
+  render() {
+      return <div>
+          <Button color = "Primary" onClick={this.resetInfections}>Reset</Button>
+          <Button color = "Primary" onClick={this.getMinContagiousSet}>Get Minimum Contagious Set</Button>
+          <Button color = "Primary" onClick={this.getGreedyContagiousSet}>Get Contagious Set Greedily</Button>
+          <Button color = "Primary" onClick={this.percolationIteration}>Bootstrap Percolate!</Button>
           <ForceGraph2D graphData={this.state.graph.getGraphData()}
-                nodeColor={d => d.infected ? "red" : "green"}
+                nodeColor={d => d.infected ? "#f65868" : "#5375e2"}
                 linkOpacity={0.5}
                 linkWidth={3}
+                backgroundColor="#fefefe"
                 />
                 </div>;
-    }
+  }
 
 
   }
