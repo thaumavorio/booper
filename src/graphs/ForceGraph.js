@@ -2,7 +2,7 @@ import * as React from "react";
 import ForceGraph2D from 'react-force-graph-2d';
 import Graph from "./Graph";
 import update from 'immutability-helper';
-import { Box, Button, ButtonGroup, Divider } from '@material-ui/core';
+import { Box, Button, ButtonGroup, Divider, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 
@@ -69,7 +69,9 @@ class ForceGraph extends React.Component{
                   <br/>
                   <br/>
                   <h3>GRAPH SETTINGS</h3>
-                  <Button color = "Primary" variant="outlined" onClick={this.resetInfections}>Reset</Button>
+                  <Tooltip title={"Deactivate all vertices"}>
+                      <Button color = "Primary" variant="outlined" onClick={this.resetInfections}>Reset</Button>
+                  </Tooltip>
                   <br/>
                   <br/>
                   <Divider variant = "middle" color = "Secondary"/>
@@ -82,8 +84,12 @@ class ForceGraph extends React.Component{
                       aria-label = "horizontal outlined primary button group"
                       variant = "outlined"
                   >
+                  <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
                       <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getMinContagiousSet}>Minimum Contagious Set</Button>
+                  </Tooltip>
+                  <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
                       <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>Greedy Contagious Set</Button>
+                  </Tooltip>
                   </ButtonGroup>
                   <br/>
                   <br/>
@@ -91,7 +97,9 @@ class ForceGraph extends React.Component{
                   <br/>
                   <br/>
                   <h3>BOOTSTRAP PERCOLATION</h3>
-                  <Button color = "Primary" variant="outlined" onClick={this.percolationIteration}>Percolation Step</Button>
+                  <Tooltip title={"Activates any vertex with 2 or more activated neighbors. This is an iterative process."}>
+                      <Button color = "Primary" variant="outlined" onClick={this.percolationIteration}>Percolation Step</Button>
+                  </Tooltip>
               </Box>
               <ForceGraph2D graphData={this.state.forceData}
                     nodeColor={d => d.infected ? "#f65868" : "#5375e2"}
