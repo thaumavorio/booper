@@ -69,7 +69,7 @@ class ForceGraph extends React.Component{
                   <br/>
                   <br/>
                   <h3>GRAPH</h3>
-                  <Button color = "Primary" variant="outlined" component="label">Upload Adjacency Matrix<input type="file" hidden /></Button>
+                  <Button color = "Primary" variant="outlined" component="label">Upload Adjacency Matrix<input type="file" accept=".csv" hidden /></Button>
                   <br/>
                   <br/>
                   <Divider variant = "middle" color = "Secondary"/>
