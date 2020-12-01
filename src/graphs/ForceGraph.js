@@ -68,8 +68,8 @@ class ForceGraph extends React.Component{
               <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" alignContent="center" color="Secondary" m={1} p={1}>
                   <br/>
                   <br/>
-                  <h3>GRAPH SETTINGS</h3>
-                  <Button color = "Primary" variant="outlined" onClick={this.resetInfections}>Reset</Button>
+                  <h3>GRAPH</h3>
+                  <Button color = "Primary" variant="outlined">Upload Adjacency Matrix</Button>
                   <br/>
                   <br/>
                   <Divider variant = "middle" color = "Secondary"/>
@@ -82,8 +82,8 @@ class ForceGraph extends React.Component{
                       aria-label = "horizontal outlined primary button group"
                       variant = "outlined"
                   >
-                      <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getMinContagiousSet}>Minimum Contagious Set</Button>
-                      <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>Greedy Contagious Set</Button>
+                    <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getMinContagiousSet}>Minimum Contagious Set</Button>
+                    <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>Greedy Contagious Set</Button>
                   </ButtonGroup>
                   <br/>
                   <br/>
@@ -91,7 +91,15 @@ class ForceGraph extends React.Component{
                   <br/>
                   <br/>
                   <h3>BOOTSTRAP PERCOLATION</h3>
-                  <Button color = "Primary" variant="outlined" onClick={this.percolationIteration}>Percolation Step</Button>
+                  <ButtonGroup
+                      orientation="horizontal"
+                      color = "Primary"
+                      aria-label = "horizontal outlined primary button group"
+                      variant = "outlined"
+                  >
+                    <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.resetInfections}>Reset Infections</Button>
+                    <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.percolationIteration}>Percolation Step</Button>
+                  </ButtonGroup>
               </Box>
               <ForceGraph2D graphData={this.state.forceData}
                     nodeColor={d => d.infected ? "#f65868" : "#5375e2"}
