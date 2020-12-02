@@ -162,11 +162,9 @@ class ForceGraph extends React.Component{
                       Upload Adjacency Matrix
                       <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
                   </Button>
-                  <h3>GRAPH SETTINGS</h3>
                   <br/>
                   <br/>
                   <Divider variant = "middle" color = "Secondary"/>
-                  <br/>
                   <br/>
                   <h3>CONTAGIOUS SETS</h3>
                   <ButtonGroup
@@ -195,10 +193,10 @@ class ForceGraph extends React.Component{
                       variant = "outlined"
                   >
                   <Tooltip title={"Deactivate all vertices"}>
-                      <Button color = "Primary" variant="outlined" onClick={this.resetInfections}>Reset</Button>
+                      <Button style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.resetInfections}>Reset</Button>
                   </Tooltip>
                   <Tooltip title={"Activates any vertex with 2 or more activated neighbors. This is an iterative process."}>
-                      <Button color = "Primary" variant="outlined" onClick={this.percolationIteration}>Percolation Step</Button>
+                      <Button style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.percolationIteration}>Percolation Step</Button>
                   </Tooltip>
               </ButtonGroup>
               </Box>
