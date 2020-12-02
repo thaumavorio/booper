@@ -4,6 +4,7 @@ import Graph from "./Graph";
 import update from 'immutability-helper';
 import { Box, Button, ButtonGroup, Divider, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { sizing } from '@material-ui/system';
 
 
 let graphs = setUpGraphs();
@@ -193,12 +194,12 @@ class ForceGraph extends React.Component{
                       variant = "outlined"
                   >
                   <Tooltip title={"Deactivate all vertices"}>
-                      <Button style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.resetInfections}>Reset</Button>
+                      <Button fullWidth={true} style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.resetInfections}>Reset</Button>
                   </Tooltip>
                   <Tooltip title={"Activates any vertex with 2 or more activated neighbors. This is an iterative process."}>
-                      <Button style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.percolationIteration}>Percolation Step</Button>
+                      <Button fullWidth={true} style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.percolationIteration}>Percolation Step</Button>
                   </Tooltip>
-              </ButtonGroup>
+                  </ButtonGroup>
               </Box>
               <ForceGraph2D graphData={this.state.forceData}
                     nodeColor={d => d.infected ? "#f65868" : "#5375e2"}
