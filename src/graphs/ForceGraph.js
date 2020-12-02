@@ -44,6 +44,7 @@ class ForceGraph extends React.Component{
 
     updateDimensions() {
         this.setState({graph: this.state.graph, forceData: this.state.forceData, windowSize: {height: window.innerHeight, width: window.innerWidth}});
+    }
 
     readAdjacencyMatrix = (evt) => {
         const file = evt.target.files[0];
