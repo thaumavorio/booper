@@ -93,13 +93,13 @@ export default class Graph {
 
     // NB: returns promise
     findContagiousSetGreedily(threshold) {
-      return fetch(`http://71.87.211.162:13894/greedy?graph=${this.getEdgeString()}&threshold=${threshold}`)
+      return fetch(`https://thaumic.dev/booper/greedy?graph=${this.getEdgeString()}&threshold=${threshold}`)
                .then(res => res.json());
     }
 
     // NB: returns promise
     findMinimalContagiousSet(threshold) {
-      return fetch(`http://71.87.211.162:13894/min?graph=${this.getEdgeString()}&threshold=${threshold}`)
+      return fetch(`https://thaumic.dev/booper/min?graph=${this.getEdgeString()}&threshold=${threshold}`)
                .then(res => res.json());
     }
 

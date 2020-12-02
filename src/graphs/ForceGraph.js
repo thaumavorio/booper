@@ -25,17 +25,105 @@ class ForceGraph extends React.Component{
         super(props);
         this.state = {
             graph: graph1,
-            forceData: graph1.getGraphData()
+            forceData: graph1.getGraphData(),
+            windowSize: {
+                height: window.innerHeight,
+                width: window.innerWidth
+            }
         };
     }
 
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener("resize", this.updateDimensions.bind(this));
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateDimensions.bind(this));
+    }
+
+    updateDimensions() {
+        this.setState(state => ({graph: this.state.graph, forceData: this.state.forceData, windowSize: {height: window.innerHeight, width: window.innerWidth}}));
+    }
+
+    readAdjacencyMatrix = (evt) => {
+        const file = evt.target.files[0];
+        document.getElementById("uploadAdjacencyMatrix").value = null;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            // Parse input file.
+            const string = event.target.result;
+            const matrix = string.split('\n');
+            for(var i in matrix) {
+                matrix[i] = matrix[i].trim().split(',');
+            }
+
+            // Check for invalid input.
+            for(var c of matrix[0]) {
+                if(c !== '+' && c !== '-') {
+                    window.alert("Invalid input. There must be a row of +'s and -'s above the adjacency matrix, indicating which vertices are seeds.");
+                    return;
+                }
+            }
+            for(var r of matrix) {
+                if(r.length !== matrix[0].length) {
+                    window.alert("Invalid input. Each row must have the same length.");
+                    return;
+                }
+            };
+            if(matrix.length !== matrix[0].length + 1) {
+                window.alert("Invalid input. The adjacency matrix must be a square matrix.");
+                return;
+            }
+            for(i = 0; i < matrix.length - 1; i++) {
+                for(var j = 0; j < matrix.length - 1; j++) {
+                    if(matrix[i + 1][j] !== '0' && matrix[i + 1][j] !== '1') {
+                        window.alert("Invalid input. Every entry in the adjacency matrix must be 1 or 0, indicating the presence or absence of an edge, respectively.");
+                        return;
+                    }
+                }
+            }
+            for(i = 0; i < matrix.length - 1; i++) {
+                for(j = 0; j < i; j++) {
+                    if(matrix[i + 1][j] !== matrix[j + 1][i]) {
+                        window.alert("Invalid input. The adjacency matrix must be symmetric, defining an undirected graph.");
+                        return;
+                    }
+                }
+            }
+            for(i = 0; i < matrix.length - 1; i++) {
+                if(matrix[i + 1][i] !== '0') {
+                    if(matrix[i + 1][i] !== '0') {
+                        window.alert("Invalid input. The adjacency matrix must have 0's on the diagonal, defining a simple graph.");
+                        return;
+                    }
+                }
+            }
+
+            // Create a graph according to the adjacency matrix.
+            const graph = new Graph();
+            for(i = 0; i < matrix.length - 1; i++) {
+                graph.addVertex(i);
+                if(matrix[0][i] === '+') {
+                    graph.activateVertex(i);
+                }
+                for(j = 0; j < i; j++) {
+                    if(matrix[i + 1][j] === '1') {
+                        graph.addEdge(i, j);
+                    }
+                }
+            }
+            this.setState({graph: graph, forceData: graph.getGraphData()});
+        };
+        reader.readAsText(file);
+    }
 
   getMinContagiousSet = () => {
     this.state.graph.findMinimalContagiousSet(2)
           .then(infectedVerts => this.setState(function(state){
             const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
             g.activateVertices(infectedVerts);
-            return { graph: g, forceData: g.getGraphData(state.forceData) };
+            return { graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } };
           }));
     };
 
@@ -44,34 +132,37 @@ class ForceGraph extends React.Component{
             .then(infectedVerts => this.setState(function(state){
                 const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
                 g.activateVertices(infectedVerts);
-                return { graph: g, forceData: g.getGraphData(state.forceData) };
+                return { graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } };
             }));
     };
 
   resetInfections = () => {
     this.state.graph.deactivateAllVertices();
     this.setState(state =>
-            ({ graph: state.graph, forceData: state.graph.getGraphData(state.forceData) })
+            ({ graph: state.graph, forceData: state.graph.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } })
     );
   };
 
   percolationIteration = () => {
       const g = update(this.state.graph, {$set: this.state.graph.bootstrapPercolationIteration(2)})
       this.setState(state =>
-            ({ graph: g, forceData: g.getGraphData(state.forceData) })
+            ({ graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } })
       );
   }
 
   render() {
+      const TOOLBAR_WIDTH = 300;
       return <div>
           <Box display="flex" flexDirection="row">
-              <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" alignContent="center" color="Secondary" m={1} p={1}>
+              <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" alignContent="center" color="Secondary" m={1} p={1} width={TOOLBAR_WIDTH}>
                   <br/>
                   <br/>
+                  <h3>GRAPH</h3>
+                  <Button color = "Primary" variant="outlined" component="label">
+                      Upload Adjacency Matrix
+                      <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
+                  </Button>
                   <h3>GRAPH SETTINGS</h3>
-                  <Tooltip title={"Deactivate all vertices"}>
-                      <Button color = "Primary" variant="outlined" onClick={this.resetInfections}>Reset</Button>
-                  </Tooltip>
                   <br/>
                   <br/>
                   <Divider variant = "middle" color = "Secondary"/>
@@ -97,9 +188,19 @@ class ForceGraph extends React.Component{
                   <br/>
                   <br/>
                   <h3>BOOTSTRAP PERCOLATION</h3>
+                  <ButtonGroup
+                      orientation="horizontal"
+                      color = "Primary"
+                      aria-label = "horizontal outlined primary button group"
+                      variant = "outlined"
+                  >
+                  <Tooltip title={"Deactivate all vertices"}>
+                      <Button color = "Primary" variant="outlined" onClick={this.resetInfections}>Reset</Button>
+                  </Tooltip>
                   <Tooltip title={"Activates any vertex with 2 or more activated neighbors. This is an iterative process."}>
                       <Button color = "Primary" variant="outlined" onClick={this.percolationIteration}>Percolation Step</Button>
                   </Tooltip>
+              </ButtonGroup>
               </Box>
               <ForceGraph2D graphData={this.state.forceData}
                     nodeColor={d => d.infected ? "#f65868" : "#5375e2"}
@@ -107,6 +208,8 @@ class ForceGraph extends React.Component{
                     linkOpacity={0.7}
                     linkWidth={3.5}
                     backgroundColor="#fefefe"
+                    width={this.state.windowSize.width - TOOLBAR_WIDTH}
+                    height={this.state.windowSize.height}
               />
           </Box>
       </div>;
