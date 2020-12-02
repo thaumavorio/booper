@@ -43,7 +43,7 @@ class ForceGraph extends React.Component{
     }
 
     updateDimensions() {
-        this.setState({graph: this.state.graph, forceData: this.state.forceData, windowSize: {height: window.innerHeight, width: window.innerWidth}});
+        this.setState(state => ({graph: this.state.graph, forceData: this.state.forceData, windowSize: {height: window.innerHeight, width: window.innerWidth}}));
     }
 
     readAdjacencyMatrix = (evt) => {
