@@ -31,7 +31,6 @@ class ForceGraph extends React.Component{
                 width: window.innerWidth
             }
         };
-        this.redrawTimer = null;
     }
 
     componentDidMount() {
