@@ -25,8 +25,25 @@ class ForceGraph extends React.Component{
         super(props);
         this.state = {
             graph: graph1,
-            forceData: graph1.getGraphData()
+            forceData: graph1.getGraphData(),
+            windowSize: {
+                height: window.innerHeight,
+                width: window.innerWidth
+            }
         };
+    }
+
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener("resize", this.updateDimensions.bind(this));
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateDimensions.bind(this));
+    }
+
+    updateDimensions() {
+        this.setState(state => ({graph: this.state.graph, forceData: this.state.forceData, windowSize: {height: window.innerHeight, width: window.innerWidth}}));
     }
 
     readAdjacencyMatrix = (evt) => {
@@ -106,7 +123,7 @@ class ForceGraph extends React.Component{
           .then(infectedVerts => this.setState(function(state){
             const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
             g.activateVertices(infectedVerts);
-            return { graph: g, forceData: g.getGraphData(state.forceData) };
+            return { graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } };
           }));
     };
 
@@ -115,28 +132,29 @@ class ForceGraph extends React.Component{
             .then(infectedVerts => this.setState(function(state){
                 const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
                 g.activateVertices(infectedVerts);
-                return { graph: g, forceData: g.getGraphData(state.forceData) };
+                return { graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } };
             }));
     };
 
   resetInfections = () => {
     this.state.graph.deactivateAllVertices();
     this.setState(state =>
-            ({ graph: state.graph, forceData: state.graph.getGraphData(state.forceData) })
+            ({ graph: state.graph, forceData: state.graph.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } })
     );
   };
 
   percolationIteration = () => {
       const g = update(this.state.graph, {$set: this.state.graph.bootstrapPercolationIteration(2)})
       this.setState(state =>
-            ({ graph: g, forceData: g.getGraphData(state.forceData) })
+            ({ graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } })
       );
   }
 
   render() {
+      const TOOLBAR_WIDTH = 300;
       return <div>
           <Box display="flex" flexDirection="row">
-              <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" alignContent="center" color="Secondary" m={1} p={1}>
+              <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" alignContent="center" color="Secondary" m={1} p={1} width={TOOLBAR_WIDTH}>
                   <br/>
                   <br/>
                   <h3>GRAPH</h3>
@@ -181,6 +199,8 @@ class ForceGraph extends React.Component{
                     linkOpacity={0.7}
                     linkWidth={3.5}
                     backgroundColor="#fefefe"
+                    width={this.state.windowSize.width - TOOLBAR_WIDTH}
+                    height={this.state.windowSize.height}
               />
           </Box>
       </div>;
