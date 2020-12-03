@@ -29,8 +29,11 @@ class ForceGraph extends React.Component{
             windowSize: {
                 height: window.innerHeight,
                 width: window.innerWidth
-            }
+            },
+            bootstrapPercolationThreshold: 2
         };
+
+        this.updateBootstrapPercolationThreshold = this.updateBootstrapPercolationThreshold.bind(this)
     }
 
     componentDidMount() {
@@ -43,7 +46,7 @@ class ForceGraph extends React.Component{
     }
 
     updateDimensions() {
-        this.setState(state => ({graph: this.state.graph, forceData: this.state.forceData, windowSize: {height: window.innerHeight, width: window.innerWidth}}));
+        this.setState(state => ({graph: this.state.graph, forceData: this.state.forceData, windowSize: {height: window.innerHeight, width: window.innerWidth}, bootstrapPercolationThreshold: state.bootstrapPercolationThreshold}));
     }
 
     readAdjacencyMatrix = (evt) => {
@@ -113,41 +116,46 @@ class ForceGraph extends React.Component{
                     }
                 }
             }
-            this.setState({graph: graph, forceData: graph.getGraphData()});
+            this.setState(state => ({graph: graph, forceData: graph.getGraphData(), windowSize: { height: window.innerHeight, width: window.innerWidth }, bootstrapPercolationThreshold: state.bootstrapPercolationThreshold}));
         };
         reader.readAsText(file);
     }
 
   getMinContagiousSet = () => {
-    this.state.graph.findMinimalContagiousSet(2)
+    this.state.graph.findMinimalContagiousSet(this.state.bootstrapPercolationThreshold)
           .then(infectedVerts => this.setState(function(state){
             const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
             g.activateVertices(infectedVerts);
-            return { graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } };
+            return { graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth }, bootstrapPercolationThreshold: state.bootstrapPercolationThreshold };
           }));
     };
 
   getGreedyContagiousSet = () => {
-        this.state.graph.findContagiousSetGreedily(2)
+        this.state.graph.findContagiousSetGreedily(this.state.bootstrapPercolationThreshold)
             .then(infectedVerts => this.setState(function(state){
                 const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
                 g.activateVertices(infectedVerts);
-                return { graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } };
+                return { graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth }, bootstrapPercolationThreshold: state.bootstrapPercolationThreshold };
             }));
     };
 
   resetInfections = () => {
     this.state.graph.deactivateAllVertices();
     this.setState(state =>
-            ({ graph: state.graph, forceData: state.graph.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } })
+            ({ graph: state.graph, forceData: state.graph.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth }, bootstrapPercolationThreshold: state.bootstrapPercolationThreshold })
     );
   };
 
   percolationIteration = () => {
-      const g = update(this.state.graph, {$set: this.state.graph.bootstrapPercolationIteration(2)})
+      const g = update(this.state.graph, {$set: this.state.graph.bootstrapPercolationIteration(this.state.bootstrapPercolationThreshold)})
       this.setState(state =>
-            ({ graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } })
+            ({ graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth }, bootstrapPercolationThreshold: state.bootstrapPercolationThreshold })
       );
+  }
+
+  updateBootstrapPercolationThreshold = (evt) => {
+    const newThreshold = evt.target.value
+    this.setState(state => ({ graph: state.graph, forceData: state.forceData, windowSize: { height: window.innerHeight, width: window.innerWidth }, bootstrapPercolationThreshold: newThreshold }))
   }
 
   render() {
@@ -183,6 +191,10 @@ class ForceGraph extends React.Component{
                   <br/>
                   <br/>
                   <h3>BOOTSTRAP PERCOLATION</h3>
+                  <div class="input-thresh">
+                    <label for="bootstrap-percolation-threshold">Threshold:</label>
+                    <input id="bootstrap-percolation-threshold" type="number" min="1" onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.state.bootstrapPercolationThreshold}  />
+                  </div>
                   <ButtonGroup
                       orientation="horizontal"
                       color = "Primary"
