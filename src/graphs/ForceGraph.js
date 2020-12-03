@@ -2,9 +2,10 @@ import * as React from "react";
 import ForceGraph2D from 'react-force-graph-2d';
 import Graph from "./Graph";
 import update from 'immutability-helper';
-import { Box, Button, ButtonGroup, Divider, Tooltip } from '@material-ui/core';
+import { Box, Button, ButtonGroup, Dialog, DialogTitle, DialogContent, Divider, IconButton, Tooltip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { sizing } from '@material-ui/system';
+import HelpIcon from '@material-ui/icons/Help';
+
 
 
 let graphs = setUpGraphs();
@@ -27,6 +28,7 @@ class ForceGraph extends React.Component{
         this.state = {
             graph: graph1,
             forceData: graph1.getGraphData(),
+            helpOpen: false,
             windowSize: {
                 height: window.innerHeight,
                 width: window.innerWidth
@@ -45,6 +47,14 @@ class ForceGraph extends React.Component{
 
     updateDimensions() {
         this.setState(state => ({graph: this.state.graph, forceData: this.state.forceData, windowSize: {height: window.innerHeight, width: window.innerWidth}}));
+    }
+
+    helpIconOpen = () => {
+        this.setState({helpOpen: true})
+    }
+
+    helpIconClose = () => {
+        this.setState({helpOpen: false})
     }
 
     readAdjacencyMatrix = (evt) => {
@@ -159,10 +169,35 @@ class ForceGraph extends React.Component{
                   <br/>
                   <br/>
                   <h3>GRAPH</h3>
+                  <Box display="flex" flexDirection="row">
                   <Button color = "Primary" variant="outlined" component="label">
                       Upload Adjacency Matrix
                       <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
                   </Button>
+                  <IconButton color="info" variant="contained" component="label" onClick={this.helpIconOpen}>
+                      <HelpIcon/>
+                  </IconButton>
+                  <Dialog onClose={this.helpIconClose} open={this.state.helpOpen}>
+                  <DialogTitle id="customized-dialog-title" onClose={this.helpIconClose}>
+                      Uploading Adjacency Matrices
+                  </DialogTitle>
+                  <DialogContent dividers>
+                      <Typography gutterBottom>
+                          The adjacency matrix input should be in the format of a .csv file. The first row should contain
+                          either a '+' or a '-', indicating whether the node is initially infected or not, respectively.
+                      </Typography>
+                      <Typography gutterBottom>
+                          The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
+                      </Typography>
+                      <Typography gutterBottom>
+                          An example of an adjacency matrix input is available below:
+                      </Typography>
+                      <Typography gutterBottom>
+                          <a href="example_graph.csv" download>Example Adjacency Matrix Input</a>
+                      </Typography>
+                  </DialogContent>
+                  </Dialog>
+                  </Box>
                   <br/>
                   <br/>
                   <Divider variant = "middle" color = "Secondary"/>
@@ -177,7 +212,7 @@ class ForceGraph extends React.Component{
                   <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
                       <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getMinContagiousSet}>Minimum Contagious Set</Button>
                   </Tooltip>
-                  <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
+                  <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph using a greedy algorithm."}>
                       <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>Greedy Contagious Set</Button>
                   </Tooltip>
                   </ButtonGroup>
