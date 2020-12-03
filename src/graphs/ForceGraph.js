@@ -255,7 +255,7 @@ class ForceGraph extends React.Component{
                   <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
                       <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getMinContagiousSet}>Minimum Contagious Set</Button>
                   </Tooltip>
-                  <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph using a greedy algorithm."}>
+                  <Tooltip title={"Calculates and displays a set of nodes which would activate the entire graph using a greedy algorithm."}>
                       <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>Greedy Contagious Set</Button>
                   </Tooltip>
                   </ButtonGroup>
