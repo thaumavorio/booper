@@ -30,7 +30,8 @@ class ForceGraph extends React.Component{
                 height: window.innerHeight,
                 width: window.innerWidth
             },
-            bootstrapPercolationThreshold: 2
+            bootstrapPercolationThreshold: 2,
+            bootstrapPercolationIteration: 0
         };
 
         this.updateBootstrapPercolationThreshold = this.updateBootstrapPercolationThreshold.bind(this)
@@ -46,7 +47,13 @@ class ForceGraph extends React.Component{
     }
 
     updateDimensions() {
-        this.setState(state => ({graph: this.state.graph, forceData: this.state.forceData, windowSize: {height: window.innerHeight, width: window.innerWidth}, bootstrapPercolationThreshold: state.bootstrapPercolationThreshold}));
+        this.setState(state => ({
+          graph: state.graph,
+          forceData: state.forceData,
+          windowSize: {height: window.innerHeight, width: window.innerWidth},
+          bootstrapPercolationIteration: state.bootstrapPercolationIteration,
+          bootstrapPercolationThreshold: state.bootstrapPercolationThreshold
+        }));
     }
 
     readAdjacencyMatrix = (evt) => {
@@ -116,7 +123,12 @@ class ForceGraph extends React.Component{
                     }
                 }
             }
-            this.setState(state => ({graph: graph, forceData: graph.getGraphData(), windowSize: { height: window.innerHeight, width: window.innerWidth }, bootstrapPercolationThreshold: state.bootstrapPercolationThreshold}));
+            this.setState(state => ({
+              graph: graph,
+              forceData: graph.getGraphData(),
+              windowSize: { height: window.innerHeight, width: window.innerWidth },
+              bootstrapPercolationIteration: 0,
+              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold }));
         };
         reader.readAsText(file);
     }
@@ -126,7 +138,12 @@ class ForceGraph extends React.Component{
           .then(infectedVerts => this.setState(function(state){
             const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
             g.activateVertices(infectedVerts);
-            return { graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth }, bootstrapPercolationThreshold: state.bootstrapPercolationThreshold };
+            return {
+              graph: g,
+              forceData: g.getGraphData(state.forceData),
+              windowSize: { height: window.innerHeight, width: window.innerWidth },
+              bootstrapPercolationIteration: 0,
+              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold };
           }));
     };
 
@@ -135,27 +152,45 @@ class ForceGraph extends React.Component{
             .then(infectedVerts => this.setState(function(state){
                 const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
                 g.activateVertices(infectedVerts);
-                return { graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth }, bootstrapPercolationThreshold: state.bootstrapPercolationThreshold };
+                return {
+                  graph: g,
+                  forceData: g.getGraphData(state.forceData),
+                  windowSize: { height: window.innerHeight, width: window.innerWidth },
+                  bootstrapPercolationIteration: 0,
+                  bootstrapPercolationThreshold: state.bootstrapPercolationThreshold };
             }));
     };
 
   resetInfections = () => {
     this.state.graph.deactivateAllVertices();
-    this.setState(state =>
-            ({ graph: state.graph, forceData: state.graph.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth }, bootstrapPercolationThreshold: state.bootstrapPercolationThreshold })
+    this.setState(state => ({
+              graph: state.graph,
+              forceData: state.graph.getGraphData(state.forceData),
+              windowSize: { height: window.innerHeight, width: window.innerWidth },
+              bootstrapPercolationIteration: 0,
+              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold })
     );
   };
 
   percolationIteration = () => {
-      const g = update(this.state.graph, {$set: this.state.graph.bootstrapPercolationIteration(this.state.bootstrapPercolationThreshold)})
-      this.setState(state =>
-            ({ graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth }, bootstrapPercolationThreshold: state.bootstrapPercolationThreshold })
+      const g = update(this.state.graph, {$set: this.state.graph.bootstrapPercolationIteration(2)})
+      this.setState(state => ({
+              graph: g,
+              forceData: g.getGraphData(state.forceData),
+              windowSize: { height: window.innerHeight, width: window.innerWidth },
+              bootstrapPercolationIteration: state.bootstrapPercolationIteration + 1,
+              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold })
       );
   }
 
   updateBootstrapPercolationThreshold = (evt) => {
     const newThreshold = evt.target.value
-    this.setState(state => ({ graph: state.graph, forceData: state.forceData, windowSize: { height: window.innerHeight, width: window.innerWidth }, bootstrapPercolationThreshold: newThreshold }))
+    this.setState(state => ({
+      graph: state.graph,
+      forceData: state.forceData,
+      windowSize: { height: window.innerHeight, width: window.innerWidth },
+      bootstrapPercolationIteration: state.bootstrapPercolationIteration,
+      bootstrapPercolationThreshold: newThreshold }))
   }
 
   render() {
@@ -195,6 +230,7 @@ class ForceGraph extends React.Component{
                     <label for="bootstrap-percolation-threshold">Threshold:</label>
                     <input id="bootstrap-percolation-threshold" type="number" min="1" onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.state.bootstrapPercolationThreshold}  />
                   </div>
+                  Iteration: {this.state.bootstrapPercolationIteration}
                   <ButtonGroup
                       orientation="horizontal"
                       color = "Primary"
