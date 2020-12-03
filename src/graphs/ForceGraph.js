@@ -29,7 +29,8 @@ class ForceGraph extends React.Component{
             windowSize: {
                 height: window.innerHeight,
                 width: window.innerWidth
-            }
+            },
+            bootstrapPercolationIteration: 0
         };
     }
 
@@ -43,7 +44,12 @@ class ForceGraph extends React.Component{
     }
 
     updateDimensions() {
-        this.setState(state => ({graph: this.state.graph, forceData: this.state.forceData, windowSize: {height: window.innerHeight, width: window.innerWidth}}));
+        this.setState(state => ({
+          graph: state.graph,
+          forceData: state.forceData,
+          windowSize: {height: window.innerHeight, width: window.innerWidth},
+          bootstrapPercolationIteration: state.bootstrapPercolationIteration
+        }));
     }
 
     readAdjacencyMatrix = (evt) => {
@@ -113,7 +119,10 @@ class ForceGraph extends React.Component{
                     }
                 }
             }
-            this.setState({graph: graph, forceData: graph.getGraphData()});
+            this.setState(state => ({
+              graph: graph,
+              forceData: graph.getGraphData(),
+              bootstrapPercolationIteration: 0 }));
         };
         reader.readAsText(file);
     }
@@ -123,7 +132,11 @@ class ForceGraph extends React.Component{
           .then(infectedVerts => this.setState(function(state){
             const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
             g.activateVertices(infectedVerts);
-            return { graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } };
+            return {
+              graph: g,
+              forceData: g.getGraphData(state.forceData),
+              windowSize: { height: window.innerHeight, width: window.innerWidth },
+              bootstrapPercolationIteration: 0 };
           }));
     };
 
@@ -132,21 +145,31 @@ class ForceGraph extends React.Component{
             .then(infectedVerts => this.setState(function(state){
                 const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
                 g.activateVertices(infectedVerts);
-                return { graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } };
+                return {
+                  graph: g,
+                  forceData: g.getGraphData(state.forceData),
+                  windowSize: { height: window.innerHeight, width: window.innerWidth },
+                  bootstrapPercolationIteration: 0 };
             }));
     };
 
   resetInfections = () => {
     this.state.graph.deactivateAllVertices();
-    this.setState(state =>
-            ({ graph: state.graph, forceData: state.graph.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } })
+    this.setState(state => ({
+              graph: state.graph,
+              forceData: state.graph.getGraphData(state.forceData),
+              windowSize: { height: window.innerHeight, width: window.innerWidth },
+              bootstrapPercolationIteration: 0 })
     );
   };
 
   percolationIteration = () => {
       const g = update(this.state.graph, {$set: this.state.graph.bootstrapPercolationIteration(2)})
-      this.setState(state =>
-            ({ graph: g, forceData: g.getGraphData(state.forceData), windowSize: { height: window.innerHeight, width: window.innerWidth } })
+      this.setState(state => ({
+              graph: g,
+              forceData: g.getGraphData(state.forceData),
+              windowSize: { height: window.innerHeight, width: window.innerWidth },
+              bootstrapPercolationIteration: state.bootstrapPercolationIteration + 1 })
       );
   }
 
@@ -183,6 +206,7 @@ class ForceGraph extends React.Component{
                   <br/>
                   <br/>
                   <h3>BOOTSTRAP PERCOLATION</h3>
+                  Iteration: {this.state.bootstrapPercolationIteration}
                   <ButtonGroup
                       orientation="horizontal"
                       color = "Primary"
