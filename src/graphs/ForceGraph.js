@@ -184,7 +184,7 @@ class ForceGraph extends React.Component{
   };
 
   percolationIteration = () => {
-      const g = update(this.state.graph, {$set: this.state.graph.bootstrapPercolationIteration(2)})
+      const g = update(this.state.graph, {$set: this.state.graph.bootstrapPercolationIteration(this.state.bootstrapPercolationThreshold)})
       this.setState(state => ({
               graph: g,
               forceData: g.getGraphData(state.forceData),
