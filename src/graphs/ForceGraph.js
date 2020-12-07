@@ -245,7 +245,7 @@ class ForceGraph extends React.Component{
                   <br/>
                   <Divider variant = "middle" color = "Secondary"/>
                   <br/>
-                  <h3>CONTAGIOUS SETS</h3>
+                  <h3>SEED SETS</h3>
                   <ButtonGroup
                       orientation="horizontal"
                       color = "Primary"
@@ -259,6 +259,12 @@ class ForceGraph extends React.Component{
                       <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>Greedy Contagious Set</Button>
                   </Tooltip>
                   </ButtonGroup>
+                  <Tooltip title={"Makes each node a seed independently at random with the given probability."}>
+                      <Button style={{ fontSize: '12px' }} color = "Primary" variant="outlined">
+                          Random Seed Set
+                          <input type="number" />
+                      </Button>
+                  </Tooltip>
                   <br/>
                   <br/>
                   <Divider variant = "middle" color = "Secondary"/>
