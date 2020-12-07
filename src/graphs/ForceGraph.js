@@ -172,6 +172,10 @@ class ForceGraph extends React.Component{
             }));
     };
 
+    randomSeedSet = () => {
+        console.log("Hello world")
+    }
+
   resetInfections = () => {
     this.state.graph.deactivateAllVertices();
     this.setState(state => ({
@@ -202,6 +206,10 @@ class ForceGraph extends React.Component{
       windowSize: { height: window.innerHeight, width: window.innerWidth },
       bootstrapPercolationIteration: state.bootstrapPercolationIteration,
       bootstrapPercolationThreshold: newThreshold }))
+  }
+
+  stopPropagation = (event) => {
+      event.stopPropagation();
   }
 
   render() {
@@ -260,9 +268,9 @@ class ForceGraph extends React.Component{
                   </Tooltip>
                   </ButtonGroup>
                   <Tooltip title={"Makes each node a seed independently at random with the given probability."}>
-                      <Button style={{ fontSize: '12px' }} color = "Primary" variant="outlined">
+                      <Button style={{ fontSize: '12px' }} color = "Primary" variant="outlined" onClick={this.randomSeedSet}>
                           Random Seed Set
-                          <input type="number" />
+                          <input id="seed-probability" type="number" min="0.00000000000" max="1.00000000000" onClick={this.stopPropagation} />
                       </Button>
                   </Tooltip>
                   <br/>
