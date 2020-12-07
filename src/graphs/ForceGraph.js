@@ -173,11 +173,10 @@ class ForceGraph extends React.Component{
     };
 
     randomSeedSet = () => {
-        this.setState(function(state) {
-            const inclusionProbability = parseFloat(document.getElementById("seed-probability").value);
-            if(!isNaN(inclusionProbability)) {
-                const g = update(state.graph, {});
-                g.randomSeedSet(parseFloat(document.getElementById("seed-probability").value));
+        const inclusionProbability = parseFloat(document.getElementById("seed-probability").value);
+        if(!isNaN(inclusionProbability)) {
+            this.setState(function(state) {
+                const g = update(state.graph, {$set: state.graph.randomSeedSet(inclusionProbability)});
                 return {
                     graph: g,
                     forceData: g.getGraphData(state.forceData),
@@ -185,10 +184,8 @@ class ForceGraph extends React.Component{
                     bootstrapPercolationIteration: 0,
                     bootstrapPercolationThreshold: state.bootstrapPercolationThreshold
                 };
-            } else {
-                return state;
-            }
-        });
+            });
+        }
     }
 
   resetInfections = () => {
