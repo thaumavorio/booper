@@ -2,7 +2,7 @@ import * as React from "react";
 import ForceGraph2D from 'react-force-graph-2d';
 import Graph from "./Graph";
 import update from 'immutability-helper';
-import { Box, Button, ButtonGroup, Dialog, DialogTitle, DialogContent, Divider, IconButton, Tooltip, Typography } from '@material-ui/core';
+import { Box, Button, ButtonGroup, Dialog, DialogTitle, DialogContent, Divider, IconButton, Paper, Tooltip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import HelpIcon from '@material-ui/icons/Help';
 
@@ -227,13 +227,14 @@ class ForceGraph extends React.Component{
   render() {
       const TOOLBAR_WIDTH = 300;
       return <div>
-          <Box display="flex" flexDirection="row">
-              <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" alignContent="center" color="Secondary" m={1} p={1} width={TOOLBAR_WIDTH}>
+          <Box display="flex" flexDirection="row" alignItems="center" justify-content="center" style={{paddingLeft: 10, backgroundColor: "#fefefe"}}>
+              <Paper variant="outlined">
+                <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" alignContent="center" m={1} p={1} width={TOOLBAR_WIDTH}>
                   <br/>
                   <br/>
                   <h3>GRAPH</h3>
                   <Box display="flex" flexDirection="row">
-                  <Button color = "Primary" variant="outlined" component="label">
+                  <Button variant="outlined" component="label">
                       Upload Adjacency Matrix
                       <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
                   </Button>
@@ -310,6 +311,7 @@ class ForceGraph extends React.Component{
                   </Tooltip>
                   </ButtonGroup>
               </Box>
+              </Paper>
               <ForceGraph2D graphData={this.state.forceData}
                     nodeColor={d => d.infected ? "#f65868" : "#5375e2"}
                     linkColor="#5c616e"
