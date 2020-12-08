@@ -43,6 +43,16 @@ export default class Graph {
       return this;
     }
 
+    randomSeedSet(inclusionProbability) {
+      this.deactivateAllVertices();
+      for(var v of this.getVertices()) {
+        if(Math.random() < inclusionProbability){
+          this.activateVertex(v);
+        }
+      }
+      return this;
+    }
+
     bootstrapPercolationIteration(threshold) {
       const vertices = this.getVertices();
       const infectedVertices = new Set();

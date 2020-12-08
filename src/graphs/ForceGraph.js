@@ -172,6 +172,22 @@ class ForceGraph extends React.Component{
             }));
     };
 
+    randomSeedSet = () => {
+        const inclusionProbability = parseFloat(document.getElementById("seed-probability").value);
+        if(!isNaN(inclusionProbability)) {
+            this.setState(function(state) {
+                const g = update(state.graph, {$set: state.graph.randomSeedSet(inclusionProbability)});
+                return {
+                    graph: g,
+                    forceData: g.getGraphData(state.forceData),
+                    windowSize: state.windowSize,
+                    bootstrapPercolationIteration: 0,
+                    bootstrapPercolationThreshold: state.bootstrapPercolationThreshold
+                };
+            });
+        }
+    }
+
   resetInfections = () => {
     this.state.graph.deactivateAllVertices();
     this.setState(state => ({
@@ -202,6 +218,10 @@ class ForceGraph extends React.Component{
       windowSize: { height: window.innerHeight, width: window.innerWidth },
       bootstrapPercolationIteration: state.bootstrapPercolationIteration,
       bootstrapPercolationThreshold: newThreshold }))
+  }
+
+  stopPropagation = (event) => {
+      event.stopPropagation();
   }
 
   render() {
@@ -245,7 +265,7 @@ class ForceGraph extends React.Component{
                   <br/>
                   <Divider variant = "middle" color = "Secondary"/>
                   <br/>
-                  <h3>CONTAGIOUS SETS</h3>
+                  <h3>SEED SETS</h3>
                   <ButtonGroup
                       orientation="horizontal"
                       color = "Primary"
@@ -259,6 +279,12 @@ class ForceGraph extends React.Component{
                       <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>Greedy Contagious Set</Button>
                   </Tooltip>
                   </ButtonGroup>
+                  <Tooltip title={"Makes each node a seed independently at random with the given probability."}>
+                      <Button style={{ fontSize: '12px' }} color = "Primary" variant="outlined" onClick={this.randomSeedSet}>
+                          Random Seed Set
+                          <input id="seed-probability" type="number" min="0.00000000000" max="1.00000000000" onClick={this.stopPropagation} />
+                      </Button>
+                  </Tooltip>
                   <br/>
                   <br/>
                   <Divider variant = "middle" color = "Secondary"/>
