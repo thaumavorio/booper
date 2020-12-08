@@ -206,6 +206,9 @@ class ForceGraph extends React.Component{
 
   render() {
       const TOOLBAR_WIDTH = 300;
+      const INACTIVE_COLOR = "#5375e2";
+      const ACTIVE_COLOR = "#f65868";
+      const RECENTLY_INFECTED_COLOR = "#228b22";
       return <div>
           <Box display="flex" flexDirection="row">
               <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" alignContent="center" color="Secondary" m={1} p={1} width={TOOLBAR_WIDTH}>
@@ -290,18 +293,18 @@ class ForceGraph extends React.Component{
                   <br/>
                   <h3>LEGEND</h3>
                   <div style={{textAlign:"left", marginLeft:TOOLBAR_WIDTH / 2 - 100}}>
-                    <div style={{width:"10px", height:"10px", backgroundColor:"#5375e2", borderRadius:"50%", display:"inline-block"}}></div>
+                    <div style={{width:"10px", height:"10px", backgroundColor:INACTIVE_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
                     &nbsp;Inactive Node
                     <br/>
-                    <div style={{width:"10px", height:"10px", backgroundColor:"#f65868", borderRadius:"50%", display:"inline-block"}}></div>
+                    <div style={{width:"10px", height:"10px", backgroundColor:ACTIVE_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
                     &nbsp;Active Node
                     <br/>
-                    <div style={{width:"10px", height:"10px", backgroundColor:"#228b22", borderRadius:"50%", display:"inline-block"}}></div>
+                    <div style={{width:"10px", height:"10px", backgroundColor:RECENTLY_INFECTED_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
                     &nbsp;Recently Infected Node
                   </div>
               </Box>
               <ForceGraph2D graphData={this.state.forceData}
-                    nodeColor={d => d.recentlyInfected ? "#228b22" : d.active ? "#f65868" : "#5375e2"}
+                    nodeColor={d => d.recentlyInfected ? RECENTLY_INFECTED_COLOR : d.active ? ACTIVE_COLOR : INACTIVE_COLOR}
                     linkColor="#5c616e"
                     linkOpacity={0.7}
                     linkWidth={3.5}
