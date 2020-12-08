@@ -283,6 +283,22 @@ class ForceGraph extends React.Component{
                       <Button fullWidth={true} style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.percolationIteration}>Percolation Step</Button>
                   </Tooltip>
                   </ButtonGroup>
+                  <br/>
+                  <br/>
+                  <Divider variant = "middle" color = "Secondary"/>
+                  <br/>
+                  <br/>
+                  <h3>LEGEND</h3>
+                  <div style={{textAlign:"left", marginLeft:TOOLBAR_WIDTH / 2 - 100}}>
+                    <div style={{width:"10px", height:"10px", backgroundColor:"#5375e2", borderRadius:"50%", display:"inline-block"}}></div>
+                    &nbsp;Inactive Node
+                    <br/>
+                    <div style={{width:"10px", height:"10px", backgroundColor:"#f65868", borderRadius:"50%", display:"inline-block"}}></div>
+                    &nbsp;Active Node
+                    <br/>
+                    <div style={{width:"10px", height:"10px", backgroundColor:"#228b22", borderRadius:"50%", display:"inline-block"}}></div>
+                    &nbsp;Recently Infected Node
+                  </div>
               </Box>
               <ForceGraph2D graphData={this.state.forceData}
                     nodeColor={d => d.recentlyInfected ? "#228b22" : d.active ? "#f65868" : "#5375e2"}
