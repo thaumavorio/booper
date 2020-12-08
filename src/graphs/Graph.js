@@ -18,12 +18,20 @@ export default class Graph {
       return this.adj.keys();
     }
 
+    getVerticesCount() {
+        return this.adj.keys().size;
+    }
+
     getNeighbors(v) {
       return this.adj.get(v);
     }
 
     getDegree(v) {
       return this.getNeighbors(v).size;
+    }
+
+    getActiveVerticesCount() {
+        return this.activeVertices.size;
     }
 
     activateVertex(v) {
