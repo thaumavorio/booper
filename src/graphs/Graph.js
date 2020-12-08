@@ -110,7 +110,7 @@ export default class Graph {
         let nodes = [];
         let edges = [];
         for (let v of this.getVertices()) {
-            let node = {"id": v, "infected": this.activeVertices.has(v.toString())};
+            let node = {"id": v, "active": this.activeVertices.has(v.toString()), "recentlyInfected": this.recentlyInfected.has(v)};
             let oldNode = oldData.nodes.find(nod => nod.id === v);
 
             if (oldNode !== undefined) {

@@ -285,7 +285,7 @@ class ForceGraph extends React.Component{
                   </ButtonGroup>
               </Box>
               <ForceGraph2D graphData={this.state.forceData}
-                    nodeColor={d => d.infected ? "#f65868" : "#5375e2"}
+                    nodeColor={d => d.recentlyInfected ? "#228b22" : d.active ? "#f65868" : "#5375e2"}
                     linkColor="#5c616e"
                     linkOpacity={0.7}
                     linkWidth={3.5}
