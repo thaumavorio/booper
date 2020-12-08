@@ -6,8 +6,6 @@ import { Box, Button, ButtonGroup, Dialog, DialogTitle, DialogContent, Divider, 
 import { makeStyles } from '@material-ui/core/styles';
 import HelpIcon from '@material-ui/icons/Help';
 
-
-
 let graphs = setUpGraphs();
 let graph1 = graphs[0];
 let graph2 = graphs[1];
@@ -227,90 +225,90 @@ class ForceGraph extends React.Component{
   render() {
       const TOOLBAR_WIDTH = 300;
       return <div>
-          <Box display="flex" flexDirection="row" alignItems="center" justify-content="center" style={{paddingLeft: 10, backgroundColor: "#fefefe"}}>
-              <Paper variant="outlined">
-                <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" alignContent="center" m={1} p={1} width={TOOLBAR_WIDTH}>
-                  <br/>
-                  <br/>
-                  <h3>GRAPH</h3>
-                  <Box display="flex" flexDirection="row">
-                  <Button variant="outlined" component="label">
-                      Upload Adjacency Matrix
-                      <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
-                  </Button>
-                  <IconButton color="info" variant="contained" component="label" onClick={this.helpIconOpen}>
-                      <HelpIcon/>
-                  </IconButton>
-                  <Dialog onClose={this.helpIconClose} open={this.state.helpOpen}>
-                  <DialogTitle id="customized-dialog-title" onClose={this.helpIconClose}>
-                      Uploading Adjacency Matrices
-                  </DialogTitle>
-                  <DialogContent dividers>
-                      <Typography gutterBottom>
-                          The adjacency matrix input should be in the format of a .csv file. The first row should contain
-                          either a '+' or a '-', indicating whether the node is initially infected or not, respectively.
-                      </Typography>
-                      <Typography gutterBottom>
-                          The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
-                      </Typography>
-                      <Typography gutterBottom>
-                          An example of an adjacency matrix input is available below:
-                      </Typography>
-                      <Typography gutterBottom>
-                          <a href="example_graph.csv" download>Example Adjacency Matrix Input</a>
-                      </Typography>
-                  </DialogContent>
-                  </Dialog>
-                  </Box>
-                  <br/>
-                  <br/>
-                  <Divider variant = "middle" color = "Secondary"/>
-                  <br/>
-                  <h3>SEED SETS</h3>
-                  <ButtonGroup
-                      orientation="horizontal"
-                      color = "Primary"
-                      aria-label = "horizontal outlined primary button group"
-                      variant = "outlined"
-                  >
-                  <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
-                      <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getMinContagiousSet}>Minimum Contagious Set</Button>
-                  </Tooltip>
-                  <Tooltip title={"Calculates and displays a set of nodes which would activate the entire graph using a greedy algorithm."}>
-                      <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>Greedy Contagious Set</Button>
-                  </Tooltip>
-                  </ButtonGroup>
-                  <Tooltip title={"Makes each node a seed independently at random with the given probability."}>
-                      <Button style={{ fontSize: '12px' }} color = "Primary" variant="outlined" onClick={this.randomSeedSet}>
-                          Random Seed Set
-                          <input id="seed-probability" type="number" min="0.00000000000" max="1.00000000000" onClick={this.stopPropagation} />
+          <Box display="flex" flexDirection="row" alignItems="center" justify-content="center" style={{backgroundColor: "#fefefe"}}>
+              <Paper elevation={5} style={{margin: 10}}>
+                  <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" alignContent="center" style={{padding: 10, overflowY: "scroll"}} width={TOOLBAR_WIDTH}>
+                      <br/>
+                      <br/>
+                      <h3>GRAPH</h3>
+                      <Box display="flex" flexDirection="row">
+                      <Button variant="outlined" component="label">
+                          Upload Adjacency Matrix
+                          <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
                       </Button>
-                  </Tooltip>
-                  <br/>
-                  <br/>
-                  <Divider variant = "middle" color = "Secondary"/>
-                  <br/>
-                  <br/>
-                  <h3>BOOTSTRAP PERCOLATION</h3>
-                  <div class="input-thresh">
-                    <label for="bootstrap-percolation-threshold">Threshold:</label>
-                    <input id="bootstrap-percolation-threshold" type="number" min="1" onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.state.bootstrapPercolationThreshold}  />
-                  </div>
-                  Iteration: {this.state.bootstrapPercolationIteration}
-                  <ButtonGroup
-                      orientation="horizontal"
-                      color = "Primary"
-                      aria-label = "horizontal outlined primary button group"
-                      variant = "outlined"
-                  >
-                  <Tooltip title={"Deactivate all vertices"}>
-                      <Button fullWidth={true} style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.resetInfections}>Reset</Button>
-                  </Tooltip>
-                  <Tooltip title={"Activates any vertex with 2 or more activated neighbors. This is an iterative process."}>
-                      <Button fullWidth={true} style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.percolationIteration}>Percolation Step</Button>
-                  </Tooltip>
-                  </ButtonGroup>
-              </Box>
+                      <IconButton color="info" variant="contained" component="label" onClick={this.helpIconOpen}>
+                          <HelpIcon/>
+                      </IconButton>
+                      <Dialog onClose={this.helpIconClose} open={this.state.helpOpen}>
+                      <DialogTitle id="customized-dialog-title" onClose={this.helpIconClose}>
+                          Uploading Adjacency Matrices
+                      </DialogTitle>
+                      <DialogContent dividers>
+                          <Typography gutterBottom>
+                              The adjacency matrix input should be in the format of a .csv file. The first row should contain
+                              either a '+' or a '-', indicating whether the node is initially infected or not, respectively.
+                          </Typography>
+                          <Typography gutterBottom>
+                              The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
+                          </Typography>
+                          <Typography gutterBottom>
+                              An example of an adjacency matrix input is available below:
+                          </Typography>
+                          <Typography gutterBottom>
+                              <a href="example_graph.csv" download>Example Adjacency Matrix Input</a>
+                          </Typography>
+                      </DialogContent>
+                      </Dialog>
+                      </Box>
+                      <br/>
+                      <br/>
+                      <Divider variant = "middle" color = "Secondary"/>
+                      <br/>
+                      <h3>SEED SETS</h3>
+                      <ButtonGroup
+                          orientation="horizontal"
+                          color = "Primary"
+                          aria-label = "horizontal outlined primary button group"
+                          variant = "outlined"
+                      >
+                      <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
+                          <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getMinContagiousSet}>Minimum Contagious Set</Button>
+                      </Tooltip>
+                      <Tooltip title={"Calculates and displays a set of nodes which would activate the entire graph using a greedy algorithm."}>
+                          <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>Greedy Contagious Set</Button>
+                      </Tooltip>
+                      </ButtonGroup>
+                      <Tooltip title={"Makes each node a seed independently at random with the given probability."}>
+                          <Button style={{ fontSize: '12px' }} color = "Primary" variant="outlined" onClick={this.randomSeedSet}>
+                              Random Seed Set
+                              <input id="seed-probability" type="number" min="0.00000000000" max="1.00000000000" onClick={this.stopPropagation} />
+                          </Button>
+                      </Tooltip>
+                      <br/>
+                      <br/>
+                      <Divider variant = "middle" color = "Secondary"/>
+                      <br/>
+                      <br/>
+                      <h3>BOOTSTRAP PERCOLATION</h3>
+                      <div class="input-thresh">
+                        <label for="bootstrap-percolation-threshold">Threshold:</label>
+                        <input id="bootstrap-percolation-threshold" type="number" min="1" onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.state.bootstrapPercolationThreshold}  />
+                      </div>
+                      Iteration: {this.state.bootstrapPercolationIteration}
+                      <ButtonGroup
+                          orientation="horizontal"
+                          color = "Primary"
+                          aria-label = "horizontal outlined primary button group"
+                          variant = "outlined"
+                      >
+                      <Tooltip title={"Deactivate all vertices"}>
+                          <Button fullWidth={true} style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.resetInfections}>Reset</Button>
+                      </Tooltip>
+                      <Tooltip title={"Activates any vertex with 2 or more activated neighbors. This is an iterative process."}>
+                          <Button fullWidth={true} style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.percolationIteration}>Percolation Step</Button>
+                      </Tooltip>
+                      </ButtonGroup>
+                  </Box>
               </Paper>
               <ForceGraph2D graphData={this.state.forceData}
                     nodeColor={d => d.infected ? "#f65868" : "#5375e2"}
