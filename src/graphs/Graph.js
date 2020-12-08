@@ -1,7 +1,8 @@
 export default class Graph {
     constructor() {
       this.adj = new Map();
-      this.activeVertices = new Set();
+      this.activeVertices = new Set();    // all active vertices
+      this.recentlyInfected = new Set();  // vertices that were infected in the most recent percolation iteration
     }
 
     addVertex(v) {
@@ -40,12 +41,13 @@ export default class Graph {
 
     deactivateAllVertices() {
       this.activeVertices.clear();
+      this.recentlyInfected.clear();
       return this;
     }
 
     bootstrapPercolationIteration(threshold) {
       const vertices = this.getVertices();
-      const infectedVertices = new Set();
+      this.recentlyInfected.clear();
 
       for (let v of vertices) {
         console.log("Looking at", v);
@@ -68,11 +70,11 @@ export default class Graph {
 
         if (threshold <= count) {
           console.log("\tIt is thus infected.");
-          infectedVertices.add(v);
+          this.recentlyInfected.add(v);
         }
       }
 
-      for(const vertex of infectedVertices) {
+      for(const vertex of this.recentlyInfected) {
         console.log("Adding infected vertex: " + vertex);
         this.activateVertex(vertex);
       }
