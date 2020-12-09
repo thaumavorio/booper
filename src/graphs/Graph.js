@@ -18,10 +18,6 @@ export default class Graph {
       return this.adj.keys();
     }
 
-    getVerticesCount() {
-        return this.adj.keys().size;
-    }
-
     getNeighbors(v) {
       return this.adj.get(v);
     }

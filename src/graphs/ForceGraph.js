@@ -245,7 +245,7 @@ class ForceGraph extends React.Component{
               <Paper elevation={5} style={{margin: 10}}>
                   <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" style={{padding: 10, justifyContent: "center"}} width={TOOLBAR_WIDTH}>
                       <h3>GRAPH</h3>
-                      <Box display="flex" flexDirection="row" style={{padding: 10}}>
+                      <Box display="flex" flexDirection="row" style={{margin: 10, marginTop: 0}}>
                           <Button variant="outlined" component="label">
                               <Typography variant="button">Upload Adjacency Matrix</Typography>
                               <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
@@ -276,34 +276,47 @@ class ForceGraph extends React.Component{
                       </Box>
                       <Divider variant = "middle" color = "#000000"/>
                       <h3>SEED SETS</h3>
+                      <Box display="flex" flexDirection="column" alignItems="center">
                       <ButtonGroup
                           orientation="horizontal"
                           color = "Primary"
                           aria-label = "horizontal outlined primary button group"
                           variant = "outlined"
+                          style = {{margin: 10, marginTop: 0}}
                       >
                           <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
-                              <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getMinContagiousSet}>Minimum Contagious Set</Button>
+                              <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getMinContagiousSet}>
+                                  <Typography variant="button">Minimum Contagious Set</Typography>
+                              </Button>
                           </Tooltip>
                           <Tooltip title={"Calculates and displays a set of nodes which would activate the entire graph using a greedy algorithm."}>
-                              <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>Greedy Contagious Set</Button>
+                              <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>
+                                  <Typography variant="button">Greedy Contagious Set</Typography>
+                              </Button>
                           </Tooltip>
                       </ButtonGroup>
-                      <Tooltip title={"Makes each node a seed independently at random with the given probability."}>
-                          <Button style={{ fontSize: '12px' }} color = "Primary" variant="outlined" onClick={this.randomSeedSet}>
-                              Random Seed Set
-                              <input id="seed-probability" type="number" min="0.00000000000" max="1.00000000000" onClick={this.stopPropagation} />
-                          </Button>
-                      </Tooltip>
+                          <Tooltip title={"Makes each node a seed independently at random with the given probability."}>
+                              <Button style={{ margin: 10, marginRight: 0 }} color = "Primary" variant="outlined" onClick={this.randomSeedSet}>
+                                  <Typography style={{ padding: 5 }} variant="button">Random Seed Set</Typography>
+                              </Button>
+                          </Tooltip>
+                      </Box>
+                      <Box display="flex" flexDirection="row" alignContent="center" style={{justifyContent: "center"}}>
+                          <Typography variant="overline">Seed Probability:</Typography>
+                          <input style={{ width: 100, height: 30, marginLeft: 5, marginBottom: 10}} placeholder="Specify p" id="seed-probability" type="number" min="0.00000000000" max="1.00000000000" onClick={this.stopPropagation} />
+                      </Box>
                       <Divider variant = "middle" color = "Secondary"/>
                       <h3>BOOTSTRAP PERCOLATION</h3>
+                      <Box display="flex" flexDirection="column" alignItems="center" style={{justifyContent: "center"}}>
+                      <Box display="flex" flexDirection="row" alignItems="center" style={{ justifyContent: "center" }}>
+                      <Typography gutterBottom>Threshold: </Typography>
                       <div class="input-thresh">
-                          <label for="bootstrap-percolation-threshold">Threshold:</label>
-                          <input id="bootstrap-percolation-threshold" type="number" min="1" onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.state.bootstrapPercolationThreshold}  />
+                          <input style={{ width: 100, margin: 10, marginTop: 0 }} id="bootstrap-percolation-threshold" type="number" min="1" onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.state.bootstrapPercolationThreshold}  />
                       </div>
+                      </Box>
                       <Typography gutterBottom>Iteration: {this.state.bootstrapPercolationIteration}</Typography>
-                      <Typography gutterBottom>Number of Active Vertices: {this.state.activeVerticesCount}</Typography>
-                      <Typography gutterBottom>Number of Inactive Vertices: {this.state.forceData.nodes.length - this.state.activeVerticesCount}</Typography>
+                      <Typography gutterBottom>Active Vertices: {this.state.activeVerticesCount}</Typography>
+                      <Typography gutterBottom>Inactive Vertices: {this.state.forceData.nodes.length - this.state.activeVerticesCount}</Typography>
                       <ButtonGroup
                           orientation="horizontal"
                           color = "Primary"
@@ -311,23 +324,28 @@ class ForceGraph extends React.Component{
                           variant = "outlined"
                       >
                           <Tooltip title={"Deactivate all vertices"}>
-                              <Button fullWidth={true} style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.resetInfections}>Reset</Button>
+                              <Button fullWidth={true} style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.resetInfections}>
+                                  <Typography variant="button" gutterBottom>Reset</Typography>
+                              </Button>
                           </Tooltip>
                           <Tooltip title={"Activates any vertex with 2 or more activated neighbors. This is an iterative process."}>
-                              <Button fullWidth={true} style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.percolationIteration}>Percolation Step</Button>
+                              <Button fullWidth={true} color = "Primary" variant="outlined" onClick={this.percolationIteration}>
+                                  <Typography variant="button" gutterBottom>Percolation Step</Typography>
+                              </Button>
                           </Tooltip>
                       </ButtonGroup>
                       <Divider variant = "middle" color = "Secondary"/>
-                      <h3>LEGEND</h3>
+                      </Box>
+                      <h3 style={{marginBottom: 5}}>LEGEND</h3>
                       <div style={{textAlign:"left", marginLeft:TOOLBAR_WIDTH / 2 - 100}}>
                           <div style={{width:"10px", height:"10px", backgroundColor:INACTIVE_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
-                          &nbsp;Inactive Node
+                          &nbsp;<Typography variant="overline" gutterBottom>Inactive Node</Typography>
                           <br/>
                           <div style={{width:"10px", height:"10px", backgroundColor:ACTIVE_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
-                          &nbsp;Active Node
+                          &nbsp;<Typography variant="overline" gutterBottom>Active Node</Typography>
                           <br/>
                           <div style={{width:"10px", height:"10px", backgroundColor:RECENTLY_INFECTED_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
-                          &nbsp;Recently Infected Node
+                          &nbsp;<Typography variant="overline" gutterBottom>Recently Infected Node</Typography>
                       </div>
                   </Box>
               </Paper>
