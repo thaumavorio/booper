@@ -74,7 +74,7 @@ class ForceGraph extends React.Component{
         const reader = new FileReader();
         reader.onload = (event) => {
             // Parse input file.
-            const string = event.target.result;
+            const string = event.target.result.trim();
             const matrix = string.split('\n');
             for(var i in matrix) {
                 matrix[i] = matrix[i].trim().split(',');
