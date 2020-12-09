@@ -8,6 +8,7 @@ import HelpIcon from '@material-ui/icons/Help';
 
 
 
+
 let graphs = setUpGraphs();
 let graph1 = graphs[0];
 let graph2 = graphs[1];
@@ -285,7 +286,7 @@ class ForceGraph extends React.Component{
                           style = {{margin: 10, marginTop: 0}}
                       >
                           <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
-                              <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getMinContagiousSet}>
+                              <Button style={{ fontSize: '12px' }} color = "Secondary" onClick={this.getMinContagiousSet}>
                                   <Typography variant="button">Minimum Contagious Set</Typography>
                               </Button>
                           </Tooltip>
@@ -308,32 +309,32 @@ class ForceGraph extends React.Component{
                       <Divider variant = "middle" color = "Secondary"/>
                       <h3>BOOTSTRAP PERCOLATION</h3>
                       <Box display="flex" flexDirection="column" alignItems="center" style={{justifyContent: "center"}}>
-                      <Box display="flex" flexDirection="row" alignItems="center" style={{ justifyContent: "center" }}>
-                      <Typography gutterBottom>Threshold: </Typography>
-                      <div class="input-thresh">
-                          <input style={{ width: 100, margin: 10, marginTop: 0 }} id="bootstrap-percolation-threshold" type="number" min="1" onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.state.bootstrapPercolationThreshold}  />
-                      </div>
+                          <ButtonGroup
+                              orientation="horizontal"
+                              color = "Primary"
+                              aria-label = "horizontal outlined primary button group"
+                              variant = "outlined"
+                          >
+                              <Tooltip title={"Deactivate all vertices"}>
+                                  <Button fullWidth={true} style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.resetInfections}>
+                                      <Typography variant="button" gutterBottom>Reset</Typography>
+                                  </Button>
+                              </Tooltip>
+                              <Tooltip title={"Activates any vertex with 2 or more activated neighbors. This is an iterative process."}>
+                                  <Button fullWidth={true} color = "Primary" variant="outlined" onClick={this.percolationIteration}>
+                                      <Typography variant="button" gutterBottom>Percolation Step</Typography>
+                                  </Button>
+                              </Tooltip>
+                          </ButtonGroup>
+                      <Box display="flex" flexDirection="row" alignItems="center" style={{ padding:10, justifyContent: "center" }}>
+                          <Typography variant="overline" gutterBottom>Threshold: </Typography>
+                          <div class="input-thresh">
+                              <input style={{ width: 100, height: 30, marginLeft: 5, marginBottom: 10}} id="bootstrap-percolation-threshold" type="number" min="1" onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.state.bootstrapPercolationThreshold}  />
+                          </div>
                       </Box>
-                      <Typography gutterBottom>Iteration: {this.state.bootstrapPercolationIteration}</Typography>
-                      <Typography gutterBottom>Active Vertices: {this.state.activeVerticesCount}</Typography>
-                      <Typography gutterBottom>Inactive Vertices: {this.state.forceData.nodes.length - this.state.activeVerticesCount}</Typography>
-                      <ButtonGroup
-                          orientation="horizontal"
-                          color = "Primary"
-                          aria-label = "horizontal outlined primary button group"
-                          variant = "outlined"
-                      >
-                          <Tooltip title={"Deactivate all vertices"}>
-                              <Button fullWidth={true} style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.resetInfections}>
-                                  <Typography variant="button" gutterBottom>Reset</Typography>
-                              </Button>
-                          </Tooltip>
-                          <Tooltip title={"Activates any vertex with 2 or more activated neighbors. This is an iterative process."}>
-                              <Button fullWidth={true} color = "Primary" variant="outlined" onClick={this.percolationIteration}>
-                                  <Typography variant="button" gutterBottom>Percolation Step</Typography>
-                              </Button>
-                          </Tooltip>
-                      </ButtonGroup>
+                      <Typography variant="subtitle1" gutterBottom>Iteration: {this.state.bootstrapPercolationIteration}</Typography>
+                      <Typography variant="subtitle1" gutterBottom>Active Vertices: {this.state.activeVerticesCount}</Typography>
+                      <Typography variant="subtitle1" gutterBottom>Inactive Vertices: {this.state.forceData.nodes.length - this.state.activeVerticesCount}</Typography>
                       <Divider variant = "middle" color = "Secondary"/>
                       </Box>
                       <h3 style={{marginBottom: 5}}>LEGEND</h3>
