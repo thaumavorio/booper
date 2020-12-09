@@ -7,8 +7,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import HelpIcon from '@material-ui/icons/Help';
 
 
-
-
 let graphs = setUpGraphs();
 let graph1 = graphs[0];
 let graph2 = graphs[1];
@@ -240,10 +238,11 @@ class ForceGraph extends React.Component{
       const INACTIVE_COLOR = "#5375e2";
       const ACTIVE_COLOR = "#f65868";
       const RECENTLY_INFECTED_COLOR = "#228b22";
-      const BACKGROUND_COLOR = "#fefefe"
+      const BACKGROUND_COLOR = "#fefefe";
+      const TOOLBAR_COLOR = "#f5f5f5";
       return <div>
           <Box display="flex" flexDirection="row" alignItems="center" style={{backgroundColor: BACKGROUND_COLOR}}>
-              <Paper elevation={5} style={{margin: 10}}>
+              <Paper elevation={10} style={{margin: 20, backgroundColor: TOOLBAR_COLOR}}>
                   <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" style={{padding: 10, justifyContent: "center"}} width={TOOLBAR_WIDTH}>
                       <h3>GRAPH</h3>
                       <Box display="flex" flexDirection="row" style={{margin: 10, marginTop: 0}}>
@@ -251,7 +250,7 @@ class ForceGraph extends React.Component{
                               <Typography variant="button">Upload Adjacency Matrix</Typography>
                               <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
                           </Button>
-                          <IconButton color="info" variant="contained" component="label" onClick={this.helpIconOpen}>
+                          <IconButton color="Info" variant="contained" component="label" onClick={this.helpIconOpen}>
                               <HelpIcon/>
                           </IconButton>
                           <Dialog onClose={this.helpIconClose} open={this.state.helpOpen}>
@@ -275,23 +274,22 @@ class ForceGraph extends React.Component{
                               </DialogContent>
                           </Dialog>
                       </Box>
-                      <Divider variant = "middle" color = "#000000"/>
+                      <Divider variant = "middle" color = "Primary"/>
                       <h3>SEED SETS</h3>
                       <Box display="flex" flexDirection="column" alignItems="center">
                       <ButtonGroup
                           orientation="horizontal"
-                          color = "Primary"
-                          aria-label = "horizontal outlined primary button group"
-                          variant = "outlined"
+                          aria-label = "horizontal contained primary button group"
+                          variant = "contained"
                           style = {{margin: 10, marginTop: 0}}
                       >
                           <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
-                              <Button style={{ fontSize: '12px' }} color = "Secondary" onClick={this.getMinContagiousSet}>
+                              <Button style={{ fontSize: '12px' }} variant="outlined" onClick={this.getMinContagiousSet}>
                                   <Typography variant="button">Minimum Contagious Set</Typography>
                               </Button>
                           </Tooltip>
                           <Tooltip title={"Calculates and displays a set of nodes which would activate the entire graph using a greedy algorithm."}>
-                              <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>
+                              <Button style={{ fontSize: '12px' }} variant="outlined" onClick={this.getGreedyContagiousSet}>
                                   <Typography variant="button">Greedy Contagious Set</Typography>
                               </Button>
                           </Tooltip>
@@ -306,22 +304,21 @@ class ForceGraph extends React.Component{
                           <Typography variant="overline">Seed Probability:</Typography>
                           <input style={{ width: 100, height: 30, marginLeft: 5, marginBottom: 10}} placeholder="Specify p" id="seed-probability" type="number" min="0.00000000000" max="1.00000000000" onClick={this.stopPropagation} />
                       </Box>
-                      <Divider variant = "middle" color = "Secondary"/>
+                      <Divider variant = "middle" color = "Primary"/>
                       <h3>BOOTSTRAP PERCOLATION</h3>
                       <Box display="flex" flexDirection="column" alignItems="center" style={{justifyContent: "center"}}>
                           <ButtonGroup
                               orientation="horizontal"
-                              color = "Primary"
-                              aria-label = "horizontal outlined primary button group"
-                              variant = "outlined"
+                              aria-label = "horizontal contained primary button group"
+                              variant = "contained"
                           >
                               <Tooltip title={"Deactivate all vertices"}>
-                                  <Button fullWidth={true} style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.resetInfections}>
+                                  <Button fullWidth={true} variant="outlined" onClick={this.resetInfections}>
                                       <Typography variant="button" gutterBottom>Reset</Typography>
                                   </Button>
                               </Tooltip>
                               <Tooltip title={"Activates any vertex with 2 or more activated neighbors. This is an iterative process."}>
-                                  <Button fullWidth={true} color = "Primary" variant="outlined" onClick={this.percolationIteration}>
+                                  <Button fullWidth={true} variant="outlined" onClick={this.percolationIteration}>
                                       <Typography variant="button" gutterBottom>Percolation Step</Typography>
                                   </Button>
                               </Tooltip>
@@ -335,8 +332,8 @@ class ForceGraph extends React.Component{
                       <Typography variant="subtitle1" gutterBottom>Iteration: {this.state.bootstrapPercolationIteration}</Typography>
                       <Typography variant="subtitle1" gutterBottom>Active Vertices: {this.state.activeVerticesCount}</Typography>
                       <Typography variant="subtitle1" gutterBottom>Inactive Vertices: {this.state.forceData.nodes.length - this.state.activeVerticesCount}</Typography>
-                      <Divider variant = "middle" color = "Secondary"/>
                       </Box>
+                      <Divider variant = "middle" color = "Primary"/>
                       <h3 style={{marginBottom: 5}}>LEGEND</h3>
                       <div style={{textAlign:"left", marginLeft:TOOLBAR_WIDTH / 2 - 100}}>
                           <div style={{width:"10px", height:"10px", backgroundColor:INACTIVE_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
