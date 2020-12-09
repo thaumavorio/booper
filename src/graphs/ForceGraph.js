@@ -5,6 +5,7 @@ import update from 'immutability-helper';
 import { Box, Button, ButtonGroup, Dialog, DialogTitle, DialogContent, Divider, IconButton, Tooltip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import HelpIcon from '@material-ui/icons/Help';
+import Loader from 'react-loader-spinner';
 
 
 
@@ -34,7 +35,8 @@ class ForceGraph extends React.Component{
                 width: window.innerWidth
             },
             bootstrapPercolationThreshold: 2,
-            bootstrapPercolationIteration: 0
+            bootstrapPercolationIteration: 0,
+            loading: false
         };
 
         this.updateBootstrapPercolationThreshold = this.updateBootstrapPercolationThreshold.bind(this)
@@ -55,7 +57,8 @@ class ForceGraph extends React.Component{
           forceData: state.forceData,
           windowSize: {height: window.innerHeight, width: window.innerWidth},
           bootstrapPercolationIteration: state.bootstrapPercolationIteration,
-          bootstrapPercolationThreshold: state.bootstrapPercolationThreshold
+          bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
+          loading: state.loading
         }));
     }
 
@@ -139,23 +142,28 @@ class ForceGraph extends React.Component{
               forceData: graph.getGraphData(),
               windowSize: { height: window.innerHeight, width: window.innerWidth },
               bootstrapPercolationIteration: 0,
-              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold }));
+              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
+              loading: state.loading }));
         };
         reader.readAsText(file);
     }
 
   getMinContagiousSet = () => {
+    this.setState(state => {
+        return update(state, {loading: {$set: true}});
+    });
     this.state.graph.findMinimalContagiousSet(this.state.bootstrapPercolationThreshold)
-          .then(infectedVerts => this.setState(function(state){
+        .then(infectedVerts => this.setState(function(state){
             const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
             g.activateVertices(infectedVerts);
             return {
-              graph: g,
-              forceData: g.getGraphData(state.forceData),
-              windowSize: { height: window.innerHeight, width: window.innerWidth },
-              bootstrapPercolationIteration: 0,
-              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold };
-          }));
+            graph: g,
+            forceData: g.getGraphData(state.forceData),
+            windowSize: { height: window.innerHeight, width: window.innerWidth },
+            bootstrapPercolationIteration: 0,
+            bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
+            loading: false };
+        }));
     };
 
   getGreedyContagiousSet = () => {
@@ -168,7 +176,8 @@ class ForceGraph extends React.Component{
                   forceData: g.getGraphData(state.forceData),
                   windowSize: { height: window.innerHeight, width: window.innerWidth },
                   bootstrapPercolationIteration: 0,
-                  bootstrapPercolationThreshold: state.bootstrapPercolationThreshold };
+                  bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
+                  loading: state.loading };
             }));
     };
 
@@ -182,7 +191,8 @@ class ForceGraph extends React.Component{
                     forceData: g.getGraphData(state.forceData),
                     windowSize: state.windowSize,
                     bootstrapPercolationIteration: 0,
-                    bootstrapPercolationThreshold: state.bootstrapPercolationThreshold
+                    bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
+                    loading: state.loading
                 };
             });
         }
@@ -195,7 +205,8 @@ class ForceGraph extends React.Component{
               forceData: state.graph.getGraphData(state.forceData),
               windowSize: { height: window.innerHeight, width: window.innerWidth },
               bootstrapPercolationIteration: 0,
-              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold })
+              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
+              loading: state.loading })
     );
   };
 
@@ -206,7 +217,8 @@ class ForceGraph extends React.Component{
               forceData: g.getGraphData(state.forceData),
               windowSize: { height: window.innerHeight, width: window.innerWidth },
               bootstrapPercolationIteration: state.bootstrapPercolationIteration + 1,
-              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold })
+              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
+              loading: state.loading })
       );
   }
 
@@ -217,7 +229,8 @@ class ForceGraph extends React.Component{
       forceData: state.forceData,
       windowSize: { height: window.innerHeight, width: window.innerWidth },
       bootstrapPercolationIteration: state.bootstrapPercolationIteration,
-      bootstrapPercolationThreshold: newThreshold }))
+      bootstrapPercolationThreshold: newThreshold,
+      loading: state.loading }))
   }
 
   stopPropagation = (event) => {
@@ -310,6 +323,10 @@ class ForceGraph extends React.Component{
                   </Tooltip>
                   </ButtonGroup>
               </Box>
+              {this.state.loading ?
+              <div style={{width: this.state.windowSize.width - TOOLBAR_WIDTH, height: this.state.windowSize.height, display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "#fefefe"}}>
+                <Loader type="Grid" color="#00BFFF" height={80} width={80} />
+              </div> :
               <ForceGraph2D graphData={this.state.forceData}
                     nodeColor={d => d.infected ? "#f65868" : "#5375e2"}
                     linkColor="#5c616e"
@@ -318,7 +335,7 @@ class ForceGraph extends React.Component{
                     backgroundColor="#fefefe"
                     width={this.state.windowSize.width - TOOLBAR_WIDTH}
                     height={this.state.windowSize.height}
-              />
+              />}
           </Box>
       </div>;
   }
