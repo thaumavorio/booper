@@ -26,6 +26,10 @@ export default class Graph {
       return this.getNeighbors(v).size;
     }
 
+    getActiveVerticesCount() {
+        return this.activeVertices.size;
+    }
+
     activateVertex(v) {
         console.log("Activate Vertex call: " + v.toString());
         return this.activeVertices.add(v.toString());

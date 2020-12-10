@@ -2,10 +2,9 @@ import * as React from "react";
 import ForceGraph2D from 'react-force-graph-2d';
 import Graph from "./Graph";
 import update from 'immutability-helper';
-import { Box, Button, ButtonGroup, Dialog, DialogTitle, DialogContent, Divider, IconButton, Tooltip, Typography } from '@material-ui/core';
+import { Box, Button, ButtonGroup, Dialog, DialogTitle, DialogContent, Divider, IconButton, Paper, Tooltip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import HelpIcon from '@material-ui/icons/Help';
-
 
 
 let graphs = setUpGraphs();
@@ -34,7 +33,8 @@ class ForceGraph extends React.Component{
                 width: window.innerWidth
             },
             bootstrapPercolationThreshold: 2,
-            bootstrapPercolationIteration: 0
+            bootstrapPercolationIteration: 0,
+            activeVerticesCount: graph1.getActiveVerticesCount()
         };
 
         this.updateBootstrapPercolationThreshold = this.updateBootstrapPercolationThreshold.bind(this)
@@ -55,7 +55,8 @@ class ForceGraph extends React.Component{
           forceData: state.forceData,
           windowSize: {height: window.innerHeight, width: window.innerWidth},
           bootstrapPercolationIteration: state.bootstrapPercolationIteration,
-          bootstrapPercolationThreshold: state.bootstrapPercolationThreshold
+          bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
+          activeVerticesCount: state.activeVerticesCount
         }));
     }
 
@@ -139,7 +140,8 @@ class ForceGraph extends React.Component{
               forceData: graph.getGraphData(),
               windowSize: { height: window.innerHeight, width: window.innerWidth },
               bootstrapPercolationIteration: 0,
-              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold }));
+              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
+              activeVerticesCount: graph.getActiveVerticesCount()}));
         };
         reader.readAsText(file);
     }
@@ -154,7 +156,8 @@ class ForceGraph extends React.Component{
               forceData: g.getGraphData(state.forceData),
               windowSize: { height: window.innerHeight, width: window.innerWidth },
               bootstrapPercolationIteration: 0,
-              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold };
+              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
+              activeVerticesCount: g.getActiveVerticesCount() };
           }));
     };
 
@@ -168,7 +171,8 @@ class ForceGraph extends React.Component{
                   forceData: g.getGraphData(state.forceData),
                   windowSize: { height: window.innerHeight, width: window.innerWidth },
                   bootstrapPercolationIteration: 0,
-                  bootstrapPercolationThreshold: state.bootstrapPercolationThreshold };
+                  bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
+                  activeVerticesCount: g.getActiveVerticesCount()};
             }));
     };
 
@@ -182,7 +186,8 @@ class ForceGraph extends React.Component{
                     forceData: g.getGraphData(state.forceData),
                     windowSize: state.windowSize,
                     bootstrapPercolationIteration: 0,
-                    bootstrapPercolationThreshold: state.bootstrapPercolationThreshold
+                    bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
+                    activeVerticesCount: g.getActiveVerticesCount()
                 };
             });
         }
@@ -195,7 +200,8 @@ class ForceGraph extends React.Component{
               forceData: state.graph.getGraphData(state.forceData),
               windowSize: { height: window.innerHeight, width: window.innerWidth },
               bootstrapPercolationIteration: 0,
-              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold })
+              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
+              activeVerticesCount: 0 })
     );
   };
 
@@ -206,7 +212,9 @@ class ForceGraph extends React.Component{
               forceData: g.getGraphData(state.forceData),
               windowSize: { height: window.innerHeight, width: window.innerWidth },
               bootstrapPercolationIteration: state.bootstrapPercolationIteration + 1,
-              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold })
+              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
+              activeVerticesCount: g.getActiveVerticesCount()
+      })
       );
   }
 
@@ -217,7 +225,8 @@ class ForceGraph extends React.Component{
       forceData: state.forceData,
       windowSize: { height: window.innerHeight, width: window.innerWidth },
       bootstrapPercolationIteration: state.bootstrapPercolationIteration,
-      bootstrapPercolationThreshold: newThreshold }))
+      bootstrapPercolationThreshold: newThreshold,
+      activeVerticesCount: state.activeVerticesCount }))
   }
 
   stopPropagation = (event) => {
@@ -229,115 +238,124 @@ class ForceGraph extends React.Component{
       const INACTIVE_COLOR = "#5375e2";
       const ACTIVE_COLOR = "#f65868";
       const RECENTLY_INFECTED_COLOR = "#228b22";
+      const BACKGROUND_COLOR = "#fefefe";
+      const TOOLBAR_COLOR = "#f5f5f5";
       return <div>
-          <Box display="flex" flexDirection="row">
-              <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" alignContent="center" color="Secondary" m={1} p={1} width={TOOLBAR_WIDTH}>
-                  <br/>
-                  <br/>
-                  <h3>GRAPH</h3>
-                  <Box display="flex" flexDirection="row">
-                  <Button color = "Primary" variant="outlined" component="label">
-                      Upload Adjacency Matrix
-                      <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
-                  </Button>
-                  <IconButton color="info" variant="contained" component="label" onClick={this.helpIconOpen}>
-                      <HelpIcon/>
-                  </IconButton>
-                  <Dialog onClose={this.helpIconClose} open={this.state.helpOpen}>
-                  <DialogTitle id="customized-dialog-title" onClose={this.helpIconClose}>
-                      Uploading Adjacency Matrices
-                  </DialogTitle>
-                  <DialogContent dividers>
-                      <Typography gutterBottom>
-                          The adjacency matrix input should be in the format of a .csv file. The first row should contain
-                          either a '+' or a '-', indicating whether the node is initially infected or not, respectively.
-                      </Typography>
-                      <Typography gutterBottom>
-                          The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
-                      </Typography>
-                      <Typography gutterBottom>
-                          An example of an adjacency matrix input is available below:
-                      </Typography>
-                      <Typography gutterBottom>
-                          <a href="example_graph.csv" download>Example Adjacency Matrix Input</a>
-                      </Typography>
-                  </DialogContent>
-                  </Dialog>
+          <Box display="flex" flexDirection="row" alignItems="center" style={{backgroundColor: BACKGROUND_COLOR}}>
+              <Paper elevation={10} style={{margin: 20, backgroundColor: TOOLBAR_COLOR}}>
+                  <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" style={{padding: 10, justifyContent: "center"}} width={TOOLBAR_WIDTH}>
+                      <h3>GRAPH</h3>
+                      <Box display="flex" flexDirection="row" style={{margin: 10, marginTop: 0}}>
+                          <Button variant="outlined" component="label">
+                              <Typography variant="button">Upload Adjacency Matrix</Typography>
+                              <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
+                          </Button>
+                          <IconButton color="Info" variant="contained" component="label" onClick={this.helpIconOpen}>
+                              <HelpIcon/>
+                          </IconButton>
+                          <Dialog onClose={this.helpIconClose} open={this.state.helpOpen}>
+                              <DialogTitle id="customized-dialog-title" onClose={this.helpIconClose}>
+                                  Uploading Adjacency Matrices
+                              </DialogTitle>
+                              <DialogContent dividers>
+                                  <Typography gutterBottom>
+                                      The adjacency matrix input should be in the format of a .csv file. The first row should contain
+                                      either a '+' or a '-', indicating whether the node is initially infected or not, respectively.
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                      The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                      An example of an adjacency matrix input is available below:
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                      <a href="example_graph.csv" download>Example Adjacency Matrix Input</a>
+                                  </Typography>
+                              </DialogContent>
+                          </Dialog>
+                      </Box>
+                      <Divider variant = "middle" color = "Primary"/>
+                      <h3>SEED SETS</h3>
+                      <Box display="flex" flexDirection="column" alignItems="center">
+                      <ButtonGroup
+                          orientation="horizontal"
+                          aria-label = "horizontal contained primary button group"
+                          variant = "contained"
+                          style = {{margin: 10, marginTop: 0}}
+                      >
+                          <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
+                              <Button style={{ fontSize: '12px' }} variant="outlined" onClick={this.getMinContagiousSet}>
+                                  <Typography variant="button">Minimum Contagious Set</Typography>
+                              </Button>
+                          </Tooltip>
+                          <Tooltip title={"Calculates and displays a set of nodes which would activate the entire graph using a greedy algorithm."}>
+                              <Button style={{ fontSize: '12px' }} variant="outlined" onClick={this.getGreedyContagiousSet}>
+                                  <Typography variant="button">Greedy Contagious Set</Typography>
+                              </Button>
+                          </Tooltip>
+                      </ButtonGroup>
+                          <Tooltip title={"Makes each node a seed independently at random with the given probability."}>
+                              <Button style={{ margin: 10, marginRight: 0 }} color = "Primary" variant="outlined" onClick={this.randomSeedSet}>
+                                  <Typography style={{ padding: 5 }} variant="button">Random Seed Set</Typography>
+                              </Button>
+                          </Tooltip>
+                      </Box>
+                      <Box display="flex" flexDirection="row" alignContent="center" style={{justifyContent: "center"}}>
+                          <Typography variant="overline">Seed Probability:</Typography>
+                          <input style={{ width: 100, height: 30, marginLeft: 5, marginBottom: 10}} placeholder="Specify p" id="seed-probability" type="number" min="0.00000000000" max="1.00000000000" onClick={this.stopPropagation} />
+                      </Box>
+                      <Divider variant = "middle" color = "Primary"/>
+                      <h3>BOOTSTRAP PERCOLATION</h3>
+                      <Box display="flex" flexDirection="column" alignItems="center" style={{justifyContent: "center"}}>
+                          <ButtonGroup
+                              orientation="horizontal"
+                              aria-label = "horizontal contained primary button group"
+                              variant = "contained"
+                          >
+                              <Tooltip title={"Deactivate all vertices"}>
+                                  <Button fullWidth={true} variant="outlined" onClick={this.resetInfections}>
+                                      <Typography variant="button" gutterBottom>Reset</Typography>
+                                  </Button>
+                              </Tooltip>
+                              <Tooltip title={"Activates any vertex with 2 or more activated neighbors. This is an iterative process."}>
+                                  <Button fullWidth={true} variant="outlined" onClick={this.percolationIteration}>
+                                      <Typography variant="button" gutterBottom>Percolation Step</Typography>
+                                  </Button>
+                              </Tooltip>
+                          </ButtonGroup>
+                      <Box display="flex" flexDirection="row" alignItems="center" style={{ padding:10, justifyContent: "center" }}>
+                          <Typography variant="overline" gutterBottom>Threshold: </Typography>
+                          <div class="input-thresh">
+                              <input style={{ width: 100, height: 30, marginLeft: 5, marginBottom: 10}} id="bootstrap-percolation-threshold" type="number" min="1" onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.state.bootstrapPercolationThreshold}  />
+                          </div>
+                      </Box>
+                      <Typography variant="subtitle1" gutterBottom>Iteration: {this.state.bootstrapPercolationIteration}</Typography>
+                      <Typography variant="subtitle1" gutterBottom>Active Vertices: {this.state.activeVerticesCount}</Typography>
+                      <Typography variant="subtitle1" gutterBottom>Inactive Vertices: {this.state.forceData.nodes.length - this.state.activeVerticesCount}</Typography>
+                      </Box>
+                      <Divider variant = "middle" color = "Primary"/>
+                      <h3 style={{marginBottom: 5}}>LEGEND</h3>
+                      <div style={{textAlign:"left", marginLeft:TOOLBAR_WIDTH / 2 - 100}}>
+                          <div style={{width:"10px", height:"10px", backgroundColor:INACTIVE_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
+                          &nbsp;<Typography variant="overline" gutterBottom>Inactive Node</Typography>
+                          <br/>
+                          <div style={{width:"10px", height:"10px", backgroundColor:ACTIVE_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
+                          &nbsp;<Typography variant="overline" gutterBottom>Active Node</Typography>
+                          <br/>
+                          <div style={{width:"10px", height:"10px", backgroundColor:RECENTLY_INFECTED_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
+                          &nbsp;<Typography variant="overline" gutterBottom>Recently Infected Node</Typography>
+                      </div>
                   </Box>
-                  <br/>
-                  <br/>
-                  <Divider variant = "middle" color = "Secondary"/>
-                  <br/>
-                  <h3>SEED SETS</h3>
-                  <ButtonGroup
-                      orientation="horizontal"
-                      color = "Primary"
-                      aria-label = "horizontal outlined primary button group"
-                      variant = "outlined"
-                  >
-                  <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
-                      <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getMinContagiousSet}>Minimum Contagious Set</Button>
-                  </Tooltip>
-                  <Tooltip title={"Calculates and displays a set of nodes which would activate the entire graph using a greedy algorithm."}>
-                      <Button style={{ fontSize: '12px' }} color = "Primary" onClick={this.getGreedyContagiousSet}>Greedy Contagious Set</Button>
-                  </Tooltip>
-                  </ButtonGroup>
-                  <Tooltip title={"Makes each node a seed independently at random with the given probability."}>
-                      <Button style={{ fontSize: '12px' }} color = "Primary" variant="outlined" onClick={this.randomSeedSet}>
-                          Random Seed Set
-                          <input id="seed-probability" type="number" min="0.00000000000" max="1.00000000000" onClick={this.stopPropagation} />
-                      </Button>
-                  </Tooltip>
-                  <br/>
-                  <br/>
-                  <Divider variant = "middle" color = "Secondary"/>
-                  <br/>
-                  <br/>
-                  <h3>BOOTSTRAP PERCOLATION</h3>
-                  <div class="input-thresh">
-                    <label for="bootstrap-percolation-threshold">Threshold:</label>
-                    <input id="bootstrap-percolation-threshold" type="number" min="1" onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.state.bootstrapPercolationThreshold}  />
-                  </div>
-                  Iteration: {this.state.bootstrapPercolationIteration}
-                  <ButtonGroup
-                      orientation="horizontal"
-                      color = "Primary"
-                      aria-label = "horizontal outlined primary button group"
-                      variant = "outlined"
-                  >
-                  <Tooltip title={"Deactivate all vertices"}>
-                      <Button fullWidth={true} style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.resetInfections}>Reset</Button>
-                  </Tooltip>
-                  <Tooltip title={"Activates any vertex with 2 or more activated neighbors. This is an iterative process."}>
-                      <Button fullWidth={true} style={{ fontSize: '12px' }}  color = "Primary" variant="outlined" onClick={this.percolationIteration}>Percolation Step</Button>
-                  </Tooltip>
-                  </ButtonGroup>
-                  <br/>
-                  <br/>
-                  <Divider variant = "middle" color = "Secondary"/>
-                  <br/>
-                  <br/>
-                  <h3>LEGEND</h3>
-                  <div style={{textAlign:"left", marginLeft:TOOLBAR_WIDTH / 2 - 100}}>
-                    <div style={{width:"10px", height:"10px", backgroundColor:INACTIVE_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
-                    &nbsp;Inactive Node
-                    <br/>
-                    <div style={{width:"10px", height:"10px", backgroundColor:ACTIVE_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
-                    &nbsp;Active Node
-                    <br/>
-                    <div style={{width:"10px", height:"10px", backgroundColor:RECENTLY_INFECTED_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
-                    &nbsp;Recently Infected Node
-                  </div>
-              </Box>
+              </Paper>
               <ForceGraph2D graphData={this.state.forceData}
-                    nodeColor={d => d.recentlyInfected ? RECENTLY_INFECTED_COLOR : d.active ? ACTIVE_COLOR : INACTIVE_COLOR}
-                    linkColor="#5c616e"
-                    linkOpacity={0.7}
-                    linkWidth={3.5}
-                    backgroundColor="#fefefe"
-                    width={this.state.windowSize.width - TOOLBAR_WIDTH}
-                    height={this.state.windowSize.height}
-              />
+                        nodeColor={d => d.recentlyInfected ? RECENTLY_INFECTED_COLOR : d.active ? ACTIVE_COLOR : INACTIVE_COLOR}
+                        linkColor="#5c616e"
+                        linkOpacity={0.7}
+                        linkWidth={3.5}
+                        backgroundColor={BACKGROUND_COLOR}
+                        width={this.state.windowSize.width - TOOLBAR_WIDTH}
+                        height={this.state.windowSize.height}
+                  />
           </Box>
       </div>;
   }
