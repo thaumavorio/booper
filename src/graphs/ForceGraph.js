@@ -5,6 +5,11 @@ import update from 'immutability-helper';
 import { Box, Button, ButtonGroup, Dialog, DialogTitle, DialogContent, Divider, IconButton, Paper, Tooltip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import HelpIcon from '@material-ui/icons/Help';
+import RotateLeftIcon from '@material-ui/icons/RotateLeft';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import LastPageIcon from '@material-ui/icons/LastPage';
 
 
 let graphs = setUpGraphs();
@@ -218,6 +223,29 @@ class ForceGraph extends React.Component{
       );
   }
 
+  finalPercolationIteration = () => {
+      this.setState(state => {
+          var g = state.graph
+          var prevActive = -1
+          var itrs = state.bootstrapPercolationIteration
+
+          while (prevActive !== g.getActiveVerticesCount()) {
+              prevActive = g.getActiveVerticesCount()
+              g.bootstrapPercolationIteration(state.bootstrapPercolationThreshold)
+              itrs = itrs + 1
+          }
+
+          return {
+              graph: g,
+              forceData: g.getGraphData(state.forceData),
+              windowSize: { height: window.innerHeight, width: window.innerWidth },
+              bootstrapPercolationIteration: itrs,
+              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
+              activeVerticesCount: g.getActiveVerticesCount()
+          }
+      });
+  }
+
   updateBootstrapPercolationThreshold = (evt) => {
     const newThreshold = evt.target.value
     this.setState(state => ({
@@ -310,17 +338,31 @@ class ForceGraph extends React.Component{
                           <ButtonGroup
                               orientation="horizontal"
                               aria-label = "horizontal contained primary button group"
-                              variant = "contained"
                           >
                               <Tooltip title={"Deactivate all vertices"}>
-                                  <Button fullWidth={true} variant="outlined" onClick={this.resetInfections}>
-                                      <Typography variant="button" gutterBottom>Reset</Typography>
-                                  </Button>
+                                  <IconButton onClick={this.resetInfections}>
+                                      <RotateLeftIcon/>
+                                  </IconButton>
                               </Tooltip>
-                              <Tooltip title={"Activates any vertex with 2 or more activated neighbors. This is an iterative process."}>
-                                  <Button fullWidth={true} variant="outlined" onClick={this.percolationIteration}>
-                                      <Typography variant="button" gutterBottom>Percolation Step</Typography>
-                                  </Button>
+                              <Tooltip title={"Return to the first iteration"}>
+                                  <IconButton disabled={true}>
+                                      <FirstPageIcon/>
+                                  </IconButton>
+                              </Tooltip>
+                              <Tooltip title={"Go back an iteration"}>
+                                  <IconButton disabled={true}>
+                                      <ChevronLeftIcon/>
+                                  </IconButton>
+                              </Tooltip>
+                              <Tooltip title={"Perform a single iteration"}>
+                                  <IconButton onClick={this.percolationIteration}>
+                                      <ChevronRightIcon/>
+                                  </IconButton>
+                              </Tooltip>
+                              <Tooltip title={"Skip to the final iteration"}>
+                                  <IconButton onClick={this.finalPercolationIteration}>
+                                      <LastPageIcon/>
+                                  </IconButton>
                               </Tooltip>
                           </ButtonGroup>
                       <Box display="flex" flexDirection="row" alignItems="center" style={{ padding:10, justifyContent: "center" }}>
