@@ -1,7 +1,8 @@
 export default class Graph {
     constructor() {
       this.adj = new Map();
-      this.activeVertices = new Set();
+      this.activeVertices = new Set();    // all active vertices
+      this.recentlyInfected = new Set();  // vertices that were infected in the most recent percolation iteration
     }
 
     addVertex(v) {
@@ -25,6 +26,10 @@ export default class Graph {
       return this.getNeighbors(v).size;
     }
 
+    getActiveVerticesCount() {
+        return this.activeVertices.size;
+    }
+
     activateVertex(v) {
         console.log("Activate Vertex call: " + v.toString());
         return this.activeVertices.add(v.toString());
@@ -40,6 +45,7 @@ export default class Graph {
 
     deactivateAllVertices() {
       this.activeVertices.clear();
+      this.recentlyInfected.clear();
       return this;
     }
 
@@ -55,7 +61,7 @@ export default class Graph {
 
     bootstrapPercolationIteration(threshold) {
       const vertices = this.getVertices();
-      const infectedVertices = new Set();
+      this.recentlyInfected.clear();
 
       for (let v of vertices) {
         console.log("Looking at", v);
@@ -78,11 +84,11 @@ export default class Graph {
 
         if (threshold <= count) {
           console.log("\tIt is thus infected.");
-          infectedVertices.add(v);
+          this.recentlyInfected.add(v);
         }
       }
 
-      for(const vertex of infectedVertices) {
+      for(const vertex of this.recentlyInfected) {
         console.log("Adding infected vertex: " + vertex);
         this.activateVertex(vertex);
       }
@@ -118,7 +124,7 @@ export default class Graph {
         let nodes = [];
         let edges = [];
         for (let v of this.getVertices()) {
-            let node = {"id": v, "infected": this.activeVertices.has(v.toString())};
+            let node = {"id": v, "active": this.activeVertices.has(v.toString()), "recentlyInfected": this.recentlyInfected.has(v)};
             let oldNode = oldData.nodes.find(nod => nod.id === v);
 
             if (oldNode !== undefined) {
