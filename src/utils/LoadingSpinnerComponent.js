@@ -3,7 +3,7 @@ import { usePromiseTracker } from "react-promise-tracker";
 import Loader from 'react-loader-spinner';
  
 export const LoadingSpinnerComponent = (props) => {
-	const { promiseInProgress } = usePromiseTracker();
+	const { promiseInProgress } = usePromiseTracker({delay: 500});
 	const ICON_WIDTH = 100;
  
 	return promiseInProgress &&
