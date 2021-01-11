@@ -95,20 +95,18 @@ export default class Graph {
       return this;
     }
 
-    getEdges() {
-      var edges = []
+    *getEdges() {
       for (let v of this.getVertices()) {
         for (let n of this.getNeighbors(v)) {
           if (v < n) { // TODO: assumes simple. is this ok?
-            edges.push([v,n])
+            yield [v,n]
           }
         }
       }
-      return edges
     }
 
     getWebGraphJSON() {
-      return JSON.stringify({ webGraphVertices: Array.from(this.getVertices()), webGraphEdges: this.getEdges() })
+      return JSON.stringify({ webGraphVertices: Array.from(this.getVertices()), webGraphEdges: Array.from(this.getEdges()) })
     }
 
     // NB: returns promise
