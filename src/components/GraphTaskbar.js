@@ -16,11 +16,12 @@ import FirstPageIcon from "@material-ui/icons/FirstPage";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
+import TextField from "@material-ui/core/TextField";
 
-class GraphToolBar extends Component {
+class GraphTaskbar extends Component {
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
             helpOpen: false
         }
@@ -83,6 +84,8 @@ class GraphToolBar extends Component {
 
     // End of functions from props to modify ForceGraph State
 
+    // Start of Taskbar functions
+
     helpIconOpen = () => {
         this.setState({helpOpen: true})
     }
@@ -91,19 +94,21 @@ class GraphToolBar extends Component {
         this.setState({helpOpen: false})
     }
 
+    // End of Taskbar functions
+
+    // Start of local Components
+
+
+
 
     render() {
         const TOOLBAR_WIDTH = 300;
-        const INACTIVE_COLOR = "#5375e2";
-        const ACTIVE_COLOR = "#f65868";
-        const RECENTLY_INFECTED_COLOR = "#228b22";
-        const TOOLBAR_COLOR = "#f5f5f5";
         return (
             <div>
-                <Paper elevation={10} style={{margin: 20, backgroundColor: TOOLBAR_COLOR}}>
-                    <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" style={{padding: 10, justifyContent: "center"}} width={TOOLBAR_WIDTH}>
+                <Paper className='toolbar-surface' elevation={10}>
+                    <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" style={{padding: 30, justifyContent: "center"}} width={TOOLBAR_WIDTH}>
                         <h3>GRAPH</h3>
-                        <Box display="flex" flexDirection="row" style={{margin: 10, marginTop: 0}}>
+                        <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center">
                             <Button variant="outlined" component="label">
                                 <Typography variant="button">Upload Adjacency Matrix</Typography>
                                 <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
@@ -132,39 +137,37 @@ class GraphToolBar extends Component {
                                 </DialogContent>
                             </Dialog>
                         </Box>
-                        <Divider variant = "middle" color = "Primary"/>
+                        <Divider variant = "middle" color = "Primary" style={{marginTop: 10}}/>
                         <h3>SEED SETS</h3>
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <ButtonGroup
                                 orientation="horizontal"
                                 aria-label = "horizontal contained primary button group"
                                 variant = "contained"
-                                style = {{margin: 10, marginTop: 0}}
                             >
                                 <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
-                                    <Button style={{ fontSize: '12px' }} variant="outlined" onClick={this.getMinContagiousSet}>
+                                    <Button variant="outlined" onClick={this.getMinContagiousSet}>
                                         <Typography variant="button">Minimum Contagious Set</Typography>
                                     </Button>
                                 </Tooltip>
                                 <Tooltip title={"Calculates and displays a set of nodes which would activate the entire graph using a greedy algorithm."}>
-                                    <Button style={{ fontSize: '12px' }} variant="outlined" onClick={this.getGreedyContagiousSet}>
+                                    <Button variant="outlined" onClick={this.getGreedyContagiousSet}>
                                         <Typography variant="button">Greedy Contagious Set</Typography>
                                     </Button>
                                 </Tooltip>
                             </ButtonGroup>
                             <Tooltip title={"Makes each node a seed independently at random with the given probability."}>
-                                <Button style={{ margin: 10, marginRight: 0 }} color = "Primary" variant="outlined" onClick={this.randomSeedSet}>
-                                    <Typography style={{ padding: 5 }} variant="button">Random Seed Set</Typography>
+                                <Button variant="outlined" onClick={this.randomSeedSet}>
+                                    <Typography variant="button">Random Seed Set</Typography>
                                 </Button>
                             </Tooltip>
-                        </Box>
-                        <Box display="flex" flexDirection="row" alignContent="center" style={{justifyContent: "center"}}>
-                            <Typography variant="overline">Seed Probability:</Typography>
-                            <input style={{ width: 100, height: 30, marginLeft: 5, marginBottom: 10}} placeholder="Specify p" id="seed-probability" type="number" min="0.00000000000" max="1.00000000000" onClick={this.stopPropagation} />
+                            <div>
+                                <TextField label="Seed Probability" placeholder="Specify p" id="seed-probability" type="number" InputProps={{ inputProps: { min: 0, max: 1 }}} defaultValue={0.5} onClick={this.stopPropagation} fullWidth={true}/>
+                            </div>
                         </Box>
                         <Divider variant = "middle" color = "Primary"/>
                         <h3>BOOTSTRAP PERCOLATION</h3>
-                        <Box display="flex" flexDirection="column" alignItems="center" style={{justifyContent: "center"}}>
+                        <Box display="flex" flexDirection="column" alignItems="center">
                             <ButtonGroup
                                 orientation="horizontal"
                                 aria-label = "horizontal contained primary button group"
@@ -195,10 +198,9 @@ class GraphToolBar extends Component {
                                     </IconButton>
                                 </Tooltip>
                             </ButtonGroup>
-                            <Box display="flex" flexDirection="row" alignItems="center" style={{ padding:10, justifyContent: "center" }}>
-                                <Typography variant="overline" gutterBottom>Threshold: </Typography>
-                                <div class="input-thresh">
-                                    <input style={{ width: 100, height: 30, marginLeft: 5, marginBottom: 10}} id="bootstrap-percolation-threshold" type="number" min="1" onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.props.threshold}  />
+                            <Box display="flex" flexDirection="row" alignItems="center">
+                                <div>
+                                    <TextField id="bootstrap-percolation-threshold" label="Threshold" type="number" InputProps={{ inputProps: { min: 0 }}} onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.props.threshold}  />
                                 </div>
                             </Box>
                             <Typography variant="subtitle1" gutterBottom>Iteration: {this.props.iteration}</Typography>
@@ -206,15 +208,15 @@ class GraphToolBar extends Component {
                             <Typography variant="subtitle1" gutterBottom>Inactive Vertices: {this.props.inactiveVerticesCount}</Typography>
                         </Box>
                         <Divider variant = "middle" color = "Primary"/>
-                        <h3 style={{marginBottom: 5}}>LEGEND</h3>
+                        <h3>LEGEND</h3>
                         <div style={{textAlign:"left", marginLeft:TOOLBAR_WIDTH / 2 - 100}}>
-                            <div style={{width:"10px", height:"10px", backgroundColor:INACTIVE_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
+                            <div className='legend-entry legend-entry-inactive'></div>
                             &nbsp;<Typography variant="overline" gutterBottom>Inactive Node</Typography>
                             <br/>
-                            <div style={{width:"10px", height:"10px", backgroundColor:ACTIVE_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
+                            <div className='legend-entry legend-entry-active'></div>
                             &nbsp;<Typography variant="overline" gutterBottom>Active Node</Typography>
                             <br/>
-                            <div style={{width:"10px", height:"10px", backgroundColor:RECENTLY_INFECTED_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
+                            <div className='legend-entry legend-entry-recently-activated'></div>
                             &nbsp;<Typography variant="overline" gutterBottom>Recently Infected Node</Typography>
                         </div>
                     </Box>
@@ -224,4 +226,4 @@ class GraphToolBar extends Component {
     }
 }
 
-export default GraphToolBar;
+export default GraphTaskbar;

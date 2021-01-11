@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import ForceGraph from './graphs/ForceGraph.js';
+import ForceGraph from './components/ForceGraph.js';
 import { Box, CssBaseline } from "@material-ui/core";
 import {RemoveScrollBar} from 'react-remove-scroll-bar';
 import { ThemeProvider } from "@material-ui/core/styles";
@@ -10,10 +10,7 @@ function App() {
     return (
     <div className="App">
         <RemoveScrollBar />
-        <CssBaseline />
-        <ThemeProvider theme={theme}>
         <ForceGraph/>
-        </ThemeProvider>
     </div>
   );
 }

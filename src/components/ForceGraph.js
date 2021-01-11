@@ -1,16 +1,10 @@
 import * as React from "react";
 import ForceGraph2D from 'react-force-graph-2d';
-import Graph from "./Graph";
+import Graph from "../classes/Graph";
 import update from 'immutability-helper';
-import { Box, Button, ButtonGroup, Dialog, DialogTitle, DialogContent, Divider, IconButton, Paper, Tooltip, Typography } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import HelpIcon from '@material-ui/icons/Help';
-import RotateLeftIcon from '@material-ui/icons/RotateLeft';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import LastPageIcon from '@material-ui/icons/LastPage';
-import GraphToolBar from "./GraphToolBar";
+import GraphTaskbar from "./GraphTaskbar";
 
 
 let graphs = setUpGraphs();
@@ -28,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 class ForceGraph extends React.Component{
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             graph: graph1,
             forceData: graph1.getGraphData(),
@@ -262,7 +256,7 @@ class ForceGraph extends React.Component{
       const TOOLBAR_COLOR = "#f5f5f5";
       return <div>
           <Box display="flex" flexDirection="row" alignItems="center" style={{backgroundColor: BACKGROUND_COLOR}}>
-              <GraphToolBar readAdjacencyMatrix={this.readAdjacencyMatrix}
+              <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
                             getMinContagiousSet={this.getMinContagiousSet}
                             getGreedyContagiousSet={this.getGreedyContagiousSet}
                             randomSeedSet={this.randomSeedSet}
