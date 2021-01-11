@@ -95,27 +95,31 @@ export default class Graph {
       return this;
     }
 
-    getEdgeString() { // TODO: make not ugly on both Haskell and JS side. Also, factor out to getEdges()
-      var edge = "[";
+    getEdges() {
+      var edges = []
       for (let v of this.getVertices()) {
         for (let n of this.getNeighbors(v)) {
           if (v < n) { // TODO: assumes simple. is this ok?
-            edge += `(${v},${n}),`
+            edges.push([v,n])
           }
         }
       }
-      return edge.slice(0, -1) + "]";
+      return edges
+    }
+
+    getWebGraphJSON() {
+      return JSON.stringify({ webGraphVertices: Array.from(this.getVertices()), webGraphEdges: this.getEdges() })
     }
 
     // NB: returns promise
     findContagiousSetGreedily(threshold) {
-      return fetch(`https://thaumic.dev/booper/greedy?graph=${this.getEdgeString()}&threshold=${threshold}`)
+      return fetch(`https://thaumic.dev/booper/greedy?graph=${this.getWebGraphJSON()}&threshold=${threshold}`)
                .then(res => res.json());
     }
 
     // NB: returns promise
     findMinimalContagiousSet(threshold) {
-      return fetch(`https://thaumic.dev/booper/min?graph=${this.getEdgeString()}&threshold=${threshold}`)
+      return fetch(`https://thaumic.dev/booper/min?graph=${this.getWebGraphJSON()}&threshold=${threshold}`)
                .then(res => res.json());
     }
 
