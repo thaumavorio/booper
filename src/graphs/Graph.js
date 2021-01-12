@@ -137,17 +137,15 @@ export default class Graph {
             }
         }
 
-        for (let v of this.getVertices()) { // TODO: convert to iterator over edges some day
-            for (let n of this.getNeighbors(v)) {
-                let edge = {"source": nodes[v], "target": nodes[n]};
-                let oldEdge = oldData.links.find(link => link.source.id === v && link.target.id === n);
+        for (const [source, target] of this.getEdges()) {
+            let forceLink = {"source": nodes[source], "target": nodes[target]};
+            let oldForceLink = oldData.links.find(link => link.source.id === source && link.target.id === target);
 
-                if (v < n && oldEdge !== undefined) {
-                    edges.push({...oldEdge, ...edge});
-                    edges[edges.length - 1].index = edges.length - 1; // TODO: necessary?
-                } else if (v < n) {
-                    edges.push(edge);
-                }
+            if (oldForceLink !== undefined) {
+                edges.push({...oldForceLink, ...forceLink});
+                edges[edges.length - 1].index = edges.length - 1; // TODO: necessary?
+            } else {
+                edges.push(forceLink);
             }
         }
 
