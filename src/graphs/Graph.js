@@ -36,8 +36,7 @@ export default class Graph {
   }
 
   activateVertices(vs) {
-    let v;
-    for (v of vs) {
+    for (const v of vs) {
       this.activateVertex(v);
     }
     return this;
@@ -122,7 +121,7 @@ export default class Graph {
   // retrieves formatted graph data for ForceGraph
   getGraphData(oldData = {nodes: [], links: []}) {
     const nodes = [];
-    const edges = [];
+    const links = [];
     for (const v of this.getVertices()) {
       const node = {"id": v, "active": this.activeVertices.has(v.toString()), "recentlyInfected": this.recentlyInfected.has(v)};
       const oldNode = oldData.nodes.find(nod => nod.id === v);
@@ -137,18 +136,18 @@ export default class Graph {
 
     for (const v of this.getVertices()) { // TODO: convert to iterator over edges some day
       for (const n of this.getNeighbors(v)) {
-        const edge = {"source": nodes[v], "target": nodes[n]};
-        const oldEdge = oldData.links.find(link => link.source.id === v && link.target.id === n);
+        const link = {"source": nodes[v], "target": nodes[n]};
+        const oldLink = oldData.links.find(link => link.source.id === v && link.target.id === n);
 
-        if (v < n && oldEdge !== undefined) {
-          edges.push({...oldEdge, ...edge});
-          edges[edges.length - 1].index = edges.length - 1; // TODO: necessary?
+        if (v < n && oldLink !== undefined) {
+          links.push({...oldLink, ...link});
+          links[links.length - 1].index = links.length - 1; // TODO: necessary?
         } else if (v < n) {
-          edges.push(edge);
+          links.push(link);
         }
       }
     }
 
-    return {nodes, "links": edges};
+    return {nodes, links};
   }
 }
