@@ -3,7 +3,6 @@ import ForceGraph2D from "react-force-graph-2d";
 import Graph from "./Graph";
 import update from "immutability-helper";
 import { Box, Button, ButtonGroup, Dialog, DialogTitle, DialogContent, Divider, IconButton, Paper, Tooltip, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import HelpIcon from "@material-ui/icons/Help";
 import RotateLeftIcon from "@material-ui/icons/RotateLeft";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -11,27 +10,38 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import FirstPageIcon from "@material-ui/icons/FirstPage";
 import LastPageIcon from "@material-ui/icons/LastPage";
 
+const initGraph = (() => {
+  const graph = new Graph();
 
-const graphs = setUpGraphs();
-const graph1 = graphs[0];
-const graph2 = graphs[1];
-const graph3 = graphs[2];
+  graph.addVertex(0);
+  graph.addVertex(1);
+  graph.addVertex(2);
+  graph.addVertex(3);
+  graph.addVertex(4);
+  graph.addVertex(5);
+  graph.addVertex(6);
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-}));
+  graph.activateVertex(1);
+  graph.activateVertex(2);
+
+  graph.addEdge(0, 1);
+  graph.addEdge(0, 2);
+  graph.addEdge(1, 4);
+  graph.addEdge(2, 3);
+  graph.addEdge(2, 4);
+  graph.addEdge(2, 5);
+  graph.addEdge(3, 6);
+  graph.addEdge(4, 5);
+
+  return graph;
+})();
 
 class ForceGraph extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      graph: graph1,
-      forceData: graph1.getGraphData(),
+      graph: initGraph,
+      forceData: initGraph.getGraphData(),
       helpOpen: false,
       windowSize: {
         height: window.innerHeight,
@@ -39,7 +49,7 @@ class ForceGraph extends React.Component{
       },
       bootstrapPercolationThreshold: 2,
       bootstrapPercolationIteration: 0,
-      activeVerticesCount: graph1.getActiveVerticesCount()
+      activeVerticesCount: initGraph.getActiveVerticesCount()
     };
 
     this.updateBootstrapPercolationThreshold = this.updateBootstrapPercolationThreshold.bind(this);
@@ -81,7 +91,7 @@ class ForceGraph extends React.Component{
         // Parse input file.
         const string = event.target.result.trim();
         const matrix = string.split("\n");
-        for(var i in matrix) {
+        for(const i in matrix) {
           matrix[i] = matrix[i].trim().split(",");
         }
 
@@ -102,23 +112,23 @@ class ForceGraph extends React.Component{
           window.alert("Invalid input. The adjacency matrix must be a square matrix.");
           return;
         }
-        for(i = 0; i < matrix.length - 1; i++) {
-          for(var j = 0; j < matrix.length - 1; j++) {
+        for(let i = 0; i < matrix.length - 1; i++) {
+          for(let j = 0; j < matrix.length - 1; j++) {
             if(matrix[i + 1][j] !== "0" && matrix[i + 1][j] !== "1") {
               window.alert("Invalid input. Every entry in the adjacency matrix must be 1 or 0, indicating the presence or absence of an edge, respectively.");
               return;
             }
           }
         }
-        for(i = 0; i < matrix.length - 1; i++) {
-          for(j = 0; j < i; j++) {
+        for(let i = 0; i < matrix.length - 1; i++) {
+          for(let j = 0; j < i; j++) {
             if(matrix[i + 1][j] !== matrix[j + 1][i]) {
               window.alert("Invalid input. The adjacency matrix must be symmetric, defining an undirected graph.");
               return;
             }
           }
         }
-        for(i = 0; i < matrix.length - 1; i++) {
+        for(let i = 0; i < matrix.length - 1; i++) {
           if(matrix[i + 1][i] !== "0") {
             if(matrix[i + 1][i] !== "0") {
               window.alert("Invalid input. The adjacency matrix must have 0's on the diagonal, defining a simple graph.");
@@ -129,12 +139,12 @@ class ForceGraph extends React.Component{
 
         // Create a graph according to the adjacency matrix.
         const graph = new Graph();
-        for(i = 0; i < matrix.length - 1; i++) {
+        for(let i = 0; i < matrix.length - 1; i++) {
           graph.addVertex(i);
           if(matrix[0][i] === "+") {
             graph.activateVertex(i);
           }
-          for(j = 0; j < i; j++) {
+          for(let j = 0; j < i; j++) {
             if(matrix[i + 1][j] === "1") {
               graph.addEdge(i, j);
             }
@@ -287,14 +297,14 @@ class ForceGraph extends React.Component{
                 </DialogTitle>
                 <DialogContent dividers>
                   <Typography gutterBottom>
-                                      The adjacency matrix input should be in the format of a .csv file. The first row should contain
-                                      either a '+' or a '-', indicating whether the node is initially infected or not, respectively.
+                    The adjacency matrix input should be in the format of a .csv file. The first row should contain
+                    either a &lsquo;+&rsquo; or a &lsquo;-&rsquo;, indicating whether the node is initially infected or not, respectively.
                   </Typography>
                   <Typography gutterBottom>
-                                      The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
+                    The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
                   </Typography>
                   <Typography gutterBottom>
-                                      An example of an adjacency matrix input is available below:
+                    An example of an adjacency matrix input is available below:
                   </Typography>
                   <Typography gutterBottom>
                     <a href="example_graph.csv" download>Example Adjacency Matrix Input</a>
@@ -379,13 +389,13 @@ class ForceGraph extends React.Component{
             <h3 style={{marginBottom: 5}}>LEGEND</h3>
             <div style={{textAlign:"left", marginLeft:TOOLBAR_WIDTH / 2 - 100}}>
               <div style={{width:"10px", height:"10px", backgroundColor:INACTIVE_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
-                          &nbsp;<Typography variant="overline" gutterBottom>Inactive Node</Typography>
+                &nbsp;<Typography variant="overline" gutterBottom>Inactive Node</Typography>
               <br/>
               <div style={{width:"10px", height:"10px", backgroundColor:ACTIVE_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
-                          &nbsp;<Typography variant="overline" gutterBottom>Active Node</Typography>
+                &nbsp;<Typography variant="overline" gutterBottom>Active Node</Typography>
               <br/>
               <div style={{width:"10px", height:"10px", backgroundColor:RECENTLY_INFECTED_COLOR, borderRadius:"50%", display:"inline-block"}}></div>
-                          &nbsp;<Typography variant="overline" gutterBottom>Recently Infected Node</Typography>
+                &nbsp;<Typography variant="overline" gutterBottom>Recently Infected Node</Typography>
             </div>
           </Box>
         </Paper>
@@ -401,76 +411,6 @@ class ForceGraph extends React.Component{
       </Box>
     </div>;
   }
-
-
 }
-
-function setUpGraphs(){
-  const graph1 = new Graph();
-  graph1.addVertex(0);
-  graph1.addVertex(1);
-  graph1.addVertex(2);
-  graph1.addVertex(3);
-  graph1.addVertex(4);
-  graph1.addVertex(5);
-  graph1.addVertex(6);
-
-  graph1.activateVertex(1);
-  graph1.activateVertex(2);
-
-  graph1.addEdge(0, 1);
-  graph1.addEdge(0, 2);
-  graph1.addEdge(1, 4);
-  graph1.addEdge(2, 3);
-  graph1.addEdge(2, 4);
-  graph1.addEdge(2, 5);
-  graph1.addEdge(3, 6);
-  graph1.addEdge(4, 5);
-
-  const graph2 = new Graph();
-  graph2.addVertex(0);
-  graph2.addVertex(1);
-  graph2.addVertex(2);
-  graph2.addVertex(3);
-  graph2.addVertex(4);
-  graph2.addVertex(5);
-  graph2.addVertex(6);
-
-  graph2.activateVertex(0);
-  graph2.activateVertex(1);
-  graph2.activateVertex(5);
-  graph2.activateVertex(6);
-
-  graph2.addEdge(0, 3);
-  graph2.addEdge(1, 2);
-  graph2.addEdge(1, 4);
-  graph2.addEdge(2, 4);
-  graph2.addEdge(2, 3);
-  graph2.addEdge(2, 5);
-  graph2.addEdge(3, 6);
-
-  const graph3 = new Graph();
-  graph3.addVertex(0);
-  graph3.addVertex(1);
-  graph3.addVertex(2);
-  graph3.addVertex(3);
-  graph3.addVertex(4);
-  graph3.addVertex(5);
-  graph3.addVertex(6);
-
-  graph3.addEdge(0, 1);
-  graph3.addEdge(0, 2);
-  graph3.addEdge(1, 5);
-  graph3.addEdge(2, 3);
-  graph3.addEdge(2, 4);
-  graph3.addEdge(2, 5);
-  graph3.addEdge(2, 6);
-  graph3.addEdge(3, 6);
-  graph3.addEdge(4, 2);
-  graph3.addEdge(5, 6);
-
-  return [graph1, graph2, graph3];
-}
-
 
 export default ForceGraph;
