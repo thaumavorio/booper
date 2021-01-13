@@ -273,7 +273,8 @@ class ForceGraph extends React.Component{
       const BACKGROUND_COLOR = "#fefefe";
       const TOOLBAR_COLOR = "#f5f5f5";
       return <div>
-          <Box display="flex" flexDirection="row" alignItems="center" style={{backgroundColor: BACKGROUND_COLOR}}>
+          <Box display="flex" flexDirection="row" alignItems="center" position="relative" style={{backgroundColor: BACKGROUND_COLOR}}>
+              <LoadingSpinnerComponent />
               <Paper elevation={10} style={{margin: 20, backgroundColor: TOOLBAR_COLOR}}>
                   <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" style={{padding: 10, justifyContent: "center"}} width={TOOLBAR_WIDTH}>
                       <h3>GRAPH</h3>
@@ -393,9 +394,7 @@ class ForceGraph extends React.Component{
                       </div>
                   </Box>
               </Paper>
-              <div style={{width: this.state.windowSize.width - TOOLBAR_WIDTH, height: this.state.windowSize.height, backgroundColor: "#fefefe", position: "relative"}}>
-                <LoadingSpinnerComponent paneWidth={this.state.windowSize.width - TOOLBAR_WIDTH} paneHeight={this.state.windowSize.height} />
-                <ForceGraph2D graphData={this.state.forceData}
+              <ForceGraph2D graphData={this.state.forceData}
                           nodeColor={d => d.recentlyInfected ? RECENTLY_INFECTED_COLOR : d.active ? ACTIVE_COLOR : INACTIVE_COLOR}
                           linkColor="#5c616e"
                           linkOpacity={0.7}
@@ -403,8 +402,7 @@ class ForceGraph extends React.Component{
                           backgroundColor={BACKGROUND_COLOR}
                           width={this.state.windowSize.width - TOOLBAR_WIDTH}
                           height={this.state.windowSize.height}
-                    />
-              </div>
+                  />
           </Box>
       </div>;
   }

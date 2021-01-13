@@ -7,7 +7,7 @@ export const LoadingSpinnerComponent = (props) => {
 	const ICON_WIDTH = 100;
  
 	return promiseInProgress &&
-    	<div style={{position: "absolute", left: (props.paneWidth - ICON_WIDTH) / 2, top: (props.paneHeight - ICON_WIDTH) / 2, zIndex: 1}}>
-			<Loader type="Grid" color="#000000" height={ICON_WIDTH} width={ICON_WIDTH} />
+    	<div style={{position: "absolute", zIndex: 1, backgroundColor: "#000000", opacity: 0.5, width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
+			<Loader type="Grid" color="#ffffff" height={ICON_WIDTH} width={ICON_WIDTH} />
   		</div>
 };
