@@ -114,7 +114,7 @@ class GraphTaskbar extends Component {
                 <h3>GRAPH</h3>
                 <Box display="flex" flexDirection="row">
                   <Button variant="outlined" component="label" style={{  fontSize: "12px", marginBottom: "10px", width: TOOLBAR_WIDTH*0.8  }}>
-                                Upload Adjacency Matrix
+                    Upload Adjacency Matrix
                     <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
                   </Button>
                   <IconButton color="Info" variant="contained" component="label" onClick={this.helpIconOpen}>
@@ -155,14 +155,13 @@ class GraphTaskbar extends Component {
                     </Tooltip>
                   </Box>
                   <Box display="flex" flexDirection="row">
-
                     <Tooltip title={"Makes each node a seed independently at random with the probability p."}>
                       <TaskbarButton variant="outlined" onClick={this.randomSeedSet}>
                         <TextField label="p" id="seed-probability"
                           type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 }}}
                           defaultValue={0.5} onClick={this.stopPropagation} style={{ marginRight: 20}}
                           variant="filled"/>
-                                        p-Random Seed Set
+                          p-Random Seed Set
                       </TaskbarButton>
                     </Tooltip>
                   </Box>
