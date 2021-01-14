@@ -4,6 +4,8 @@ import Graph from "./Graph";
 import update from "immutability-helper";
 import { Box, Button, ButtonGroup, Dialog, DialogTitle, DialogContent, Divider, IconButton, Paper, Tooltip, Typography } from "@material-ui/core";
 import HelpIcon from "@material-ui/icons/Help";
+import { trackPromise } from "react-promise-tracker";
+import { LoadingSpinnerComponent } from "../utils/LoadingSpinnerComponent";
 import RotateLeftIcon from "@material-ui/icons/RotateLeft";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
@@ -65,14 +67,9 @@ class ForceGraph extends React.Component{
   }
 
   updateDimensions() {
-    this.setState(state => ({
-      graph: state.graph,
-      forceData: state.forceData,
+    this.setState({
       windowSize: {height: window.innerHeight, width: window.innerWidth},
-      bootstrapPercolationIteration: state.bootstrapPercolationIteration,
-      bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
-      activeVerticesCount: state.activeVerticesCount
-    }));
+    });
   }
 
     helpIconOpen = () => {
@@ -150,45 +147,42 @@ class ForceGraph extends React.Component{
             }
           }
         }
-        this.setState(state => ({
+        this.setState({
           graph,
           forceData: graph.getGraphData(),
-          windowSize: { height: window.innerHeight, width: window.innerWidth },
           bootstrapPercolationIteration: 0,
-          bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
-          activeVerticesCount: graph.getActiveVerticesCount()}));
+          activeVerticesCount: graph.getActiveVerticesCount()
+        });
       };
       reader.readAsText(file);
     }
 
   getMinContagiousSet = () => {
-    this.state.graph.findMinimalContagiousSet(this.state.bootstrapPercolationThreshold)
-      .then(infectedVerts => this.setState(function(state){
-        const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
-        g.activateVertices(infectedVerts);
-        return {
-          graph: g,
-          forceData: g.getGraphData(state.forceData),
-          windowSize: { height: window.innerHeight, width: window.innerWidth },
-          bootstrapPercolationIteration: 0,
-          bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
-          activeVerticesCount: g.getActiveVerticesCount() };
-      }));
+    trackPromise(
+      this.state.graph.findMinimalContagiousSet(this.state.bootstrapPercolationThreshold)
+        .then(infectedVerts => this.setState(function(state){
+          const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
+          g.activateVertices(infectedVerts);
+          return {
+            graph: g,
+            forceData: g.getGraphData(state.forceData),
+            bootstrapPercolationIteration: 0,
+            activeVerticesCount: g.getActiveVerticesCount() };
+        })));
   };
 
   getGreedyContagiousSet = () => {
-    this.state.graph.findContagiousSetGreedily(this.state.bootstrapPercolationThreshold)
-      .then(infectedVerts => this.setState(function(state){
-        const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
-        g.activateVertices(infectedVerts);
-        return {
-          graph: g,
-          forceData: g.getGraphData(state.forceData),
-          windowSize: { height: window.innerHeight, width: window.innerWidth },
-          bootstrapPercolationIteration: 0,
-          bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
-          activeVerticesCount: g.getActiveVerticesCount()};
-      }));
+    trackPromise(
+      this.state.graph.findContagiousSetGreedily(this.state.bootstrapPercolationThreshold)
+        .then(infectedVerts => this.setState(function(state){
+          const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
+          g.activateVertices(infectedVerts);
+          return {
+            graph: g,
+            forceData: g.getGraphData(state.forceData),
+            bootstrapPercolationIteration: 0,
+            activeVerticesCount: g.getActiveVerticesCount()};
+        })));
   };
 
     randomSeedSet = () => {
@@ -199,9 +193,7 @@ class ForceGraph extends React.Component{
           return {
             graph: g,
             forceData: g.getGraphData(state.forceData),
-            windowSize: state.windowSize,
             bootstrapPercolationIteration: 0,
-            bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
             activeVerticesCount: g.getActiveVerticesCount()
           };
         });
@@ -211,12 +203,10 @@ class ForceGraph extends React.Component{
   resetInfections = () => {
     this.state.graph.deactivateAllVertices();
     this.setState(state => ({
-      graph: state.graph,
       forceData: state.graph.getGraphData(state.forceData),
-      windowSize: { height: window.innerHeight, width: window.innerWidth },
       bootstrapPercolationIteration: 0,
-      bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
-      activeVerticesCount: 0 })
+      activeVerticesCount: 0
+    })
     );
   };
 
@@ -225,9 +215,7 @@ class ForceGraph extends React.Component{
     this.setState(state => ({
       graph: g,
       forceData: g.getGraphData(state.forceData),
-      windowSize: { height: window.innerHeight, width: window.innerWidth },
       bootstrapPercolationIteration: state.bootstrapPercolationIteration + 1,
-      bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
       activeVerticesCount: g.getActiveVerticesCount()
     })
     );
@@ -248,9 +236,7 @@ class ForceGraph extends React.Component{
       return {
         graph: g,
         forceData: g.getGraphData(state.forceData),
-        windowSize: { height: window.innerHeight, width: window.innerWidth },
         bootstrapPercolationIteration: itrs,
-        bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
         activeVerticesCount: g.getActiveVerticesCount()
       };
     });
@@ -258,13 +244,9 @@ class ForceGraph extends React.Component{
 
   updateBootstrapPercolationThreshold = (evt) => {
     const newThreshold = evt.target.value;
-    this.setState(state => ({
-      graph: state.graph,
-      forceData: state.forceData,
-      windowSize: { height: window.innerHeight, width: window.innerWidth },
-      bootstrapPercolationIteration: state.bootstrapPercolationIteration,
+    this.setState({
       bootstrapPercolationThreshold: newThreshold,
-      activeVerticesCount: state.activeVerticesCount }));
+    });
   }
 
   stopPropagation = (event) => {
@@ -279,7 +261,8 @@ class ForceGraph extends React.Component{
     const BACKGROUND_COLOR = "#fefefe";
     const TOOLBAR_COLOR = "#f5f5f5";
     return <div>
-      <Box display="flex" flexDirection="row" alignItems="center" style={{backgroundColor: BACKGROUND_COLOR}}>
+      <Box display="flex" flexDirection="row" alignItems="center" position="relative" style={{backgroundColor: BACKGROUND_COLOR}}>
+        <LoadingSpinnerComponent />
         <Paper elevation={10} style={{margin: 20, backgroundColor: TOOLBAR_COLOR}}>
           <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" style={{padding: 10, justifyContent: "center"}} width={TOOLBAR_WIDTH}>
             <h3>GRAPH</h3>
@@ -293,7 +276,7 @@ class ForceGraph extends React.Component{
               </IconButton>
               <Dialog onClose={this.helpIconClose} open={this.state.helpOpen}>
                 <DialogTitle id="customized-dialog-title" onClose={this.helpIconClose}>
-                                  Uploading Adjacency Matrices
+                  Uploading Adjacency Matrices
                 </DialogTitle>
                 <DialogContent dividers>
                   <Typography gutterBottom>

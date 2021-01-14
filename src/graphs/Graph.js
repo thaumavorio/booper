@@ -94,16 +94,18 @@ export default class Graph {
     return this;
   }
 
-  getEdgeString() { // TODO: make not ugly on both Haskell and JS side. Also, factor out to getEdges()
-    let edge = "[";
+  *getEdges() {
     for (const v of this.getVertices()) {
       for (const n of this.getNeighbors(v)) {
         if (v < n) { // TODO: assumes simple. is this ok?
-          edge += `(${v},${n}),`;
+          yield [v,n];
         }
       }
     }
-    return edge.slice(0, -1) + "]";
+  }
+
+  getWebGraphJSON() {
+    return JSON.stringify({ webGraphVertices: Array.from(this.getVertices()), webGraphEdges: Array.from(this.getEdges()) });
   }
 
   // NB: returns promise
@@ -134,17 +136,15 @@ export default class Graph {
       }
     }
 
-    for (const v of this.getVertices()) { // TODO: convert to iterator over edges some day
-      for (const n of this.getNeighbors(v)) {
-        const link = {"source": nodes[v], "target": nodes[n]};
-        const oldLink = oldData.links.find(link => link.source.id === v && link.target.id === n);
+    for (const [source, target] of this.getEdges()) {
+      const forceLink = {"source": nodes[source], "target": nodes[target]};
+      const oldForceLink = oldData.links.find(link => link.source.id === source && link.target.id === target);
 
-        if (v < n && oldLink !== undefined) {
-          links.push({...oldLink, ...link});
-          links[links.length - 1].index = links.length - 1; // TODO: necessary?
-        } else if (v < n) {
-          links.push(link);
-        }
+      if (oldForceLink !== undefined) {
+        links.push({...oldForceLink, ...forceLink});
+        links[links.length - 1].index = links.length - 1; // TODO: necessary?
+      } else {
+        links.push(forceLink);
       }
     }
 
