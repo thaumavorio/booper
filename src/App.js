@@ -1,6 +1,6 @@
 import "./App.css";
 import React from "react";
-import ForceGraph from "./graphs/ForceGraph.js";
+import ForceGraph from "./components/ForceGraph.js";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
 function App() {
