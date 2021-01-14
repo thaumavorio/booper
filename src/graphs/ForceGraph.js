@@ -55,14 +55,9 @@ class ForceGraph extends React.Component{
     }
 
     updateDimensions() {
-        this.setState(state => ({
-          graph: state.graph,
-          forceData: state.forceData,
+        this.setState({
           windowSize: {height: window.innerHeight, width: window.innerWidth},
-          bootstrapPercolationIteration: state.bootstrapPercolationIteration,
-          bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
-          activeVerticesCount: state.activeVerticesCount
-        }));
+        });
     }
 
     helpIconOpen = () => {
@@ -140,13 +135,12 @@ class ForceGraph extends React.Component{
                     }
                 }
             }
-            this.setState(state => ({
+            this.setState({
               graph: graph,
               forceData: graph.getGraphData(),
-              windowSize: { height: window.innerHeight, width: window.innerWidth },
               bootstrapPercolationIteration: 0,
-              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
-              activeVerticesCount: graph.getActiveVerticesCount()}));
+              activeVerticesCount: graph.getActiveVerticesCount()
+            });
         };
         reader.readAsText(file);
     }
@@ -159,9 +153,7 @@ class ForceGraph extends React.Component{
             return {
               graph: g,
               forceData: g.getGraphData(state.forceData),
-              windowSize: { height: window.innerHeight, width: window.innerWidth },
               bootstrapPercolationIteration: 0,
-              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
               activeVerticesCount: g.getActiveVerticesCount() };
           }));
     };
@@ -174,9 +166,7 @@ class ForceGraph extends React.Component{
                 return {
                   graph: g,
                   forceData: g.getGraphData(state.forceData),
-                  windowSize: { height: window.innerHeight, width: window.innerWidth },
                   bootstrapPercolationIteration: 0,
-                  bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
                   activeVerticesCount: g.getActiveVerticesCount()};
             }));
     };
@@ -189,9 +179,7 @@ class ForceGraph extends React.Component{
                 return {
                     graph: g,
                     forceData: g.getGraphData(state.forceData),
-                    windowSize: state.windowSize,
                     bootstrapPercolationIteration: 0,
-                    bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
                     activeVerticesCount: g.getActiveVerticesCount()
                 };
             });
@@ -201,12 +189,10 @@ class ForceGraph extends React.Component{
   resetInfections = () => {
     this.state.graph.deactivateAllVertices();
     this.setState(state => ({
-              graph: state.graph,
               forceData: state.graph.getGraphData(state.forceData),
-              windowSize: { height: window.innerHeight, width: window.innerWidth },
               bootstrapPercolationIteration: 0,
-              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
-              activeVerticesCount: 0 })
+              activeVerticesCount: 0
+            })
     );
   };
 
@@ -215,9 +201,7 @@ class ForceGraph extends React.Component{
       this.setState(state => ({
               graph: g,
               forceData: g.getGraphData(state.forceData),
-              windowSize: { height: window.innerHeight, width: window.innerWidth },
               bootstrapPercolationIteration: state.bootstrapPercolationIteration + 1,
-              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
               activeVerticesCount: g.getActiveVerticesCount()
       })
       );
@@ -238,9 +222,7 @@ class ForceGraph extends React.Component{
           return {
               graph: g,
               forceData: g.getGraphData(state.forceData),
-              windowSize: { height: window.innerHeight, width: window.innerWidth },
               bootstrapPercolationIteration: itrs,
-              bootstrapPercolationThreshold: state.bootstrapPercolationThreshold,
               activeVerticesCount: g.getActiveVerticesCount()
           }
       });
@@ -248,13 +230,9 @@ class ForceGraph extends React.Component{
 
   updateBootstrapPercolationThreshold = (evt) => {
     const newThreshold = evt.target.value
-    this.setState(state => ({
-      graph: state.graph,
-      forceData: state.forceData,
-      windowSize: { height: window.innerHeight, width: window.innerWidth },
-      bootstrapPercolationIteration: state.bootstrapPercolationIteration,
+    this.setState({
       bootstrapPercolationThreshold: newThreshold,
-      activeVerticesCount: state.activeVerticesCount }))
+    })
   }
 
   stopPropagation = (event) => {
