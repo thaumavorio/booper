@@ -5,6 +5,8 @@ import update from 'immutability-helper';
 import { Box, Button, ButtonGroup, Dialog, DialogTitle, DialogContent, Divider, IconButton, Paper, Tooltip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import HelpIcon from '@material-ui/icons/Help';
+import { trackPromise} from 'react-promise-tracker';
+import { LoadingSpinnerComponent } from "../utils/LoadingSpinnerComponent";
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -146,6 +148,7 @@ class ForceGraph extends React.Component{
     }
 
   getMinContagiousSet = () => {
+    trackPromise(
     this.state.graph.findMinimalContagiousSet(this.state.bootstrapPercolationThreshold)
           .then(infectedVerts => this.setState(function(state){
             const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
@@ -155,10 +158,11 @@ class ForceGraph extends React.Component{
               forceData: g.getGraphData(state.forceData),
               bootstrapPercolationIteration: 0,
               activeVerticesCount: g.getActiveVerticesCount() };
-          }));
+          })));
     };
 
   getGreedyContagiousSet = () => {
+      trackPromise(
         this.state.graph.findContagiousSetGreedily(this.state.bootstrapPercolationThreshold)
             .then(infectedVerts => this.setState(function(state){
                 const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
@@ -168,7 +172,7 @@ class ForceGraph extends React.Component{
                   forceData: g.getGraphData(state.forceData),
                   bootstrapPercolationIteration: 0,
                   activeVerticesCount: g.getActiveVerticesCount()};
-            }));
+            })));
     };
 
     randomSeedSet = () => {
@@ -247,7 +251,8 @@ class ForceGraph extends React.Component{
       const BACKGROUND_COLOR = "#fefefe";
       const TOOLBAR_COLOR = "#f5f5f5";
       return <div>
-          <Box display="flex" flexDirection="row" alignItems="center" style={{backgroundColor: BACKGROUND_COLOR}}>
+          <Box display="flex" flexDirection="row" alignItems="center" position="relative" style={{backgroundColor: BACKGROUND_COLOR}}>
+              <LoadingSpinnerComponent />
               <Paper elevation={10} style={{margin: 20, backgroundColor: TOOLBAR_COLOR}}>
                   <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" style={{padding: 10, justifyContent: "center"}} width={TOOLBAR_WIDTH}>
                       <h3>GRAPH</h3>
@@ -368,13 +373,13 @@ class ForceGraph extends React.Component{
                   </Box>
               </Paper>
               <ForceGraph2D graphData={this.state.forceData}
-                        nodeColor={d => d.recentlyInfected ? RECENTLY_INFECTED_COLOR : d.active ? ACTIVE_COLOR : INACTIVE_COLOR}
-                        linkColor="#5c616e"
-                        linkOpacity={0.7}
-                        linkWidth={3.5}
-                        backgroundColor={BACKGROUND_COLOR}
-                        width={this.state.windowSize.width - TOOLBAR_WIDTH}
-                        height={this.state.windowSize.height}
+                          nodeColor={d => d.recentlyInfected ? RECENTLY_INFECTED_COLOR : d.active ? ACTIVE_COLOR : INACTIVE_COLOR}
+                          linkColor="#5c616e"
+                          linkOpacity={0.7}
+                          linkWidth={3.5}
+                          backgroundColor={BACKGROUND_COLOR}
+                          width={this.state.windowSize.width - TOOLBAR_WIDTH}
+                          height={this.state.windowSize.height}
                   />
           </Box>
       </div>;
