@@ -1,13 +1,19 @@
 import React, {Component} from 'react';
 import {
     Box,
-    Button, ButtonGroup,
+    Button,
+    ButtonGroup,
+    Container,
     Dialog,
     DialogContent,
     DialogTitle,
     Divider,
+    FormControlLabel,
     IconButton,
-    Paper, Tooltip,
+    Paper,
+    Switch,
+    TextField,
+    Tooltip,
     Typography
 } from "@material-ui/core";
 import HelpIcon from "@material-ui/icons/Help";
@@ -16,14 +22,25 @@ import FirstPageIcon from "@material-ui/icons/FirstPage";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
-import TextField from "@material-ui/core/TextField";
+import { styled } from '@material-ui/core/styles';
+
+
+const TOOLBAR_WIDTH = 300;
+
+// Start of local Components
+const TaskbarButton = styled(Button)({
+    fontSize: "11px",
+    marginBottom: "10px",
+    width: "100%"
+});
 
 class GraphTaskbar extends Component {
 
     constructor(props){
         super(props);
         this.state = {
-            helpOpen: false
+            helpOpen: false,
+            defaultAlgorithm: true
         }
     }
 
@@ -33,12 +50,13 @@ class GraphTaskbar extends Component {
         this.props.readAdjacencyMatrix(evt)
     }
 
-    getMinContagiousSet = () => {
-        this.props.getMinContagiousSet()
-    }
-
-    getGreedyContagiousSet = () => {
-        this.props.getGreedyContagiousSet()
+    getContagiousSet = () => {
+        if(this.state.defaultAlgorithm){
+            this.props.getMinContagiousSet();
+        }
+        else {
+            this.props.getGreedyContagiousSet()
+        }
     }
 
     randomSeedSet = () => {
@@ -81,7 +99,6 @@ class GraphTaskbar extends Component {
         this.props.getInactiveVerticesCount()
     }
 
-
     // End of functions from props to modify ForceGraph State
 
     // Start of Taskbar functions
@@ -94,23 +111,24 @@ class GraphTaskbar extends Component {
         this.setState({helpOpen: false})
     }
 
+    getUserAlgorithmChoice = (event, value) => {
+        // value is true when the user engages the switch to choose the greedy algorithm, false otherwise
+        this.setState({
+                defaultAlgorithm: !value
+            });
+    }
     // End of Taskbar functions
 
-    // Start of local Components
-
-
-
-
     render() {
-        const TOOLBAR_WIDTH = 300;
         return (
             <div>
                 <Paper className='toolbar-surface' elevation={10}>
-                    <Box component="span" display="flex" flexDirection="column" flexWrap="wrap" style={{padding: 30, justifyContent: "center"}} width={TOOLBAR_WIDTH}>
+                    <Box style={{padding: 30}} width={TOOLBAR_WIDTH}>
+                        <Container>
                         <h3>GRAPH</h3>
-                        <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center">
-                            <Button variant="outlined" component="label">
-                                <Typography variant="button">Upload Adjacency Matrix</Typography>
+                        <Box display="flex" flexDirection="row">
+                            <Button variant="outlined" component="label" style={{  fontSize: "12px", marginBottom: "10px", width: TOOLBAR_WIDTH*0.8  }}>
+                                Upload Adjacency Matrix
                                 <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
                             </Button>
                             <IconButton color="Info" variant="contained" component="label" onClick={this.helpIconOpen}>
@@ -137,35 +155,35 @@ class GraphTaskbar extends Component {
                                 </DialogContent>
                             </Dialog>
                         </Box>
-                        <Divider variant = "middle" color = "Primary" style={{marginTop: 10}}/>
+                        </Container>
+                        <Divider variant = "middle"/>
+                        <Container>
                         <h3>SEED SETS</h3>
-                        <Box display="flex" flexDirection="column" alignItems="center">
-                            <ButtonGroup
-                                orientation="horizontal"
-                                aria-label = "horizontal contained primary button group"
-                                variant = "contained"
-                            >
+                        <Box display="flex" flexDirection="column">
+                            <Box display="flex" flexDirection="row">
                                 <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
-                                    <Button variant="outlined" onClick={this.getMinContagiousSet}>
-                                        <Typography variant="button">Minimum Contagious Set</Typography>
-                                    </Button>
+                                    <TaskbarButton variant="outlined" onClick={this.getContagiousSet}>
+                                        <Switch size="small" onChange={this.getUserAlgorithmChoice}/>
+                                        { this.state.defaultAlgorithm ? "Minimum Contagious Set" : "Greedy Contagious Set" }
+                                    </TaskbarButton>
                                 </Tooltip>
-                                <Tooltip title={"Calculates and displays a set of nodes which would activate the entire graph using a greedy algorithm."}>
-                                    <Button variant="outlined" onClick={this.getGreedyContagiousSet}>
-                                        <Typography variant="button">Greedy Contagious Set</Typography>
-                                    </Button>
+                            </Box>
+                            <Box display="flex" flexDirection="row">
+
+                                <Tooltip title={"Makes each node a seed independently at random with the probability p."}>
+                                    <TaskbarButton variant="outlined" onClick={this.randomSeedSet}>
+                                        <TextField label="p" id="seed-probability"
+                                                   type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 }}}
+                                                   defaultValue={0.5} onClick={this.stopPropagation} style={{ marginRight: 20}}
+                                                   variant="filled"/>
+                                        p-Random Seed Set
+                                    </TaskbarButton>
                                 </Tooltip>
-                            </ButtonGroup>
-                            <Tooltip title={"Makes each node a seed independently at random with the given probability."}>
-                                <Button variant="outlined" onClick={this.randomSeedSet}>
-                                    <Typography variant="button">Random Seed Set</Typography>
-                                </Button>
-                            </Tooltip>
-                            <div>
-                                <TextField label="Seed Probability" placeholder="Specify p" id="seed-probability" type="number" InputProps={{ inputProps: { min: 0, max: 1 }}} defaultValue={0.5} onClick={this.stopPropagation} fullWidth={true}/>
-                            </div>
+                            </Box>
                         </Box>
-                        <Divider variant = "middle" color = "Primary"/>
+                        </Container>
+                        <Divider variant = "middle"/>
+                        <Container>
                         <h3>BOOTSTRAP PERCOLATION</h3>
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <ButtonGroup
@@ -203,11 +221,13 @@ class GraphTaskbar extends Component {
                                     <TextField id="bootstrap-percolation-threshold" label="Threshold" type="number" InputProps={{ inputProps: { min: 0 }}} onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.props.threshold}  />
                                 </div>
                             </Box>
-                            <Typography variant="subtitle1" gutterBottom>Iteration: {this.props.iteration}</Typography>
-                            <Typography variant="subtitle1" gutterBottom>Active Vertices: {this.props.activeVerticesCount}</Typography>
-                            <Typography variant="subtitle1" gutterBottom>Inactive Vertices: {this.props.inactiveVerticesCount}</Typography>
+                            <Typography variant="overline" gutterBottom>Iteration: {this.props.iteration}</Typography>
+                            <Typography variant="overline" gutterBottom>Active Vertices: {this.props.activeVerticesCount}</Typography>
+                            <Typography variant="overline" gutterBottom>Inactive Vertices: {this.props.inactiveVerticesCount}</Typography>
                         </Box>
-                        <Divider variant = "middle" color = "Primary"/>
+                        </Container>
+                        <Divider variant = "middle"/>
+                        <Container>
                         <h3>LEGEND</h3>
                         <div style={{textAlign:"left", marginLeft:TOOLBAR_WIDTH / 2 - 100}}>
                             <div className='legend-entry legend-entry-inactive'></div>
@@ -219,11 +239,14 @@ class GraphTaskbar extends Component {
                             <div className='legend-entry legend-entry-recently-activated'></div>
                             &nbsp;<Typography variant="overline" gutterBottom>Recently Infected Node</Typography>
                         </div>
+                        </Container>
                     </Box>
                 </Paper>
             </div>
         );
     }
+
+
 }
 
 export default GraphTaskbar;
