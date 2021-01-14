@@ -95,27 +95,29 @@ export default class Graph {
       return this;
     }
 
-    getEdgeString() { // TODO: make not ugly on both Haskell and JS side. Also, factor out to getEdges()
-      var edge = "[";
+    *getEdges() {
       for (let v of this.getVertices()) {
         for (let n of this.getNeighbors(v)) {
           if (v < n) { // TODO: assumes simple. is this ok?
-            edge += `(${v},${n}),`
+            yield [v,n]
           }
         }
       }
-      return edge.slice(0, -1) + "]";
+    }
+
+    getWebGraphJSON() {
+      return JSON.stringify({ webGraphVertices: Array.from(this.getVertices()), webGraphEdges: Array.from(this.getEdges()) })
     }
 
     // NB: returns promise
     findContagiousSetGreedily(threshold) {
-      return fetch(`https://thaumic.dev/booper/greedy?graph=${this.getEdgeString()}&threshold=${threshold}`)
+      return fetch(`https://thaumic.dev/booper/greedy?graph=${this.getWebGraphJSON()}&threshold=${threshold}`)
                .then(res => res.json());
     }
 
     // NB: returns promise
     findMinimalContagiousSet(threshold) {
-      return fetch(`https://thaumic.dev/booper/min?graph=${this.getEdgeString()}&threshold=${threshold}`)
+      return fetch(`https://thaumic.dev/booper/min?graph=${this.getWebGraphJSON()}&threshold=${threshold}`)
                .then(res => res.json());
     }
 
@@ -135,17 +137,15 @@ export default class Graph {
             }
         }
 
-        for (let v of this.getVertices()) { // TODO: convert to iterator over edges some day
-            for (let n of this.getNeighbors(v)) {
-                let edge = {"source": nodes[v], "target": nodes[n]};
-                let oldEdge = oldData.links.find(link => link.source.id === v && link.target.id === n);
+        for (const [source, target] of this.getEdges()) {
+            let forceLink = {"source": nodes[source], "target": nodes[target]};
+            let oldForceLink = oldData.links.find(link => link.source.id === source && link.target.id === target);
 
-                if (v < n && oldEdge !== undefined) {
-                    edges.push({...oldEdge, ...edge});
-                    edges[edges.length - 1].index = edges.length - 1; // TODO: necessary?
-                } else if (v < n) {
-                    edges.push(edge);
-                }
+            if (oldForceLink !== undefined) {
+                edges.push({...oldForceLink, ...forceLink});
+                edges[edges.length - 1].index = edges.length - 1; // TODO: necessary?
+            } else {
+                edges.push(forceLink);
             }
         }
 
