@@ -72,68 +72,26 @@ class ForceGraph extends React.Component{
     });
   }
 
-    helpIconOpen = () => {
-      this.setState({helpOpen: true});
-    }
+  helpIconOpen = () => {
+    this.setState({helpOpen: true});
+  }
 
-    helpIconClose = () => {
-      this.setState({helpOpen: false});
-    }
+  helpIconClose = () => {
+    this.setState({helpOpen: false});
+  }
 
-    readAdjacencyMatrix = (evt) => {
-      const file = evt.target.files[0];
-      document.getElementById("uploadAdjacencyMatrix").value = null;
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        // Parse input file.
-        const string = event.target.result.trim();
-        const matrix = string.split("\n");
-        for(const i in matrix) {
-          matrix[i] = matrix[i].trim().split(",");
-        }
-
-        // Check for invalid input.
-        for(const c of matrix[0]) {
-          if(c !== "+" && c !== "-") {
-            window.alert("Invalid input. There must be a row of +'s and -'s above the adjacency matrix, indicating which vertices are seeds.");
-            return;
-          }
-        }
-        for(const r of matrix) {
-          if(r.length !== matrix[0].length) {
-            window.alert("Invalid input. Each row must have the same length.");
-            return;
-          }
-        }
-        if(matrix.length !== matrix[0].length + 1) {
-          window.alert("Invalid input. The adjacency matrix must be a square matrix.");
-          return;
-        }
-        for(let i = 0; i < matrix.length - 1; i++) {
-          for(let j = 0; j < matrix.length - 1; j++) {
-            if(matrix[i + 1][j] !== "0" && matrix[i + 1][j] !== "1") {
-              window.alert("Invalid input. Every entry in the adjacency matrix must be 1 or 0, indicating the presence or absence of an edge, respectively.");
-              return;
-            }
-          }
-        }
-        for(let i = 0; i < matrix.length - 1; i++) {
-          for(let j = 0; j < i; j++) {
-            if(matrix[i + 1][j] !== matrix[j + 1][i]) {
-              window.alert("Invalid input. The adjacency matrix must be symmetric, defining an undirected graph.");
-              return;
-            }
-          }
-        }
-        for(let i = 0; i < matrix.length - 1; i++) {
-          if(matrix[i + 1][i] !== "0") {
-            if(matrix[i + 1][i] !== "0") {
-              window.alert("Invalid input. The adjacency matrix must have 0's on the diagonal, defining a simple graph.");
-              return;
-            }
-          }
-        }
-
+  readAdjacencyMatrix = (evt) => {
+    const file = evt.target.files[0];
+    document.getElementById("uploadAdjacencyMatrix").value = null;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      // Parse input file.
+      const string = event.target.result.trim();
+      const matrix = string.split("\n");
+      for(const i in matrix) {
+        matrix[i] = matrix[i].trim().split(",");
+      }
+      if(ForceGraph.hasValidShape(matrix) && ForceGraph.hasValidEntries(matrix) && ForceGraph.representsValidGraph(matrix)) {
         // Create a graph according to the adjacency matrix.
         const graph = new Graph();
         for(let i = 0; i < matrix.length - 1; i++) {
@@ -153,9 +111,60 @@ class ForceGraph extends React.Component{
           bootstrapPercolationIteration: 0,
           activeVerticesCount: graph.getActiveVerticesCount()
         });
-      };
-      reader.readAsText(file);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  static hasValidShape(matrix) {
+    for(const r of matrix) {
+      if(r.length !== matrix[0].length) {
+        window.alert("Invalid input. Each row must have the same length.");
+        return false;
+      }
     }
+    if(matrix.length !== matrix[0].length + 1) {
+      window.alert("Invalid input. The adjacency matrix must be a square matrix.");
+      return false;
+    }
+    return true;
+  }
+  
+  static hasValidEntries(matrix) {
+    for(const c of matrix[0]) {
+      if(c !== "+" && c !== "-") {
+        window.alert("Invalid input. There must be a row of +'s and -'s above the adjacency matrix, indicating which vertices are seeds.");
+        return false;
+      }
+    }
+    for(let i = 0; i < matrix.length - 1; i++) {
+      for(let j = 0; j < matrix.length - 1; j++) {
+        if(matrix[i + 1][j] !== "0" && matrix[i + 1][j] !== "1") {
+          window.alert("Invalid input. Every entry in the adjacency matrix must be 1 or 0, indicating the presence or absence of an edge, respectively.");
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+    
+  static representsValidGraph(matrix) {
+    for(let i = 0; i < matrix.length - 1; i++) {
+      for(let j = 0; j < i; j++) {
+        if(matrix[i + 1][j] !== matrix[j + 1][i]) {
+          window.alert("Invalid input. The adjacency matrix must be symmetric, defining an undirected graph.");
+          return false;
+        }
+      }
+    }
+    for(let i = 0; i < matrix.length - 1; i++) {
+      if(matrix[i + 1][i] !== "0") {
+        window.alert("Invalid input. The adjacency matrix must have 0's on the diagonal, defining a simple graph.");
+        return false;
+      }
+    }
+    return true;
+  }
 
   getMinContagiousSet = () => {
     trackPromise(
@@ -185,20 +194,20 @@ class ForceGraph extends React.Component{
         })));
   };
 
-    randomSeedSet = () => {
-      const inclusionProbability = parseFloat(document.getElementById("seed-probability").value);
-      if(!isNaN(inclusionProbability)) {
-        this.setState(function(state) {
-          const g = update(state.graph, {$set: state.graph.randomSeedSet(inclusionProbability)});
-          return {
-            graph: g,
-            forceData: g.getGraphData(state.forceData),
-            bootstrapPercolationIteration: 0,
-            activeVerticesCount: g.getActiveVerticesCount()
-          };
-        });
-      }
+  randomSeedSet = () => {
+    const inclusionProbability = parseFloat(document.getElementById("seed-probability").value);
+    if(!isNaN(inclusionProbability)) {
+      this.setState(function(state) {
+        const g = update(state.graph, {$set: state.graph.randomSeedSet(inclusionProbability)});
+        return {
+          graph: g,
+          forceData: g.getGraphData(state.forceData),
+          bootstrapPercolationIteration: 0,
+          activeVerticesCount: g.getActiveVerticesCount()
+        };
+      });
     }
+  }
 
   resetInfections = () => {
     this.state.graph.deactivateAllVertices();
