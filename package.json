@@ -16,6 +16,7 @@
     "react-promise-tracker": "2.1.0",
     "react-remove-scroll-bar": "^2.1.1",
     "react-scripts": "4.0.0",
+    "type-fest": "^0.13.1",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
