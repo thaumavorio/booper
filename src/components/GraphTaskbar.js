@@ -41,7 +41,7 @@ class GraphTaskbar extends Component {
     super(props);
     this.state = {
       helpOpen: false,
-      defaultAlgorithm: true
+      useMinAlgorithm: true
     };
   }
 
@@ -52,7 +52,7 @@ class GraphTaskbar extends Component {
     }
 
     getContagiousSet = () => {
-      if(this.state.defaultAlgorithm){
+      if(this.state.useMinAlgorithm){
         this.props.getMinContagiousSet();
       }
       else {
@@ -99,7 +99,7 @@ class GraphTaskbar extends Component {
     getUserAlgorithmChoice = (event, value) => {
       // value is true when the user engages the switch to choose the greedy algorithm, false otherwise
       this.setState({
-        defaultAlgorithm: !value
+        useMinAlgorithm: !value
       });
     }
     // End of Taskbar functions
@@ -150,7 +150,7 @@ class GraphTaskbar extends Component {
                     <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
                       <TaskbarButton variant="outlined" onClick={this.getContagiousSet}>
                         <Switch size="small" onChange={this.getUserAlgorithmChoice}/>
-                        { this.state.defaultAlgorithm ? "Minimum Contagious Set" : "Greedy Contagious Set" }
+                        { this.state.useMinAlgorithm ? "Minimum Contagious Set" : "Greedy Contagious Set" }
                       </TaskbarButton>
                     </Tooltip>
                   </Box>
