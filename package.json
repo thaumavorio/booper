@@ -23,7 +23,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --transformIgnorePatterns \"[/\\\\\\]node_modules[/\\\\\\](?!bezier-js)\" --passWithNoTests",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -47,5 +47,6 @@
   "devDependencies": {
     "eslint": "^7.17.0",
     "eslint-plugin-react": "^7.22.0"
-  }
+  },
+  "homepage": "."
 }
