@@ -20,7 +20,7 @@ jobs:
       - run: npm run build
         env:
           CI: false
-      - uses: AEnterprise/rsync-deploy@v1.0.1
+      - uses: AEnterprise/rsync-deploy@1.0.1
         env:
           ARGS: "-rc --delete"
           FOLDER: "build/"
