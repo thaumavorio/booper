@@ -149,7 +149,7 @@ class GraphTaskbar extends Component {
                 <Box display="flex" flexDirection="row">
                   <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
                     <TaskbarButton variant="outlined" onClick={this.getContagiousSet}>
-                      <Switch size="small" onChange={this.toggleAlgorithmChoice}/>
+                      <Switch size="small" onChange={this.toggleAlgorithmChoice} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}/>
                       { this.state.useMinAlgorithm ? "Minimum Contagious Set" : "Greedy Contagious Set" }
                     </TaskbarButton>
                   </Tooltip>
@@ -159,7 +159,7 @@ class GraphTaskbar extends Component {
                     <TaskbarButton variant="outlined" onClick={this.randomSeedSet}>
                       <TextField label="p" id="seed-probability"
                         type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 }}}
-                        defaultValue={0.5} onClick={this.stopPropagation} style={{ marginRight: 20}}
+                        defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation} style={{ marginRight: 20}}
                         variant="filled"/>
                           p-Random Seed Set
                     </TaskbarButton>
