@@ -1,5 +1,6 @@
 import * as React from "react";
 import ForceGraph2D from "react-force-graph-2d";
+import { forceCollide, forceX, forceY, forceZ } from "d3-force-3d";
 import Graph from "./Graph";
 import update from "immutability-helper";
 import { Box, Button, ButtonGroup, Dialog, DialogTitle, DialogContent, Divider, IconButton, Paper, Tooltip, Typography } from "@material-ui/core";
@@ -39,6 +40,9 @@ const initGraph = (() => {
 })();
 
 class ForceGraph extends React.Component{
+
+  graphRef = React.createRef(null);
+
   constructor(props) {
     super(props);
     this.state = {
@@ -269,6 +273,16 @@ class ForceGraph extends React.Component{
     const RECENTLY_INFECTED_COLOR = "#228b22";
     const BACKGROUND_COLOR = "#fefefe";
     const TOOLBAR_COLOR = "#f5f5f5";
+
+    setTimeout(() => {
+      this.graphRef.current.d3Force("collide", forceCollide());
+      this.graphRef.current.d3Force("center", null);
+      this.graphRef.current.d3Force("x", forceX().strength(0.01));
+      this.graphRef.current.d3Force("y", forceY().strength(0.01));
+      this.graphRef.current.d3Force("z", forceZ().strength(0.01));
+      this.graphRef.current.d3Force("charge").strength(-100);
+    }, 100);
+
     return <div>
       <Box display="flex" flexDirection="row" alignItems="center" position="relative" style={{backgroundColor: BACKGROUND_COLOR}}>
         <LoadingSpinnerComponent />
@@ -399,6 +413,7 @@ class ForceGraph extends React.Component{
           backgroundColor={BACKGROUND_COLOR}
           width={this.state.windowSize.width - TOOLBAR_WIDTH}
           height={this.state.windowSize.height}
+          ref={this.graphRef}
         />
       </Box>
     </div>;
