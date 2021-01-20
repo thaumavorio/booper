@@ -226,8 +226,6 @@ class ForceGraph extends React.Component{
         itrs = itrs + 1;
       }
 
-      console.log(itrs);
-
       return {
         graph: g,
         forceData: g.getGraphData(state.forceData),
