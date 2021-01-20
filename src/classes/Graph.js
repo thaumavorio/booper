@@ -58,32 +58,37 @@ export default class Graph {
     return this;
   }
 
-  bootstrapPercolationIteration(threshold) {
+  // Peform one bootstap percolation iteration.
+  // For each vertex, if it has enough active neighbors, it is activated with the given probability.
+  // If any inactive vertices had enough active neighbors, return false. Otherwise, return true.
+  bootstrapPercolationIteration(threshold, infectionProbability) {
     const vertices = this.getVertices();
     this.recentlyInfected.clear();
+    let done = true;
 
     for (const v of vertices) {
       console.log("Looking at", v);
+
       if (this.activeVertices.has(v.toString())) {
         console.log("\tIt's already active.");
         continue;
       }
 
       const neighbors = this.getNeighbors(v);
-
       let count = 0;
-
       for (const n of neighbors) {
         if (this.activeVertices.has(n.toString())) {
           count++;
         }
       }
-
       console.log("\tIt has", count, "active neighbors.");
 
       if (threshold <= count) {
-        console.log("\tIt is thus infected.");
-        this.recentlyInfected.add(v);
+        done = false;
+        if(Math.random() < infectionProbability) {
+          console.log("\tIt is thus infected.");
+          this.recentlyInfected.add(v);
+        }
       }
     }
 
@@ -91,7 +96,7 @@ export default class Graph {
       console.log("Adding infected vertex: " + vertex);
       this.activateVertex(vertex);
     }
-    return this;
+    return done;
   }
 
   *getEdges() {
