@@ -28,7 +28,7 @@ import PropTypes from "prop-types";
 
 const TOOLBAR_WIDTH = 300;
 
-// Start of local Components
+// Local Components
 const TaskbarButton = styled(Button)({
   fontSize: "11px",
   marginBottom: "10px",

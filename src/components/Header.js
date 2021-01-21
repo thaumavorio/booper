@@ -1,6 +1,7 @@
 import React, {Component} from "react";
-import { AppBar, IconButton, List, ListItem, ListItemText, Toolbar } from "@material-ui/core";
+import {AppBar, Box, IconButton, List, ListItem, ListItemText, Toolbar} from "@material-ui/core";
 import { Home } from "@material-ui/icons";
+import { styled } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 
 const navLinks = [
@@ -10,26 +11,49 @@ const navLinks = [
   { title: "About Us", path: "/about-us" },
 ];
 
+// Local Components
+const HeaderBox = styled(Box)({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  alignContent: "center",
+  justifyContent: "space-between",
+  width: "100%"
+});
+
+const LinkBox = styled(Box)({
+  display: "flex",
+  flexDirection: "row"
+});
+
+const StyledLink = styled(Link)({
+  textDecoration: "none"
+});
+
 class Header extends Component {
   
   render() {
     return (
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="home">
-            <Link to="/">
-              <Home fontSize="large" />
-            </Link>
-          </IconButton>
-          <List component="nav" aria-labelledby="main navigation">
-            {navLinks.map(({ title, path }) => (
-              <ListItem key={title}>
-                <Link to={path}>
-                  <ListItemText primary={title} />
-                </Link>
-              </ListItem>
-            ))}
-          </List>
+          <HeaderBox>
+            <IconButton edge="start" color="inherit" aria-label="home">
+              <Link to="/">
+                <Home fontSize="large" />
+              </Link>
+            </IconButton>
+            <List component="nav" aria-labelledby="main navigation">
+              <LinkBox>
+                {navLinks.map(({ title, path }) => (
+                  <StyledLink key={title} to={path}>
+                    <ListItem button>
+                      <ListItemText primary={title} />
+                    </ListItem>
+                  </StyledLink>
+                ))}
+              </LinkBox>
+            </List>
+          </HeaderBox>
         </Toolbar>
       </AppBar>
     );
