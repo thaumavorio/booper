@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {AppBar, Box, IconButton, List, ListItem, ListItemText, Toolbar} from "@material-ui/core";
+import React, { Component } from "react";
+import { AppBar, Box, IconButton, List, ListItem, ListItemText, Toolbar } from "@material-ui/core";
 import { Home } from "@material-ui/icons";
 import { styled } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
@@ -32,7 +32,6 @@ const StyledLink = styled(Link)({
 });
 
 class Header extends Component {
-  
   render() {
     return (
       <AppBar position="static">
