@@ -27,7 +27,8 @@ const LinkBox = styled(Box)({
 });
 
 const StyledLink = styled(Link)({
-  textDecoration: "none"
+  textDecoration: "none",
+  color: "white"
 });
 
 class Header extends Component {
@@ -38,9 +39,9 @@ class Header extends Component {
         <Toolbar>
           <HeaderBox>
             <IconButton edge="start" color="inherit" aria-label="home">
-              <Link to="/">
+              <StyledLink to="/">
                 <Home fontSize="large" />
-              </Link>
+              </StyledLink>
             </IconButton>
             <List component="nav" aria-labelledby="main navigation">
               <LinkBox>
