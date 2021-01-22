@@ -41,8 +41,6 @@ const initGraph = (() => {
 
 class ForceGraph extends React.Component{
 
-  graphRef = React.createRef(null);
-
   constructor(props) {
     super(props);
     this.state = {
@@ -59,6 +57,8 @@ class ForceGraph extends React.Component{
     };
 
     this.updateBootstrapPercolationThreshold = this.updateBootstrapPercolationThreshold.bind(this);
+
+    this.graphRef = React.createRef(null);
   }
 
   componentDidMount() {
