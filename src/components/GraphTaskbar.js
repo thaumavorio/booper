@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import {
   Box,
   Button,
@@ -22,13 +22,13 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import { styled } from "@material-ui/core/styles";
-import {LoadingSpinnerComponent} from "./LoadingSpinnerComponent";
+import { LoadingSpinnerComponent } from "./LoadingSpinnerComponent";
 import PropTypes from "prop-types";
 
 
 const TOOLBAR_WIDTH = 300;
 
-// Start of local Components
+// Local Components
 const TaskbarButton = styled(Button)({
   fontSize: "11px",
   marginBottom: "10px",
@@ -36,7 +36,6 @@ const TaskbarButton = styled(Button)({
 });
 
 class GraphTaskbar extends Component {
-
   constructor(props){
     super(props);
     this.state = {
