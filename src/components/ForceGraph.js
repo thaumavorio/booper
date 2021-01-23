@@ -44,6 +44,7 @@ class ForceGraph extends React.Component{
         width: window.innerWidth
       },
       bootstrapPercolationThreshold: 2,
+      bootstrapPercolationProbability: 1,
       bootstrapPercolationIteration: 0,
       activeVerticesCount: initGraph.getActiveVerticesCount()
     };
@@ -206,25 +207,22 @@ class ForceGraph extends React.Component{
   };
 
   percolationIteration = () => {
-    const g = update(this.state.graph, {$set: this.state.graph.bootstrapPercolationIteration(this.state.bootstrapPercolationThreshold)});
+    const g = update(this.state.graph, {});
+    g.bootstrapPercolationIteration(this.state.bootstrapPercolationThreshold, this.state.bootstrapPercolationProbability);
     this.setState(state => ({
       graph: g,
       forceData: g.getGraphData(state.forceData),
       bootstrapPercolationIteration: state.bootstrapPercolationIteration + 1,
       activeVerticesCount: g.getActiveVerticesCount()
-    })
-    );
+    }));
   }
 
   finalPercolationIteration = () => {
     this.setState(state => {
-      const g = state.graph;
-      let prevActive = -1;
+      const g = update(state.graph, {});
       let itrs = state.bootstrapPercolationIteration;
 
-      while (prevActive !== g.getActiveVerticesCount()) {
-        prevActive = g.getActiveVerticesCount();
-        g.bootstrapPercolationIteration(state.bootstrapPercolationThreshold);
+      while (!g.bootstrapPercolationIteration(state.bootstrapPercolationThreshold, state.bootstrapPercolationProbability)) {
         itrs = itrs + 1;
       }
 
@@ -242,6 +240,15 @@ class ForceGraph extends React.Component{
     this.setState({
       bootstrapPercolationThreshold: newThreshold,
     });
+  }
+
+  updateBootstrapPercolationProbability = (evt) => {
+    const newProbability = evt.target.value;
+    if(newProbability !== "") {
+      this.setState({
+        bootstrapPercolationProbability: newProbability
+      });
+    }
   }
 
   stopPropagation = (event) => {
@@ -265,6 +272,7 @@ class ForceGraph extends React.Component{
           percolationIteration={this.percolationIteration}
           finalPercolationIteration={this.finalPercolationIteration}
           updateBootstrapPercolationThreshold={this.updateBootstrapPercolationThreshold}
+          updateBootstrapPercolationProbability={this.updateBootstrapPercolationProbability}
           threshold={this.state.bootstrapPercolationThreshold}
           iteration={this.state.bootstrapPercolationIteration}
           activeVerticesCount={this.state.activeVerticesCount}

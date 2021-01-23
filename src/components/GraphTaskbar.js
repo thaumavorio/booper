@@ -83,6 +83,10 @@ class GraphTaskbar extends Component {
       this.props.updateBootstrapPercolationThreshold(evt);
     }
 
+    updateBootstrapPercolationProbability = (evt) => {
+      this.props.updateBootstrapPercolationProbability(evt);
+    }
+
     // End of functions from props to modify ForceGraph State
 
     // Start of Taskbar functions
@@ -202,7 +206,8 @@ class GraphTaskbar extends Component {
                 </ButtonGroup>
                 <Box display="flex" flexDirection="row" alignItems="center">
                   <div>
-                    <TextField id="bootstrap-percolation-threshold" label="Threshold" type="number" InputProps={{ inputProps: { min: 0 }}} onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.props.threshold}  />
+                    <TextField id="bootstrap-percolation-threshold" label="Threshold" type="number" InputProps={{ inputProps: { min: 0 }}} onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.props.threshold} style={{width: "50%"}} />
+                    <TextField label="Probability" type="number" InputProps={{ inputProps: { min: 0, max: 1 }}} onChange={this.updateBootstrapPercolationProbability} defaultValue={1} style={{width: "50%"}} />
                   </div>
                 </Box>
                 <Typography variant="overline" gutterBottom>Iteration: {this.props.iteration}</Typography>
@@ -243,6 +248,7 @@ GraphTaskbar.propTypes = {
   percolationIteration: PropTypes.func,
   finalPercolationIteration: PropTypes.func,
   updateBootstrapPercolationThreshold: PropTypes.func,
+  updateBootstrapPercolationProbability: PropTypes.func,
   threshold: PropTypes.number,
   iteration: PropTypes.number,
   activeVerticesCount: PropTypes.number,
