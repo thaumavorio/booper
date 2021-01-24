@@ -9,12 +9,14 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "immutability-helper": "^3.1.1",
+    "prop-types": "^15.7.2",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-force-graph-2d": "^1.18.1",
     "react-loader-spinner": "^3.1.14",
     "react-promise-tracker": "2.1.0",
     "react-remove-scroll-bar": "^2.1.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
     "type-fest": "^0.13.1",
     "web-vitals": "^0.2.4"
@@ -22,7 +24,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --transformIgnorePatterns \"[/\\\\\\]node_modules[/\\\\\\](?!bezier-js)\" --passWithNoTests",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -46,5 +48,6 @@
   "devDependencies": {
     "eslint": "^7.17.0",
     "eslint-plugin-react": "^7.22.0"
-  }
+  },
+  "homepage": "."
 }

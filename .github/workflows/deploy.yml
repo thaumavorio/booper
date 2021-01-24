@@ -1,0 +1,31 @@
+# This workflow will do a clean install of node dependencies, build the source
+# code, and deploy it to a webserver.
+
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 15.x
+      - run: npm ci
+      - run: npm run build
+        env:
+          CI: false
+      - uses: AEnterprise/rsync-deploy@1.0.1
+        env:
+          ARGS: "-rc --delete"
+          FOLDER: "build/"
+          SERVER_IP: ${{ secrets.DEPLOY_IP }}
+          SERVER_PORT: ${{ secrets.DEPLOY_PORT }}
+          USERNAME: ${{ secrets.DEPLOY_USERNAME }}
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+          SERVER_DESTINATION: ${{ secrets.DEPLOY_DEST }}
