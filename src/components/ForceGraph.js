@@ -6,6 +6,10 @@ import { Box } from "@material-ui/core";
 import { trackPromise } from "react-promise-tracker";
 import GraphTaskbar from "./GraphTaskbar";
 
+/**
+ * Create the default graph. Users will see this graph in the display pane when they first open the Study tab in Booper.
+ * @returns a Graph object
+*/
 const initGraph = (() => {
   const graph = new Graph();
 
@@ -33,6 +37,10 @@ const initGraph = (() => {
 })();
 
 class ForceGraph extends React.Component{
+  /**
+   * Instantiates a ForceGraph component with the default initial state.
+   * @param {Object} props not used in this component. Expecting an empty object.
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -52,33 +60,56 @@ class ForceGraph extends React.Component{
     this.updateBootstrapPercolationThreshold = this.updateBootstrapPercolationThreshold.bind(this);
   }
 
+  /**
+   * Enables the behavior that when the user resizes the browser window, the graph will be re-centered in the display pane.
+   */
   componentDidMount() {
     this.updateDimensions();
     window.addEventListener("resize", this.updateDimensions.bind(this));
   }
 
+  /**
+   * Removes the resizing event listener added by @see componentDidMount when it is no longer necessary.
+   */
   componentWillUnmount() {
     window.removeEventListener("resize", this.updateDimensions.bind(this));
   }
 
+  /**
+   * Re-centers the graph in the display pane if the user has resized the browser window.
+   */
   updateDimensions() {
     this.setState({
       windowSize: {height: window.innerHeight, width: window.innerWidth},
     });
   }
 
+  /**
+   * Parses an input file that defines a graph. Renders the graph in the display pane.
+   * Expects a CSV file in which each row has the same length, and the number of rows is the row length plus one.
+   * Each entry in the first row is a '+' or '-' character. Each entry in every other row is either a '0' or '1' character.
+   * The resulting graph has one vertex for each column, or one vertex for each row after the first row.
+   * A '+' in the first row means that the column's corresponding vertex is a seed. A '-' means it is not a seed.
+   * The remaining rows are interpreted as an adjacency matrix.
+   * A '1' means that the row's corresponding vertex is adjacent to the column's corresponding vertex. A '0' means that they are not adjacent.
+   * Currently, Booper can only render simple, undirected graphs; the input adjacency matrix must be symmetric with 0s on the diagonal.
+   * If the input file is invalid according to these rules, an error message will pop up on the screen, and the input graph will not be rendered.
+   * @param {Object} evt an object containing the input file
+   */
   readAdjacencyMatrix = (evt) => {
+    // Extract the input file from its container object.
     const file = evt.target.files[0];
+    // Clear the file input component so this method will be called every time a user uploads a file, even if they upload the same file twice.
     document.getElementById("uploadAdjacencyMatrix").value = null;
     const reader = new FileReader();
     reader.onload = (event) => {
-      // Parse input file.
+      // Parse input file into a 2-D array so each entry is eaily accessible.
       const string = event.target.result.trim();
       const matrix = string.split("\n");
       for(const i in matrix) {
         matrix[i] = matrix[i].trim().split(",");
       }
-      if(ForceGraph.hasValidShape(matrix) && ForceGraph.hasValidEntries(matrix) && ForceGraph.representsValidGraph(matrix)) {
+      if(ForceGraph.hasValidShape(matrix) && ForceGraph.hasValidEntries(matrix) && ForceGraph.representsValidGraph(matrix)) { // check that the input is valid
         // Create a graph according to the adjacency matrix.
         const graph = new Graph();
         for(let i = 0; i < matrix.length - 1; i++) {
@@ -92,6 +123,7 @@ class ForceGraph extends React.Component{
             }
           }
         }
+        // Render the graph.
         this.setState({
           graph,
           forceData: graph.getGraphData(),
@@ -103,6 +135,14 @@ class ForceGraph extends React.Component{
     reader.readAsText(file);
   }
 
+  /**
+   * Checks that the matrix has a valid shape valid, as defined for @see readAdjacencyMatrix.
+   * Each row in the given matrix should have the same length.
+   * The number of rows should be the row length plus one.
+   * If the matrix does not have a valid shape, an error message will pop up on the screen.
+   * @param {Array} matrix a 2-D array
+   * @returns true if the matrix has a valid shape, false otherwise
+   */
   static hasValidShape(matrix) {
     for(const r of matrix) {
       if(r.length !== matrix[0].length) {
@@ -117,6 +157,14 @@ class ForceGraph extends React.Component{
     return true;
   }
 
+  /**
+   * Checks that the matrix has valid entries, as defined for @see readAdjacencyMatrix.
+   * Each entry in the first row should be a '+' or '-' character.
+   * Each entry in every row thereafter should be a '1' or '0' character.
+   * If the matrix does not have valid entries, an error message will pop up on the screen.
+   * @param {Array} matrix a 2-D array
+   * @returns true if the matrix has valid entries, false otherwise
+   */
   static hasValidEntries(matrix) {
     for(const c of matrix[0]) {
       if(c !== "+" && c !== "-") {
@@ -135,6 +183,12 @@ class ForceGraph extends React.Component{
     return true;
   }
 
+  /**
+   * Checks that the matrix represents a valid (simple and undirected) graph.
+   * Ignoring the first row, the matrix should be symmetric. Each entry on the diagonal should be a '0' character.
+   * @param {Array} matrix a 2-D array with a valid shape, as defined by @see hasValidShape
+   * @returns true if the matrix represents a valid graph, false otherwise.
+   */
   static representsValidGraph(matrix) {
     for(let i = 0; i < matrix.length - 1; i++) {
       for(let j = 0; j < i; j++) {
@@ -153,6 +207,11 @@ class ForceGraph extends React.Component{
     return true;
   }
 
+  /**
+   * Finds a minimum contagious set of the currently displayed graph.
+   * Sends the graph and treshold in an HTTP request to a server, which performs the algorithm and sends the result in a response object.
+   * When the response object is received, the minimum contagious set is rendered.
+   */
   getMinContagiousSet = () => {
     trackPromise(
       this.state.graph.findMinimalContagiousSet(this.state.bootstrapPercolationThreshold)
@@ -167,6 +226,11 @@ class ForceGraph extends React.Component{
         })));
   };
 
+  /**
+   * Finds a small contagious set of the currently displayed graph.
+   * Sends the graph and treshold in an HTTP request to a server, which performs a greedy algorithm and sends the result in a response object.
+   * When the response object is received, the minimum contagious set is rendered.
+   */
   getGreedyContagiousSet = () => {
     trackPromise(
       this.state.graph.findContagiousSetGreedily(this.state.bootstrapPercolationThreshold)
@@ -181,21 +245,29 @@ class ForceGraph extends React.Component{
         })));
   };
 
-    randomSeedSet = () => {
-      const inclusionProbability = parseFloat(document.getElementById("seed-probability").value);
-      if(!isNaN(inclusionProbability)) {
-        this.setState(function(state) {
-          const g = update(state.graph, {$set: state.graph.randomSeedSet(inclusionProbability)});
-          return {
-            graph: g,
-            forceData: g.getGraphData(state.forceData),
-            bootstrapPercolationIteration: 0,
-            activeVerticesCount: g.getActiveVerticesCount()
-          };
-        });
-      }
+  /**
+   * Generates a random seed set for the currently displayed graph.
+   * Each vertex becomes a seed independently with the given inclusion probability.
+   * Renders the resulting seed set.
+   */
+  randomSeedSet = () => {
+    const inclusionProbability = parseFloat(document.getElementById("seed-probability").value);
+    if(!isNaN(inclusionProbability)) {
+      this.setState(function(state) {
+        const g = update(state.graph, {$set: state.graph.randomSeedSet(inclusionProbability)});
+        return {
+          graph: g,
+          forceData: g.getGraphData(state.forceData),
+          bootstrapPercolationIteration: 0,
+          activeVerticesCount: g.getActiveVerticesCount()
+        };
+      });
     }
+  }
 
+  /**
+   * Deactivates all vertices in the currently displayed graph. Re-renders the graph.
+   */
   resetInfections = () => {
     this.state.graph.deactivateAllVertices();
     this.setState(state => ({
@@ -206,6 +278,10 @@ class ForceGraph extends React.Component{
     );
   };
 
+  /**
+   * Simulates an iteration of bootstrap percolation with the currently displayed graph.
+   * Re-renders the graph, showing which vertices were just infected.
+   */
   percolationIteration = () => {
     const g = update(this.state.graph, {});
     g.bootstrapPercolationIteration(this.state.bootstrapPercolationThreshold, this.state.bootstrapPercolationProbability);
@@ -217,24 +293,35 @@ class ForceGraph extends React.Component{
     }));
   }
 
+  /**
+   * Simulates bootstrap percolation until no more vertices can be infected.
+   * Re-renders the graph, showing which vertices are active at the end.
+   * This function might take a long time for low infection probabilities.
+   */
   finalPercolationIteration = () => {
-    this.setState(state => {
-      const g = update(state.graph, {});
-      let itrs = state.bootstrapPercolationIteration;
+    if(this.state.bootstrapPercolationProbability > 0) {
+      this.setState(state => {
+        const g = update(state.graph, {});
+        let itrs = state.bootstrapPercolationIteration;
 
-      while (!g.bootstrapPercolationIteration(state.bootstrapPercolationThreshold, state.bootstrapPercolationProbability)) {
-        itrs = itrs + 1;
-      }
+        while (!g.bootstrapPercolationIteration(state.bootstrapPercolationThreshold, state.bootstrapPercolationProbability)) {
+          itrs = itrs + 1;
+        }
 
-      return {
-        graph: g,
-        forceData: g.getGraphData(state.forceData),
-        bootstrapPercolationIteration: itrs,
-        activeVerticesCount: g.getActiveVerticesCount()
-      };
-    });
+        return {
+          graph: g,
+          forceData: g.getGraphData(state.forceData),
+          bootstrapPercolationIteration: itrs,
+          activeVerticesCount: g.getActiveVerticesCount()
+        };
+      });
+    }
   }
 
+  /**
+   * Changes the bootstrap percolation threshold.
+   * @param {Object} evt an object that contains the new threshold
+   */
   updateBootstrapPercolationThreshold = (evt) => {
     const newThreshold = evt.target.value;
     this.setState({
@@ -242,6 +329,10 @@ class ForceGraph extends React.Component{
     });
   }
 
+  /**
+   * Changes the infection probability for bootstrap percolation.
+   * @param {Object} evt an object that contains the new probability
+   */
   updateBootstrapPercolationProbability = (evt) => {
     const newProbability = evt.target.value;
     if(newProbability !== "") {
@@ -251,6 +342,10 @@ class ForceGraph extends React.Component{
     }
   }
 
+  /**
+   * When a component is inside another component and the user clicks on the child component, prevents the parent component from reacting the click.
+   * @param {Object} event an event object representing a mouse click
+   */
   stopPropagation = (event) => {
     event.stopPropagation();
   }
