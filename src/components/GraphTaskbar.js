@@ -125,10 +125,10 @@ class GraphTaskbar extends Component {
                     Upload Adjacency Matrix
                   <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix}
                     hidden/>
+                  <IconButton color="Info" variant="contained" component="label" onClick={this.helpIconOpen} onMouseDown={this.stopPropagation}>
+                    <HelpIcon/>
+                  </IconButton>
                 </Button>
-                <IconButton color="Info" variant="contained" component="label" onClick={this.helpIconOpen}>
-                  <HelpIcon/>
-                </IconButton>
                 <Dialog onClose={this.helpIconClose} open={this.state.helpOpen}>
                   <DialogTitle id="customized-dialog-title" onClose={this.helpIconClose}>
                       Uploading Adjacency Matrices

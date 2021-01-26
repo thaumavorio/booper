@@ -253,7 +253,7 @@ class ForceGraph extends React.Component{
     const INACTIVE_COLOR = "#5375e2";
     const ACTIVE_COLOR = "#f65868";
     const RECENTLY_INFECTED_COLOR = "#228b22";
-    const BACKGROUND_COLOR = "#fefefe";
+    const BACKGROUND_COLOR = "#fffdee";
     return <div>
       <Box display="flex" flexDirection="row" alignItems="center" style={{backgroundColor: BACKGROUND_COLOR}}>
         <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
