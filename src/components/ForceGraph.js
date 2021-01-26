@@ -93,36 +93,43 @@ class ForceGraph extends React.Component{
    * The remaining rows are interpreted as an adjacency matrix.
    * A '1' means that the row's corresponding vertex is adjacent to the column's corresponding vertex. A '0' means that they are not adjacent.
    * Currently, Booper can only render simple, undirected graphs; the input adjacency matrix must be symmetric with 0s on the diagonal.
-   * If the input file is invalid according to these rules, an error message will pop up on the screen, and the input graph will not be rendered.
+   * If the input file is invalid according to these rules, an error message will pop up on the screen, and the desired graph will not be rendered.
    * @param {Object} evt an object containing the input file
    */
   readAdjacencyMatrix = (evt) => {
     // Extract the input file from its container object.
     const file = evt.target.files[0];
+
     // Clear the file input component so this method will be called every time a user uploads a file, even if they upload the same file twice.
     document.getElementById("uploadAdjacencyMatrix").value = null;
+
     const reader = new FileReader();
     reader.onload = (event) => {
       // Parse input file into a 2-D array so each entry is eaily accessible.
       const string = event.target.result.trim();
-      const matrix = string.split("\n");
-      for(const i in matrix) {
-        matrix[i] = matrix[i].trim().split(",");
+      const rows = string.split("\n");
+      const seeds = rows[0].trim().split(","); // an array defining which vertices are seeds in the desired graph
+      const adjacencyMatrix = []; // the adjacency matrix of the desired graph
+      for(let i = 1; i < rows.length; i++) {
+        adjacencyMatrix[i - 1] = rows[i].trim().split(",");
       }
-      if(ForceGraph.hasValidShape(matrix) && ForceGraph.hasValidEntries(matrix) && ForceGraph.representsValidGraph(matrix)) { // check that the input is valid
+    
+      // Check that the input is valid.
+      if(ForceGraph.hasValidShape(seeds, adjacencyMatrix) && ForceGraph.hasValidEntries(seeds, adjacencyMatrix) && ForceGraph.representsValidGraph(adjacencyMatrix)) {
         // Create a graph according to the adjacency matrix.
         const graph = new Graph();
-        for(let i = 0; i < matrix.length - 1; i++) {
+        for(let i = 0; i < seeds.length; i++) {
           graph.addVertex(i);
-          if(matrix[0][i] === "+") {
+          if(seeds[i] === "+") {
             graph.activateVertex(i);
           }
           for(let j = 0; j < i; j++) {
-            if(matrix[i + 1][j] === "1") {
+            if(adjacencyMatrix[i][j] === "1") {
               graph.addEdge(i, j);
             }
           }
         }
+
         // Render the graph.
         this.setState({
           graph,
@@ -136,21 +143,21 @@ class ForceGraph extends React.Component{
   }
 
   /**
-   * Checks that the matrix has a valid shape valid, as defined for @see readAdjacencyMatrix.
-   * Each row in the given matrix should have the same length.
-   * The number of rows should be the row length plus one.
-   * If the matrix does not have a valid shape, an error message will pop up on the screen.
-   * @param {Array} matrix a 2-D array
-   * @returns true if the matrix has a valid shape, false otherwise
+   * Checks that the given arrays have valid shape, as defined for @see readAdjacencyMatrix.
+   * adjacencyMatrix should be square with the same width as seeds.
+   * If the arrays do not have valid shape, an error message will pop up on the screen.
+   * @param {Array} seeds an array
+   * @param {Array} adjacencyMatrix a 2-D array
+   * @returns true if the arrays have valid shape, false otherwise
    */
-  static hasValidShape(matrix) {
-    for(const r of matrix) {
-      if(r.length !== matrix[0].length) {
+  static hasValidShape(seeds, adjacencyMatrix) {
+    for(const r of adjacencyMatrix) {
+      if(r.length !== seeds.length) {
         window.alert("Invalid input. Each row must have the same length.");
         return false;
       }
     }
-    if(matrix.length !== matrix[0].length + 1) {
+    if(adjacencyMatrix.length !== seeds.length) {
       window.alert("Invalid input. The adjacency matrix must be a square matrix.");
       return false;
     }
@@ -158,23 +165,24 @@ class ForceGraph extends React.Component{
   }
 
   /**
-   * Checks that the matrix has valid entries, as defined for @see readAdjacencyMatrix.
-   * Each entry in the first row should be a '+' or '-' character.
-   * Each entry in every row thereafter should be a '1' or '0' character.
-   * If the matrix does not have valid entries, an error message will pop up on the screen.
+   * Checks that the given arrays have valid entries, as defined for @see readAdjacencyMatrix.
+   * Each entry in seeds should be a '+' or '-' character.
+   * Each entry in adjacencyMatrix should be a '1' or '0' character.
+   * If the arrays do not have valid entries, an error message will pop up on the screen.
+   * @param {Array} seeds an array
    * @param {Array} matrix a 2-D array
    * @returns true if the matrix has valid entries, false otherwise
    */
-  static hasValidEntries(matrix) {
-    for(const c of matrix[0]) {
-      if(c !== "+" && c !== "-") {
+  static hasValidEntries(seeds, matrix) {
+    for(const entry of seeds) {
+      if(entry !== "+" && entry !== "-") {
         window.alert("Invalid input. There must be a row of +'s and -'s above the adjacency matrix, indicating which vertices are seeds.");
         return false;
       }
     }
-    for(let i = 0; i < matrix.length - 1; i++) {
-      for(let j = 0; j < matrix.length - 1; j++) {
-        if(matrix[i + 1][j] !== "0" && matrix[i + 1][j] !== "1") {
+    for(const row of matrix) {
+      for(const entry of row) {
+        if(entry !== "0" && entry !== "1") {
           window.alert("Invalid input. Every entry in the adjacency matrix must be 1 or 0, indicating the presence or absence of an edge, respectively.");
           return false;
         }
@@ -184,22 +192,20 @@ class ForceGraph extends React.Component{
   }
 
   /**
-   * Checks that the matrix represents a valid (simple and undirected) graph.
-   * Ignoring the first row, the matrix should be symmetric. Each entry on the diagonal should be a '0' character.
-   * @param {Array} matrix a 2-D array with a valid shape, as defined by @see hasValidShape
+   * Checks that the adjacency matrix represents a valid (simple and undirected) graph.
+   * The matrix should be symmetric. Each entry on the diagonal should be a '0' character.
+   * @param {Array} matrix a 2-D array with a valid shape and valid entries, as defined by @see hasValidShape and @see hasValidEntries
    * @returns true if the matrix represents a valid graph, false otherwise.
    */
   static representsValidGraph(matrix) {
-    for(let i = 0; i < matrix.length - 1; i++) {
+    for(let i = 0; i < matrix.length; i++) {
       for(let j = 0; j < i; j++) {
-        if(matrix[i + 1][j] !== matrix[j + 1][i]) {
+        if(matrix[i][j] !== matrix[j][i]) {
           window.alert("Invalid input. The adjacency matrix must be symmetric, defining an undirected graph.");
           return false;
         }
       }
-    }
-    for(let i = 0; i < matrix.length - 1; i++) {
-      if(matrix[i + 1][i] !== "0") {
+      if(matrix[i][i] !== "0") {
         window.alert("Invalid input. The adjacency matrix must have 0's on the diagonal, defining a simple graph.");
         return false;
       }
