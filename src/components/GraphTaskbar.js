@@ -161,18 +161,18 @@ class GraphTaskbar extends Component {
               <h3>SEED SETS</h3>
               <Box display="flex" flexDirection="column">
                 <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
-                  <TaskbarButton variant="outlined" onClick={this.getMinContagiousSet}>
+                  <TaskbarButton variant="contained" onClick={this.getMinContagiousSet} color="secondary">
                     Minimum Contagious Set
                   </TaskbarButton>
                 </Tooltip>
                 <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph using a greedy algorithm."}>
-                  <TaskbarButton variant="outlined" onClick={this.getGreedyContagiousSet}>
+                  <TaskbarButton variant="contained" onClick={this.getGreedyContagiousSet} color="secondary">
                     Greedy Contagious Set
                   </TaskbarButton>
                 </Tooltip>
                 <Box display="flex" flexDirection="row">
                   <Tooltip title={"Makes each node a seed independently at random with the probability p."}>
-                    <TaskbarButton variant="outlined" onClick={this.randomSeedSet} style={{justifyContent: "space-between"}}>
+                    <TaskbarButton variant="contained" onClick={this.randomSeedSet} style={{justifyContent: "space-between"}} color="secondary">
                       <TextField label="probability" id="seed-probability"
                         type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
                         defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}

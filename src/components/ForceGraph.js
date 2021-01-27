@@ -5,6 +5,7 @@ import update from "immutability-helper";
 import { Box } from "@material-ui/core";
 import { trackPromise } from "react-promise-tracker";
 import GraphTaskbar from "./GraphTaskbar";
+import theme from "../utils/theme.js";
 
 const initGraph = (() => {
   const graph = new Graph();
@@ -258,11 +259,10 @@ class ForceGraph extends React.Component{
   render() {
     const TOOLBAR_WIDTH = 300;
     const INACTIVE_COLOR = "#5375e2";
-    const ACTIVE_COLOR = "#f65868";
+    // const ACTIVE_COLOR = "#f65868";
     const RECENTLY_INFECTED_COLOR = "#228b22";
-    const BACKGROUND_COLOR = "#fffdee";
     return <div>
-      <Box display="flex" flexDirection="row" alignItems="center" style={{backgroundColor: BACKGROUND_COLOR}}>
+      <Box display="flex" flexDirection="row" alignItems="center">
         <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
           getMinContagiousSet={this.getMinContagiousSet}
           getGreedyContagiousSet={this.getGreedyContagiousSet}
@@ -278,11 +278,10 @@ class ForceGraph extends React.Component{
           activeVerticesCount={this.state.activeVerticesCount}
           inactiveVerticesCount={this.state.forceData.nodes.length - this.state.activeVerticesCount}/>
         <ForceGraph2D graphData={this.state.forceData}
-          nodeColor={d => d.recentlyInfected ? RECENTLY_INFECTED_COLOR : d.active ? ACTIVE_COLOR : INACTIVE_COLOR}
+          nodeColor={d => d.recentlyInfected ? RECENTLY_INFECTED_COLOR : d.active ? theme.palette.active.main : INACTIVE_COLOR}
           linkColor="#5c616e"
           linkOpacity={0.7}
           linkWidth={3.5}
-          backgroundColor={BACKGROUND_COLOR}
           width={this.state.windowSize.width - TOOLBAR_WIDTH}
           height={this.state.windowSize.height}
         />

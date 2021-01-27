@@ -34,7 +34,7 @@ const StyledLink = styled(Link)({
 class Header extends Component {
   render() {
     return (
-      <AppBar position="static">
+      <AppBar color="primary" position="static">
         <Toolbar>
           <HeaderBox>
             <IconButton edge="start" color="inherit" aria-label="home">
