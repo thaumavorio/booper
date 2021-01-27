@@ -1,5 +1,6 @@
 import * as React from "react";
 import ForceGraph2D from "react-force-graph-2d";
+import { forceCollide, forceX, forceY, forceZ } from "d3-force-3d";
 import Graph from "../classes/Graph";
 import update from "immutability-helper";
 import { Box } from "@material-ui/core";
@@ -51,6 +52,8 @@ class ForceGraph extends React.Component{
     };
 
     this.updateBootstrapPercolationThreshold = this.updateBootstrapPercolationThreshold.bind(this);
+
+    this.graphRef = React.createRef(null);
   }
 
   componentDidMount() {
@@ -261,6 +264,15 @@ class ForceGraph extends React.Component{
     const INACTIVE_COLOR = "#5375e2";
     // const ACTIVE_COLOR = "#f65868";
     const RECENTLY_INFECTED_COLOR = "#228b22";
+    setTimeout(() => {
+      this.graphRef.current.d3Force("collide", forceCollide());
+      this.graphRef.current.d3Force("center", null);
+      this.graphRef.current.d3Force("x", forceX().strength(0.01));
+      this.graphRef.current.d3Force("y", forceY().strength(0.01));
+      this.graphRef.current.d3Force("z", forceZ().strength(0.01));
+      this.graphRef.current.d3Force("charge").strength(-100);
+    }, 100);
+
     return <div>
       <Box display="flex" flexDirection="row" alignItems="center">
         <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
@@ -284,6 +296,7 @@ class ForceGraph extends React.Component{
           linkWidth={3.5}
           width={this.state.windowSize.width - TOOLBAR_WIDTH}
           height={this.state.windowSize.height}
+          ref={this.graphRef}
         />
       </Box>
     </div>;
