@@ -8,14 +8,12 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
-  IconButton,
+  IconButton, Link,
   Paper,
-  Switch,
   TextField,
   Tooltip,
   Typography
 } from "@material-ui/core";
-import HelpIcon from "@material-ui/icons/Help";
 import RotateLeftIcon from "@material-ui/icons/RotateLeft";
 import FirstPageIcon from "@material-ui/icons/FirstPage";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -50,13 +48,12 @@ class GraphTaskbar extends Component {
       this.props.readAdjacencyMatrix(evt);
     }
 
-    getContagiousSet = () => {
-      if(this.state.useMinAlgorithm){
-        this.props.getMinContagiousSet();
-      }
-      else {
-        this.props.getGreedyContagiousSet();
-      }
+    getMinContagiousSet = () => {
+      this.props.getMinContagiousSet();
+    }
+
+    getGreedyContagiousSet = () => {
+      this.props.getGreedyContagiousSet();
     }
 
     randomSeedSet = () => {
@@ -116,16 +113,30 @@ class GraphTaskbar extends Component {
             <Container>
               <h3>GRAPH</h3>
               <Box display="flex" flexDirection="row">
-                <Button variant="outlined" component="label" style={{  fontSize: "12px", marginBottom: "10px", width: TOOLBAR_WIDTH*0.8  }}>
-                    Upload Adjacency Matrix
-                  <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
-                </Button>
-                <IconButton color="Info" variant="contained" component="label" onClick={this.helpIconOpen}>
-                  <HelpIcon/>
-                </IconButton>
+                <Tooltip title={
+                  <React.Fragment>
+                    <Typography gutterBottom>
+                      The adjacency matrix input should be in the format of a .csv file. The first row should contain
+                      either a &lsquo;+&rsquo; or a &lsquo;-&rsquo;, indicating whether the node is initially infected or not, respectively.
+                    </Typography>
+                    <Typography gutterBottom>
+                      The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
+                    </Typography>
+                    <Typography gutterBottom>
+                      <Link onClick={this.helpIconOpen} style={{color: "white"}}>
+                        See more..
+                      </Link>
+                    </Typography>
+                  </React.Fragment>
+                } interactive={true} placement="right">
+                  <TaskbarButton variant="outlined">
+                      Upload Adjacency Matrix
+                    <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
+                  </TaskbarButton>
+                </Tooltip>
                 <Dialog onClose={this.helpIconClose} open={this.state.helpOpen}>
                   <DialogTitle id="customized-dialog-title" onClose={this.helpIconClose}>
-                                    Uploading Adjacency Matrices
+                    Uploading Adjacency Matrices
                   </DialogTitle>
                   <DialogContent dividers>
                     <Typography gutterBottom>
@@ -149,21 +160,23 @@ class GraphTaskbar extends Component {
             <Container>
               <h3>SEED SETS</h3>
               <Box display="flex" flexDirection="column">
-                <Box display="flex" flexDirection="row">
-                  <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
-                    <TaskbarButton variant="outlined" onClick={this.getContagiousSet}>
-                      <Switch size="small" onChange={this.toggleAlgorithmChoice} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}/>
-                      { this.state.useMinAlgorithm ? "Minimum Contagious Set" : "Greedy Contagious Set" }
-                    </TaskbarButton>
-                  </Tooltip>
-                </Box>
+                <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
+                  <TaskbarButton variant="outlined" onClick={this.getMinContagiousSet}>
+                    Minimum Contagious Set
+                  </TaskbarButton>
+                </Tooltip>
+                <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph using a greedy algorithm."}>
+                  <TaskbarButton variant="outlined" onClick={this.getGreedyContagiousSet}>
+                    Greedy Contagious Set
+                  </TaskbarButton>
+                </Tooltip>
                 <Box display="flex" flexDirection="row">
                   <Tooltip title={"Makes each node a seed independently at random with the probability p."}>
-                    <TaskbarButton variant="outlined" onClick={this.randomSeedSet}>
-                      <TextField label="p" id="seed-probability"
-                        type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 }}}
-                        defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation} style={{ marginRight: 20}}
-                        variant="filled"/>
+                    <TaskbarButton variant="outlined" onClick={this.randomSeedSet} style={{justifyContent: "space-between"}}>
+                      <TextField label="probability" id="seed-probability"
+                        type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
+                        defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
+                        variant="filled" fullWidth={true}/>
                           p-Random Seed Set
                     </TaskbarButton>
                   </Tooltip>
