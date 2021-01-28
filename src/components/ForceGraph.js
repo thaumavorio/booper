@@ -274,7 +274,7 @@ class ForceGraph extends React.Component{
     }, 100);
 
     return <div>
-      <Box display="flex" flexDirection="row" alignItems="center">
+      <Box display="flex" flexDirection="row" alignItems="center" style={{backgroundColor: theme.palette.background.main}}>
         <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
           getMinContagiousSet={this.getMinContagiousSet}
           getGreedyContagiousSet={this.getGreedyContagiousSet}
@@ -297,6 +297,7 @@ class ForceGraph extends React.Component{
           width={this.state.windowSize.width - TOOLBAR_WIDTH}
           height={this.state.windowSize.height}
           ref={this.graphRef}
+          backgroundColor={theme.palette.background.main}
         />
       </Box>
     </div>;

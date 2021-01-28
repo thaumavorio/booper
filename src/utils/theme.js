@@ -6,7 +6,7 @@ let theme = createMuiTheme({
       main: "#221B2C"
     },
     secondary: {
-      main: "#83AAA4"
+      main: "#5d79b8"
     },
     info: {
       main: "#7791a1"
@@ -18,8 +18,8 @@ let theme = createMuiTheme({
       main: "#f65868"
     },
     background: {
-      paper: "#C6DFE1",
-      main: "#fefefe"
+      paper: "#655e86",
+      main: "#c6d1e1"
     },
   }
 });

@@ -28,7 +28,7 @@ const TOOLBAR_WIDTH = 300;
 
 // Local Components
 const TaskbarButton = styled(Button)({
-  fontSize: "11px",
+  fontSize: "14px",
   marginBottom: "10px",
   width: "100%"
 });
@@ -106,9 +106,9 @@ class GraphTaskbar extends Component {
 
   render() {
     return (
-      <div>
+      <Box style={{backgroundColor: "transparent"}}>
         <LoadingSpinnerComponent />
-        <Paper className='toolbar-surface' elevation={10}>
+        <Paper className='toolbar-surface' elevation={5} style={{marginRight: 10}}>
           <Box style={{padding: 30}} width={TOOLBAR_WIDTH}>
             <Container>
               <h3>GRAPH</h3>
@@ -129,7 +129,7 @@ class GraphTaskbar extends Component {
                     </Typography>
                   </React.Fragment>
                 } interactive={true} placement="right">
-                  <TaskbarButton variant="outlined">
+                  <TaskbarButton variant="contained" color="secondary">
                       Upload Adjacency Matrix
                     <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
                   </TaskbarButton>
@@ -188,8 +188,11 @@ class GraphTaskbar extends Component {
               <h3>BOOTSTRAP PERCOLATION</h3>
               <Box display="flex" flexDirection="column" alignItems="center">
                 <ButtonGroup
+                  size="large"
+                  variant="outlined"
                   orientation="horizontal"
                   aria-label = "horizontal contained primary button group"
+                  color="primary"
                 >
                   <Tooltip title={"Deactivate all vertices"}>
                     <IconButton onClick={this.resetInfections}>
@@ -218,14 +221,18 @@ class GraphTaskbar extends Component {
                   </Tooltip>
                 </ButtonGroup>
                 <Box display="flex" flexDirection="row" alignItems="center">
-                  <div>
-                    <TextField id="bootstrap-percolation-threshold" label="Threshold" type="number" InputProps={{ inputProps: { min: 0 }}} onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.props.threshold} style={{width: "50%"}} />
-                    <TextField label="Probability" type="number" InputProps={{ inputProps: { min: 0, max: 1 }}} onChange={this.updateBootstrapPercolationProbability} defaultValue={1} style={{width: "50%"}} />
-                  </div>
+                  <TextField label="THRESHOLD" id="bootstrap-percolation-threshold"
+                    type="number" InputProps={{ inputProps: { min: 1, step: 1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
+                    variant="outlined" fullWidth={true} onChange={this.updateBootstrapPercolationThreshold}
+                    defaultValue={this.props.threshold} style={{margin: 5}} color="secondary"/>
+                  <TextField label="PROBABILITY" type="number"
+                    InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
+                    variant="outlined" fullWidth={true} onChange={this.updateBootstrapPercolationProbability}
+                    defaultValue={1} style={{margin: 5}} color="secondary"/>
                 </Box>
-                <Typography variant="overline" gutterBottom>Iteration: {this.props.iteration}</Typography>
-                <Typography variant="overline" gutterBottom>Active Vertices: {this.props.activeVerticesCount}</Typography>
-                <Typography variant="overline" gutterBottom>Inactive Vertices: {this.props.inactiveVerticesCount}</Typography>
+                <Typography variant="overline" style={{textAlign: "left"}} gutterBottom>Iteration: {this.props.iteration}</Typography>
+                <Typography variant="overline" align="center" gutterBottom>Active Vertices: {this.props.activeVerticesCount}</Typography>
+                <Typography variant="overline" align="right" gutterBottom>Inactive Vertices: {this.props.inactiveVerticesCount}</Typography>
               </Box>
             </Container>
             <Divider variant = "middle"/>
@@ -244,7 +251,7 @@ class GraphTaskbar extends Component {
             </Container>
           </Box>
         </Paper>
-      </div>
+      </Box>
     );
   }
 
