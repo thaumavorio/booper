@@ -18,6 +18,8 @@
     "react-remove-scroll-bar": "^2.1.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
+    "reactour": "^1.18.0",
+    "styled-components": "^4.0.0",
     "type-fest": "^0.13.1",
     "web-vitals": "^0.2.4"
   },

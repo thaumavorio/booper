@@ -6,6 +6,7 @@ import update from "immutability-helper";
 import { Box } from "@material-ui/core";
 import { trackPromise } from "react-promise-tracker";
 import GraphTaskbar from "./GraphTaskbar";
+import Tour from "reactour";
 
 /**
  * Create the default graph. Users will see this graph in the display pane when they first open the Study tab in Booper.
@@ -37,6 +38,16 @@ const initGraph = (() => {
   return graph;
 })();
 
+const TOUR_STEPS = [
+  {
+    content: "Welcome our study tool. Here, you can visualize bootstrap percolation on any graph. Let us show you around before you dive in."
+  },
+  {
+    selector: "[data-tour=\"graph-display-pane\"]",
+    content: "This is the graph display pane. You can zoom in or out, pan around, or drag the graph around."
+  }
+];
+
 class ForceGraph extends React.Component{
   /**
    * Instantiates a ForceGraph component with the default initial state.
@@ -48,6 +59,7 @@ class ForceGraph extends React.Component{
       graph: initGraph,
       forceData: initGraph.getGraphData(),
       helpOpen: false,
+      tourOpen: true,
       windowSize: {
         height: window.innerHeight,
         width: window.innerWidth
@@ -352,6 +364,13 @@ class ForceGraph extends React.Component{
   }
 
   /**
+   * Closes the tour that shows users how to use Booper, allowing them to start actually using it.
+   */
+  closeTour = () => {
+    this.setState({tourOpen: false});
+  }
+
+  /**
    * When a component is inside another component and the user clicks on the child component, prevents the parent component from reacting the click.
    * @param {Object} event an event object representing a mouse click
    */
@@ -390,18 +409,22 @@ class ForceGraph extends React.Component{
           threshold={this.state.bootstrapPercolationThreshold}
           iteration={this.state.bootstrapPercolationIteration}
           activeVerticesCount={this.state.activeVerticesCount}
-          inactiveVerticesCount={this.state.forceData.nodes.length - this.state.activeVerticesCount}/>
-        <ForceGraph2D graphData={this.state.forceData}
-          nodeColor={d => d.recentlyInfected ? RECENTLY_INFECTED_COLOR : d.active ? ACTIVE_COLOR : INACTIVE_COLOR}
-          linkColor="#5c616e"
-          linkOpacity={0.7}
-          linkWidth={3.5}
-          backgroundColor={BACKGROUND_COLOR}
-          width={this.state.windowSize.width - TOOLBAR_WIDTH}
-          height={this.state.windowSize.height}
-          ref={this.graphRef}
+          inactiveVerticesCount={this.state.forceData.nodes.length - this.state.activeVerticesCount}
         />
+        <div data-tour="graph-display-pane">
+          <ForceGraph2D graphData={this.state.forceData}
+            nodeColor={d => d.recentlyInfected ? RECENTLY_INFECTED_COLOR : d.active ? ACTIVE_COLOR : INACTIVE_COLOR}
+            linkColor="#5c616e"
+            linkOpacity={0.7}
+            linkWidth={3.5}
+            backgroundColor={BACKGROUND_COLOR}
+            width={this.state.windowSize.width - TOOLBAR_WIDTH}
+            height={this.state.windowSize.height}
+            ref={this.graphRef}
+          />
+        </div>
       </Box>
+      <Tour steps={TOUR_STEPS} isOpen={this.state.tourOpen} onRequestClose={this.closeTour} />
     </div>;
   }
 }
