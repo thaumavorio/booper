@@ -380,6 +380,7 @@ class ForceGraph extends React.Component{
 
   render() {
     const TOOLBAR_WIDTH = 300;
+    const HEIGHT_OFFSET = 100;
     const INACTIVE_COLOR = "#5375e2";
     const ACTIVE_COLOR = "#f65868";
     const RECENTLY_INFECTED_COLOR = "#228b22";
@@ -419,7 +420,7 @@ class ForceGraph extends React.Component{
             linkWidth={3.5}
             backgroundColor={BACKGROUND_COLOR}
             width={this.state.windowSize.width - TOOLBAR_WIDTH}
-            height={this.state.windowSize.height}
+            height={this.state.windowSize.height - HEIGHT_OFFSET}
             ref={this.graphRef}
           />
         </div>
