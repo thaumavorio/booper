@@ -19,19 +19,26 @@ import FirstPageIcon from "@material-ui/icons/FirstPage";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
-import { styled } from "@material-ui/core/styles";
 import { LoadingSpinnerComponent } from "./LoadingSpinnerComponent";
 import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
 
 
 const TOOLBAR_WIDTH = 300;
 
 // Local Components
-const TaskbarButton = styled(Button)({
-  fontSize: "14px",
-  marginBottom: "10px",
-  width: "100%"
-});
+const TaskbarButton = withStyles(theme => ({
+  root: {
+    fontSize: "14px",
+    marginBottom: "10px",
+    width: "100%",
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.main,
+    "&:hover": {
+      background: theme.palette.primary.hover,
+    }
+  }
+}))(Button);
 
 class GraphTaskbar extends Component {
   constructor(props){
@@ -106,7 +113,7 @@ class GraphTaskbar extends Component {
 
   render() {
     return (
-      <Box style={{backgroundColor: "transparent"}}>
+      <Box>
         <LoadingSpinnerComponent />
         <Paper className='toolbar-surface' elevation={5} style={{marginRight: 10}}>
           <Box style={{padding: 30}} width={TOOLBAR_WIDTH}>
@@ -129,7 +136,7 @@ class GraphTaskbar extends Component {
                     </Typography>
                   </React.Fragment>
                 } interactive={true} placement="right">
-                  <TaskbarButton variant="contained" color="secondary">
+                  <TaskbarButton variant="contained">
                       Upload Adjacency Matrix
                     <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
                   </TaskbarButton>
@@ -161,38 +168,38 @@ class GraphTaskbar extends Component {
               <h3>SEED SETS</h3>
               <Box display="flex" flexDirection="column">
                 <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
-                  <TaskbarButton variant="contained" onClick={this.getMinContagiousSet} color="secondary">
+                  <TaskbarButton variant="contained" onClick={this.getMinContagiousSet}>
                     Minimum Contagious Set
                   </TaskbarButton>
                 </Tooltip>
                 <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph using a greedy algorithm."}>
-                  <TaskbarButton variant="contained" onClick={this.getGreedyContagiousSet} color="secondary">
+                  <TaskbarButton variant="contained" onClick={this.getGreedyContagiousSet}>
                     Greedy Contagious Set
                   </TaskbarButton>
                 </Tooltip>
                 <Box display="flex" flexDirection="row">
                   <Tooltip title={"Makes each node a seed independently at random with the probability p."}>
-                    <TaskbarButton variant="contained" onClick={this.randomSeedSet} style={{justifyContent: "space-between"}} color="secondary">
+                    <TaskbarButton variant="contained" onClick={this.randomSeedSet} style={{justifyContent: "space-between"}}>
                       <TextField label="probability" id="seed-probability"
                         type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
                         defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
-                        variant="filled" fullWidth={true}/>
+                        variant="outlined" fullWidth={true} style={{marginTop: 5}}/>
                           p-Random Seed Set
                     </TaskbarButton>
                   </Tooltip>
                 </Box>
               </Box>
             </Container>
-            <Divider variant = "middle"/>
+            <Divider variant="middle"/>
             <Container>
               <h3>BOOTSTRAP PERCOLATION</h3>
               <Box display="flex" flexDirection="column" alignItems="center">
                 <ButtonGroup
                   size="large"
-                  variant="outlined"
+                  variant="filled"
                   orientation="horizontal"
                   aria-label = "horizontal contained primary button group"
-                  color="primary"
+                  color="inherit"
                 >
                   <Tooltip title={"Deactivate all vertices"}>
                     <IconButton onClick={this.resetInfections}>
@@ -235,7 +242,7 @@ class GraphTaskbar extends Component {
                 <Typography variant="overline" align="right" gutterBottom>Inactive Vertices: {this.props.inactiveVerticesCount}</Typography>
               </Box>
             </Container>
-            <Divider variant = "middle"/>
+            <Divider variant="middle"/>
             <Container>
               <h3>LEGEND</h3>
               <div style={{textAlign:"left", marginLeft:TOOLBAR_WIDTH / 2 - 100}}>
