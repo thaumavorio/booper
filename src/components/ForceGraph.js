@@ -8,6 +8,7 @@ import { trackPromise } from "react-promise-tracker";
 import GraphTaskbar from "./GraphTaskbar";
 import { withTheme } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
+import {LoadingSpinnerComponent} from "./LoadingSpinnerComponent";
 
 const initGraph = (() => {
   const graph = new Graph();
@@ -34,9 +35,6 @@ const initGraph = (() => {
 
   return graph;
 })();
-
-// Local Components
-
 
 class ForceGraph extends React.Component{
   constructor(props) {
@@ -273,6 +271,7 @@ class ForceGraph extends React.Component{
       this.graphRef.current.d3Force("charge").strength(-100);
     }, 100);
     return <div>
+      <LoadingSpinnerComponent />
       <Box display="flex" flexDirection="row" alignItems="center" style={{backgroundColor: this.props.theme.palette.background.main}}>
         <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
           getMinContagiousSet={this.getMinContagiousSet}
@@ -288,7 +287,7 @@ class ForceGraph extends React.Component{
           iteration={this.state.bootstrapPercolationIteration}
           activeVerticesCount={this.state.activeVerticesCount}
           inactiveVerticesCount={this.state.forceData.nodes.length - this.state.activeVerticesCount}
-          theme={this.props.theme}/>
+        />
         <ForceGraph2D graphData={this.state.forceData}
           nodeColor={d => d.recentlyInfected ? this.props.theme.palette.recentlyActive.main : d.active ? this.props.theme.palette.active.main : this.props.theme.palette.inactive.main}
           linkColor={() => this.props.theme.palette.link.main}
