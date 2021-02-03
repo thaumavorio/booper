@@ -3,10 +3,11 @@ import ForceGraph2D from "react-force-graph-2d";
 import { forceCollide, forceX, forceY, forceZ } from "d3-force-3d";
 import Graph from "../classes/Graph";
 import update from "immutability-helper";
-import { Box } from "@material-ui/core";
+import {Box} from "@material-ui/core";
 import { trackPromise } from "react-promise-tracker";
 import GraphTaskbar from "./GraphTaskbar";
-import theme from "../utils/theme.js";
+import { withTheme } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 
 const initGraph = (() => {
   const graph = new Graph();
@@ -34,6 +35,9 @@ const initGraph = (() => {
   return graph;
 })();
 
+// Local Components
+
+
 class ForceGraph extends React.Component{
   constructor(props) {
     super(props);
@@ -50,7 +54,6 @@ class ForceGraph extends React.Component{
       bootstrapPercolationIteration: 0,
       activeVerticesCount: initGraph.getActiveVerticesCount()
     };
-
     this.updateBootstrapPercolationThreshold = this.updateBootstrapPercolationThreshold.bind(this);
 
     this.graphRef = React.createRef(null);
@@ -185,20 +188,20 @@ class ForceGraph extends React.Component{
         })));
   };
 
-    randomSeedSet = () => {
-      const inclusionProbability = parseFloat(document.getElementById("seed-probability").value);
-      if(!isNaN(inclusionProbability)) {
-        this.setState(function(state) {
-          const g = update(state.graph, {$set: state.graph.randomSeedSet(inclusionProbability)});
-          return {
-            graph: g,
-            forceData: g.getGraphData(state.forceData),
-            bootstrapPercolationIteration: 0,
-            activeVerticesCount: g.getActiveVerticesCount()
-          };
-        });
-      }
+  randomSeedSet = () => {
+    const inclusionProbability = parseFloat(document.getElementById("seed-probability").value);
+    if(!isNaN(inclusionProbability)) {
+      this.setState(function(state) {
+        const g = update(state.graph, {$set: state.graph.randomSeedSet(inclusionProbability)});
+        return {
+          graph: g,
+          forceData: g.getGraphData(state.forceData),
+          bootstrapPercolationIteration: 0,
+          activeVerticesCount: g.getActiveVerticesCount()
+        };
+      });
     }
+  }
 
   resetInfections = () => {
     this.state.graph.deactivateAllVertices();
@@ -261,9 +264,6 @@ class ForceGraph extends React.Component{
 
   render() {
     const TOOLBAR_WIDTH = 300;
-    const INACTIVE_COLOR = "#5375e2";
-    // const ACTIVE_COLOR = "#f65868";
-    const RECENTLY_INFECTED_COLOR = "#228b22";
     setTimeout(() => {
       this.graphRef.current.d3Force("collide", forceCollide());
       this.graphRef.current.d3Force("center", null);
@@ -272,9 +272,8 @@ class ForceGraph extends React.Component{
       this.graphRef.current.d3Force("z", forceZ().strength(0.01));
       this.graphRef.current.d3Force("charge").strength(-100);
     }, 100);
-
     return <div>
-      <Box display="flex" flexDirection="row" alignItems="center" style={{backgroundColor: theme.palette.background.main}}>
+      <Box display="flex" flexDirection="row" alignItems="center" style={{backgroundColor: this.props.theme.palette.background.main}}>
         <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
           getMinContagiousSet={this.getMinContagiousSet}
           getGreedyContagiousSet={this.getGreedyContagiousSet}
@@ -288,20 +287,43 @@ class ForceGraph extends React.Component{
           threshold={this.state.bootstrapPercolationThreshold}
           iteration={this.state.bootstrapPercolationIteration}
           activeVerticesCount={this.state.activeVerticesCount}
-          inactiveVerticesCount={this.state.forceData.nodes.length - this.state.activeVerticesCount}/>
+          inactiveVerticesCount={this.state.forceData.nodes.length - this.state.activeVerticesCount}
+          theme={this.props.theme}/>
         <ForceGraph2D graphData={this.state.forceData}
-          nodeColor={d => d.recentlyInfected ? RECENTLY_INFECTED_COLOR : d.active ? theme.palette.active.main : INACTIVE_COLOR}
-          linkColor="#5c616e"
+          nodeColor={d => d.recentlyInfected ? this.props.theme.palette.recentlyActive.main : d.active ? this.props.theme.palette.active.main : this.props.theme.palette.inactive.main}
+          linkColor={() => this.props.theme.palette.link.main}
+          backgroundColor={() => this.props.theme.palette.background.main}
           linkOpacity={0.7}
           linkWidth={3.5}
           width={this.state.windowSize.width - TOOLBAR_WIDTH}
           height={this.state.windowSize.height}
           ref={this.graphRef}
-          backgroundColor={theme.palette.background.main}
         />
       </Box>
     </div>;
   }
 }
 
-export default ForceGraph;
+ForceGraph.propTypes = {
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      background: PropTypes.shape({
+        main: PropTypes.string.isRequired
+      }).isRequired,
+      active: PropTypes.shape({
+        main: PropTypes.string.isRequired
+      }).isRequired,
+      inactive: PropTypes.shape({
+        main: PropTypes.string.isRequired
+      }).isRequired,
+      link: PropTypes.shape({
+        main: PropTypes.string.isRequired
+      }).isRequired,
+      recentlyActive: PropTypes.shape({
+        main: PropTypes.string.isRequired
+      }).isRequired
+    }).isRequired
+  }).isRequired
+};
+
+export default withTheme(ForceGraph);

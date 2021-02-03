@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { AppBar, Box, IconButton, List, ListItem, ListItemText, Toolbar } from "@material-ui/core";
+import {AppBar, Box, IconButton, List, ListItem, ListItemText, Toolbar} from "@material-ui/core";
 import { Home } from "@material-ui/icons";
 import { styled } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
-import { withStyles } from "@material-ui/core/styles";
 
 const navLinks = [
   { title: "Learn", path: "/learn" },
@@ -27,16 +26,6 @@ const LinkBox = styled(Box)({
   flexDirection: "row"
 });
 
-const StyledLink = withStyles(theme => ({
-  root: {
-    "& MuiSvgIcon": {
-      root: {
-        fill: theme.palette.primary.contrastText
-      }
-    }
-  }
-}))(Link);
-
 class Header extends Component {
   render() {
     return (
@@ -44,18 +33,18 @@ class Header extends Component {
         <Toolbar>
           <HeaderBox>
             <IconButton edge="start" aria-label="home">
-              <StyledLink to="/">
-                <Home fontSize="large" />
-              </StyledLink>
+              <Link to="/">
+                <Home color="secondary" fontSize="large" />
+              </Link>
             </IconButton>
             <List component="nav" aria-labelledby="main navigation">
               <LinkBox>
                 {navLinks.map(({ title, path }) => (
-                  <StyledLink key={title} to={path}>
+                  <Link key={title} to={path} style={{textDecoration: "none"}}>
                     <ListItem button>
-                      <ListItemText primary={title} color="secondary"/>
+                      <ListItemText primary={title}/>
                     </ListItem>
-                  </StyledLink>
+                  </Link>
                 ))}
               </LinkBox>
             </List>

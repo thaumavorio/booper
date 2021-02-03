@@ -183,7 +183,7 @@ class GraphTaskbar extends Component {
                       <TextField label="probability" id="seed-probability"
                         type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
                         defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
-                        variant="outlined" fullWidth={true} style={{marginTop: 5}}/>
+                        variant="outlined" fullWidth={true} style={{marginTop: 5}} color="secondary"/>
                           p-Random Seed Set
                     </TaskbarButton>
                   </Tooltip>
@@ -279,7 +279,26 @@ GraphTaskbar.propTypes = {
   threshold: PropTypes.number,
   iteration: PropTypes.number,
   activeVerticesCount: PropTypes.number,
-  inactiveVerticesCount: PropTypes.number
+  inactiveVerticesCount: PropTypes.number,
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      background: PropTypes.shape({
+        main: PropTypes.string.isRequired
+      }).isRequired,
+      active: PropTypes.shape({
+        main: PropTypes.string.isRequired
+      }).isRequired,
+      inactive: PropTypes.shape({
+        main: PropTypes.string.isRequired
+      }).isRequired,
+      link: PropTypes.shape({
+        main: PropTypes.string.isRequired
+      }).isRequired,
+      recentlyActive: PropTypes.shape({
+        main: PropTypes.string.isRequired
+      }).isRequired
+    }).isRequired
+  }).isRequired
 };
 
 export default GraphTaskbar;

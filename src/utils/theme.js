@@ -18,17 +18,36 @@ let theme = createMuiTheme({
       main: "#7791a1"
     },
     inactive: {
-      main: "#5375e2"
+      main: "#00b5ff"
     },
     active: {
-      main: "#f65868"
+      main: "#f53500"
+    },
+    recentlyActive: {
+      main: "#9060ff"
+    },
+    link: {
+      main: "#a9a972"
     },
     background: {
       paper: "#655e86",
-      main: "#c6d1e1"
+      main: "#413c58"
     },
     text: {
       primary: "#dede96"
+    }
+  },
+  overrides: {
+    MuiFormLabel: {
+      root: {
+        color: "inherit"
+      }
+    },
+    MuiListItem: {
+      button: {
+        color: "#f7f6a8",
+        backgroundColor: "#5d79b8"
+      }
     }
   }
 });
