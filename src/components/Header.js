@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {AppBar, Box, IconButton, List, ListItem, ListItemText, Toolbar} from "@material-ui/core";
+import {AppBar, Box, IconButton, List, ListItem, ListItemText, Toolbar, Typography} from "@material-ui/core";
 import { Home } from "@material-ui/icons";
 import { styled } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
@@ -42,7 +42,11 @@ class Header extends Component {
                 {navLinks.map(({ title, path }) => (
                   <Link key={title} to={path} style={{textDecoration: "none"}}>
                     <ListItem button>
-                      <ListItemText primary={title}/>
+                      <ListItemText primary={<React.Fragment>
+                        <Typography variant="button" gutterBottom>
+                          { title }
+                        </Typography>
+                      </React.Fragment>}/>
                     </ListItem>
                   </Link>
                 ))}

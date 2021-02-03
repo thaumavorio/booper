@@ -2,11 +2,23 @@ import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
 let theme = createMuiTheme({
   typography: {
-
+    button: {
+      fontWeight: 800
+    },
+    overline: {
+      fontWeight: 400,
+      fontSize: "13px"
+    },
+    caption: {
+      fontWeight: 600,
+      fontSize: "18px",
+      lineHeight: 1.75,
+      textTransform: "uppercase"
+    }
   },
   palette: {
     primary: {
-      main: "#5d79b8",
+      main: "#5b83ff",
       contrastText: "#f7f6a8",
       hover: "#221B2C"
       // main: "#221B2C",
@@ -24,7 +36,7 @@ let theme = createMuiTheme({
       main: "#f53500"
     },
     recentlyActive: {
-      main: "#9060ff"
+      main: "#ff6dcf"
     },
     link: {
       main: "#a9a972"
@@ -46,7 +58,17 @@ let theme = createMuiTheme({
     MuiListItem: {
       button: {
         color: "#f7f6a8",
-        backgroundColor: "#5d79b8"
+        backgroundColor: "#5b83ff",
+        "&:hover": {
+          backgroundColor: "#221B2C"
+        }
+      }
+    },
+    MuiIconButton: {
+      root: {
+        "&:hover": {
+          backgroundColor: "#221B2C"
+        }
       }
     }
   }

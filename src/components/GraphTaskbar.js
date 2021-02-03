@@ -8,7 +8,9 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
-  IconButton, Link,
+  Grid,
+  IconButton,
+  Link,
   Paper,
   TextField,
   Tooltip,
@@ -20,7 +22,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import PropTypes from "prop-types";
-import { withStyles, withTheme } from "@material-ui/core/styles";
+import {withStyles, withTheme} from "@material-ui/core/styles";
 
 
 const TOOLBAR_WIDTH = 300;
@@ -121,7 +123,7 @@ class GraphTaskbar extends Component {
                       The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
                       </Typography>
                       <Typography gutterBottom>
-                        <Link onClick={this.helpIconOpen} style={{color: "white"}}>
+                        <Link onClick={this.helpIconOpen} color="secondary">
                         See more..
                         </Link>
                       </Typography>
@@ -192,27 +194,27 @@ class GraphTaskbar extends Component {
                     aria-label = "horizontal contained primary button group"
                     color="inherit"
                   >
-                    <Tooltip title={"Deactivate all vertices"}>
+                    <Tooltip title={"Deactivate all vertices"} placement="left">
                       <IconButton onClick={this.resetInfections}>
                         <RotateLeftIcon/>
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title={"Return to the first iteration"}>
+                    <Tooltip title={"Return to the first iteration"} placement="left">
                       <IconButton disabled={true}>
                         <FirstPageIcon/>
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title={"Go back an iteration"}>
+                    <Tooltip title={"Go back an iteration"} placement="left">
                       <IconButton disabled={true}>
                         <ChevronLeftIcon/>
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title={"Perform a single iteration"}>
+                    <Tooltip title={"Perform a single iteration"} placement="left">
                       <IconButton onClick={this.percolationIteration}>
                         <ChevronRightIcon/>
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title={"Skip to the final iteration"}>
+                    <Tooltip title={"Skip to the final iteration"} placement="left">
                       <IconButton onClick={this.finalPercolationIteration}>
                         <LastPageIcon/>
                       </IconButton>
@@ -222,31 +224,57 @@ class GraphTaskbar extends Component {
                     <TextField label="THRESHOLD" id="bootstrap-percolation-threshold"
                       type="number" InputProps={{ inputProps: { min: 1, step: 1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
                       variant="outlined" fullWidth={true} onChange={this.updateBootstrapPercolationThreshold}
-                      defaultValue={this.props.threshold} style={{margin: 5}} color="secondary"/>
+                      defaultValue={this.props.threshold} style={{margin: 5, marginTop: 15}} color="secondary"/>
                     <TextField label="PROBABILITY" type="number"
                       InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
                       variant="outlined" fullWidth={true} onChange={this.updateBootstrapPercolationProbability}
-                      defaultValue={1} style={{margin: 5}} color="secondary"/>
+                      defaultValue={1} style={{margin: 5, marginTop: 15}} color="secondary"/>
                   </Box>
-                  <Typography variant="overline" style={{textAlign: "left"}} gutterBottom>Iteration: {this.props.iteration}</Typography>
-                  <Typography variant="overline" align="center" gutterBottom>Active Vertices: {this.props.activeVerticesCount}</Typography>
-                  <Typography variant="overline" align="right" gutterBottom>Inactive Vertices: {this.props.inactiveVerticesCount}</Typography>
+                  <Grid container spacing={1}>
+                    <Grid item xs={8} style={{textAlign: "right"}}>
+                      <Typography variant="overline" gutterBottom>Iteration:</Typography>
+                    </Grid>
+                    <Grid item xs={4} alignItems="center" style={{textAlign: "left"}}>
+                      <Typography variant="caption">{this.props.iteration}</Typography>
+                    </Grid>
+                    <Grid item xs={8} style={{textAlign: "right"}}>
+                      <Typography variant="overline" gutterBottom>Active Vertices:</Typography>
+                    </Grid>
+                    <Grid item xs={4} style={{textAlign: "left"}}>
+                      <Typography variant="caption" gutterBottom>{this.props.activeVerticesCount}</Typography>
+                    </Grid>
+                    <Grid item xs={8} style={{textAlign: "right"}}>
+                      <Typography variant="overline" gutterBottom>Inactive Vertices:</Typography>
+                    </Grid>
+                    <Grid item xs={4} style={{textAlign: "left"}}>
+                      <Typography variant="caption" gutterBottom>{this.props.inactiveVerticesCount}</Typography>
+                    </Grid>
+                  </Grid>
                 </Box>
               </Container>
               <Divider variant="middle"/>
               <Container>
                 <h3>LEGEND</h3>
-                <div style={{textAlign:"left", marginLeft:TOOLBAR_WIDTH / 2 - 100}}>
-                  <div style={{width: 10, height: 10, borderRadius: "50%",
-                    display: "inline-block", backgroundColor: this.props.theme.palette.inactive.main}}></div>
-                            &nbsp;<Typography variant="overline" gutterBottom>Inactive Node</Typography>
-                  <br/>
-                  <div className='legend-entry legend-entry-active'></div>
-                            &nbsp;<Typography variant="overline" gutterBottom>Active Node</Typography>
-                  <br/>
-                  <div className='legend-entry legend-entry-recently-activated'></div>
-                            &nbsp;<Typography variant="overline" gutterBottom>Recently Infected Node</Typography>
-                </div>
+                <Grid container spacing={1}>
+                  <Grid item xs={8} style={{textAlign: "right"}}>
+                    <Typography variant="overline" gutterBottom>Inactive</Typography>
+                  </Grid>
+                  <Grid item xs={4} style={{textAlign: "left", alignContent: "center"}}>
+                    <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.inactive.main}}></div>
+                  </Grid>
+                  <Grid item xs={8} style={{textAlign: "right"}}>
+                    <Typography variant="overline" gutterBottom>Active</Typography>
+                  </Grid>
+                  <Grid item xs={4} style={{textAlign: "left"}}>
+                    <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.active.main}}></div>
+                  </Grid>
+                  <Grid item xs={8} style={{textAlign: "right"}}>
+                    <Typography variant="overline" gutterBottom>Recently Activated</Typography>
+                  </Grid>
+                  <Grid item xs={4} style={{textAlign: "left"}}>
+                    <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.recentlyActive.main}}></div>
+                  </Grid>
+                </Grid>
               </Container>
             </Box>
           </Paper>
