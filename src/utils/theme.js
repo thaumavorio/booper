@@ -2,16 +2,23 @@ import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
 let theme = createMuiTheme({
   typography: {
+    h3: {
+      fontSize: "24px",
+      fontWeight: 600,
+      color: "#f8c90d",
+      marginTop: 10,
+      marginBottom: 10
+    },
     button: {
-      fontWeight: 800
+      fontWeight: 700
     },
     overline: {
       fontWeight: 500,
       fontSize: "13px"
     },
     caption: {
-      fontWeight: 600,
-      fontSize: "20px",
+      fontWeight: 500,
+      fontSize: "18px",
       lineHeight: 1.75,
       textTransform: "uppercase"
     }

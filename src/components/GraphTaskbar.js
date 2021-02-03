@@ -111,7 +111,7 @@ class GraphTaskbar extends Component {
           <Paper className='toolbar-surface' elevation={5} style={{marginRight: 10}}>
             <Box style={{padding: 30}} width={TOOLBAR_WIDTH}>
               <Container>
-                <h3>GRAPH</h3>
+                <Typography variant="h3">Graph</Typography>
                 <Box display="flex" flexDirection="row">
                   <Tooltip title={
                     <React.Fragment>
@@ -158,7 +158,7 @@ class GraphTaskbar extends Component {
               </Container>
               <Divider variant = "middle"/>
               <Container>
-                <h3>SEED SETS</h3>
+                <Typography variant="h3">Seed Sets</Typography>
                 <Box display="flex" flexDirection="column">
                   <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
                     <TaskbarButton variant="contained" onClick={this.getMinContagiousSet}>
@@ -185,7 +185,7 @@ class GraphTaskbar extends Component {
               </Container>
               <Divider variant="middle"/>
               <Container>
-                <h3>BOOTSTRAP PERCOLATION</h3>
+                <Typography variant="h3">Bootstrap Percolation</Typography>
                 <Box display="flex" flexDirection="column" alignItems="center">
                   <ButtonGroup
                     size="medium"
@@ -254,7 +254,7 @@ class GraphTaskbar extends Component {
               </Container>
               <Divider variant="middle"/>
               <Container>
-                <h3>LEGEND</h3>
+                <Typography variant="h3">Legend</Typography>
                 <Grid container spacing={1}>
                   <Grid item xs={8} style={{textAlign: "right"}}>
                     <Typography variant="overline" gutterBottom>Inactive</Typography>
