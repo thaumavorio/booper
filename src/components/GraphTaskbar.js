@@ -188,8 +188,8 @@ class GraphTaskbar extends Component {
                 <h3>BOOTSTRAP PERCOLATION</h3>
                 <Box display="flex" flexDirection="column" alignItems="center">
                   <ButtonGroup
-                    size="large"
-                    variant="filled"
+                    size="medium"
+                    variant="outlined"
                     orientation="horizontal"
                     aria-label = "horizontal contained primary button group"
                     color="inherit"
@@ -230,11 +230,11 @@ class GraphTaskbar extends Component {
                       variant="outlined" fullWidth={true} onChange={this.updateBootstrapPercolationProbability}
                       defaultValue={1} style={{margin: 5, marginTop: 15}} color="secondary"/>
                   </Box>
-                  <Grid container spacing={1}>
+                  <Grid container alignItems="center" spacing={1}>
                     <Grid item xs={8} style={{textAlign: "right"}}>
                       <Typography variant="overline" gutterBottom>Iteration:</Typography>
                     </Grid>
-                    <Grid item xs={4} alignItems="center" style={{textAlign: "left"}}>
+                    <Grid item xs={4} style={{textAlign: "left"}}>
                       <Typography variant="caption">{this.props.iteration}</Typography>
                     </Grid>
                     <Grid item xs={8} style={{textAlign: "right"}}>
@@ -260,19 +260,19 @@ class GraphTaskbar extends Component {
                     <Typography variant="overline" gutterBottom>Inactive</Typography>
                   </Grid>
                   <Grid item xs={4} style={{textAlign: "left", alignContent: "center"}}>
-                    <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.inactive.main}}></div>
+                    <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.inactive.main}} />
                   </Grid>
                   <Grid item xs={8} style={{textAlign: "right"}}>
                     <Typography variant="overline" gutterBottom>Active</Typography>
                   </Grid>
                   <Grid item xs={4} style={{textAlign: "left"}}>
-                    <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.active.main}}></div>
+                    <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.active.main}} />
                   </Grid>
                   <Grid item xs={8} style={{textAlign: "right"}}>
                     <Typography variant="overline" gutterBottom>Recently Activated</Typography>
                   </Grid>
                   <Grid item xs={4} style={{textAlign: "left"}}>
-                    <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.recentlyActive.main}}></div>
+                    <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.recentlyActive.main}}/>
                   </Grid>
                 </Grid>
               </Container>

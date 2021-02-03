@@ -291,7 +291,7 @@ class ForceGraph extends React.Component{
         <ForceGraph2D graphData={this.state.forceData}
           nodeColor={d => d.recentlyInfected ? this.props.theme.palette.recentlyActive.main : d.active ? this.props.theme.palette.active.main : this.props.theme.palette.inactive.main}
           linkColor={() => this.props.theme.palette.link.main}
-          backgroundColor={() => this.props.theme.palette.background.main}
+          backgroundColor={this.props.theme.palette.background.main}
           linkOpacity={0.7}
           linkWidth={3.5}
           width={this.state.windowSize.width - TOOLBAR_WIDTH}

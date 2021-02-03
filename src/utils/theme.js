@@ -6,12 +6,12 @@ let theme = createMuiTheme({
       fontWeight: 800
     },
     overline: {
-      fontWeight: 400,
+      fontWeight: 500,
       fontSize: "13px"
     },
     caption: {
       fontWeight: 600,
-      fontSize: "18px",
+      fontSize: "20px",
       lineHeight: 1.75,
       textTransform: "uppercase"
     }
