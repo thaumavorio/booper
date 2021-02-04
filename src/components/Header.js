@@ -5,10 +5,10 @@ import { styled } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 
 const navLinks = [
-  { title: "Learn", path: "/learn" },
-  { title: "Research", path: "/research" },
-  { title: "Study", path: "/study" },
-  { title: "About Us", path: "/about-us" },
+  { title: "Learn", path: "/bp/learn" },
+  { title: "Research", path: "/bp/research" },
+  { title: "Study", path: "/bp/study" },
+  { title: "About Us", path: "/bp/about-us" },
 ];
 
 // Local Components
@@ -38,7 +38,7 @@ class Header extends Component {
         <Toolbar>
           <HeaderBox>
             <IconButton edge="start" color="inherit" aria-label="home">
-              <StyledLink to="/">
+              <StyledLink to="/bp/">
                 <Home fontSize="large" />
               </StyledLink>
             </IconButton>
