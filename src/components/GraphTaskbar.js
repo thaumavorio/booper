@@ -160,7 +160,12 @@ class GraphTaskbar extends Component {
               <Container>
                 <Typography variant="h3">Seed Sets</Typography>
                 <Box display="flex" flexDirection="column">
-                  <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
+                  <Tooltip title={
+                    <React.Fragment>
+                      <Typography gutterBottom>
+                        Calculates and displays the smallest set of nodes needed to activate the entire graph
+                      </Typography>
+                    </React.Fragment>}>
                     <TaskbarButton variant="contained" onClick={this.getMinContagiousSet}>
                     Minimum Contagious Set
                     </TaskbarButton>

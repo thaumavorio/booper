@@ -3,6 +3,8 @@ import {AppBar, Box, IconButton, List, ListItem, ListItemText, Toolbar, Typograp
 import { Home } from "@material-ui/icons";
 import { styled } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+// import { Switch } from "@material-ui/core";
+import PropTypes from "prop-types";
 
 const navLinks = [
   { title: "Learn", path: "/learn" },
@@ -27,6 +29,26 @@ const LinkBox = styled(Box)({
 });
 
 class Header extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      darkMode: true
+    };
+  }
+
+  updateTheme(){
+    this.props.sendTheme(this.state.darkMode);
+  }
+
+  toggleAlgorithmChoice = (event, value) => {
+    // value is true when the user engages the switch to choose the greedy algorithm, false otherwise
+    this.setState({
+      darkMode: !value
+    });
+    this.updateTheme();
+  }
+
   render() {
     return (
       <AppBar color="primary" position="static">
@@ -58,4 +80,12 @@ class Header extends Component {
     );
   }
 }
+
+// <Switch color="secondary" onChange={this.toggleAlgorithmChoice}/>
+// { this.state.darkMode ? "Dark" : "Light" }
+
+Header.propTypes = {
+  sendTheme: PropTypes.func
+};
+
 export default Header;
