@@ -165,27 +165,36 @@ class GraphTaskbar extends Component {
                       <Typography gutterBottom>
                         Calculates and displays the smallest set of nodes needed to activate the entire graph
                       </Typography>
-                    </React.Fragment>}>
+                    </React.Fragment>} placement="right">
                     <TaskbarButton variant="contained" onClick={this.getMinContagiousSet}>
                     Minimum Contagious Set
                     </TaskbarButton>
                   </Tooltip>
-                  <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph using a greedy algorithm."}>
+                  <Tooltip title={
+                    <React.Fragment>
+                      <Typography gutterBottom>
+                        Calculates and displays the smallest set of nodes needed to activate the entire graph using a greedy algorithm.
+                      </Typography>
+                    </React.Fragment>} placement="right">
                     <TaskbarButton variant="contained" onClick={this.getGreedyContagiousSet}>
                     Greedy Contagious Set
                     </TaskbarButton>
                   </Tooltip>
-                  <Box display="flex" flexDirection="row">
-                    <Tooltip title={"Makes each node a seed independently at random with the probability p."}>
-                      <TaskbarButton variant="contained" onClick={this.randomSeedSet} style={{justifyContent: "space-between"}}>
-                        <TextField label="probability" id="seed-probability"
-                          type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
-                          defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
-                          variant="outlined" fullWidth={true} style={{marginTop: 5}} color="secondary"/>
-                          p-Random Seed Set
-                      </TaskbarButton>
-                    </Tooltip>
-                  </Box>
+                  <Tooltip title={
+                    <React.Fragment>
+                      <Typography>
+                        Makes each node a seed independently at random with the probability p.
+                      </Typography>
+                    </React.Fragment>
+                  } placement="right">
+                    <TaskbarButton variant="contained" onClick={this.randomSeedSet} style={{justifyContent: "space-between"}}>
+                      <TextField label="probability" id="seed-probability"
+                        type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
+                        defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
+                        variant="outlined" fullWidth={true} style={{marginTop: 5}} color="secondary"/>
+                      p-Random Seed Set
+                    </TaskbarButton>
+                  </Tooltip>
                 </Box>
               </Container>
               <Divider variant="middle"/>
@@ -199,27 +208,48 @@ class GraphTaskbar extends Component {
                     aria-label = "horizontal contained primary button group"
                     color="inherit"
                   >
-                    <Tooltip title={"Deactivate all vertices"} placement="left">
+                    <Tooltip title={
+                      <React.Fragment>
+                        <Typography gutterBottom>
+                          Deactivate all vertices
+                        </Typography>
+                      </React.Fragment>} placement="left">
                       <IconButton onClick={this.resetInfections}>
                         <RotateLeftIcon/>
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title={"Return to the first iteration"} placement="left">
+                    <Tooltip title={<React.Fragment>
+                      <Typography gutterBottom>
+                        Return to the first iteration
+                      </Typography>
+                    </React.Fragment>} placement="left">
                       <IconButton disabled={true}>
                         <FirstPageIcon/>
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title={"Go back an iteration"} placement="left">
+                    <Tooltip title={<React.Fragment>
+                      <Typography gutterBottom>
+                        Go back an iteration
+                      </Typography>
+                    </React.Fragment>} placement="left">
                       <IconButton disabled={true}>
                         <ChevronLeftIcon/>
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title={"Perform a single iteration"} placement="left">
+                    <Tooltip title={<React.Fragment>
+                      <Typography gutterBottom>
+                        Perform a single iteration
+                      </Typography>
+                    </React.Fragment>} placement="left">
                       <IconButton onClick={this.percolationIteration}>
                         <ChevronRightIcon/>
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title={"Skip to the final iteration"} placement="left">
+                    <Tooltip title={<React.Fragment>
+                      <Typography gutterBottom>
+                        Skip to the final iteration
+                      </Typography>
+                    </React.Fragment>} placement="left">
                       <IconButton onClick={this.finalPercolationIteration}>
                         <LastPageIcon/>
                       </IconButton>

@@ -41,13 +41,13 @@ class Header extends Component {
     this.props.sendTheme(this.state.darkMode);
   }
 
-  toggleAlgorithmChoice = (event, value) => {
-    // value is true when the user engages the switch to choose the greedy algorithm, false otherwise
-    this.setState({
-      darkMode: !value
-    });
-    this.updateTheme();
-  }
+  // toggleAlgorithmChoice = (event, value) => {
+  //   // value is true when the user engages the switch to choose the greedy algorithm, false otherwise
+  //   this.setState({
+  //     darkMode: !value
+  //   });
+  //   this.updateTheme();
+  // }
 
   render() {
     return (
