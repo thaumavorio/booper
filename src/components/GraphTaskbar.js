@@ -12,6 +12,12 @@ import {
   IconButton,
   Link,
   Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
   Tooltip,
   Typography
@@ -106,6 +112,13 @@ class GraphTaskbar extends Component {
     // End of Taskbar functions
 
     render() {
+      const rows = [
+        [ 0,1,0,1,0 ],
+        [ 1,0,0,0,1 ],
+        [ 0,0,0,1,1 ],
+        [ 1,0,1,0,1 ],
+        [ 0,1,1,1,0 ]
+      ];
       return (
         <Box>
           <Paper className='toolbar-surface' elevation={5} style={{marginRight: 10}}>
@@ -115,14 +128,14 @@ class GraphTaskbar extends Component {
                 <Box display="flex" flexDirection="row">
                   <Tooltip title={
                     <React.Fragment>
-                      <Typography gutterBottom>
+                      <Typography gutterBottom variant="body2">
                       The adjacency matrix input should be in the format of a .csv file. The first row should contain
                       either a &lsquo;+&rsquo; or a &lsquo;-&rsquo;, indicating whether the node is initially infected or not, respectively.
                       </Typography>
-                      <Typography gutterBottom>
+                      <Typography gutterBottom variant="body2">
                       The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
                       </Typography>
-                      <Typography gutterBottom>
+                      <Typography gutterBottom variant="body2">
                         <Link onClick={this.helpIconOpen} color="secondary">
                         See more..
                         </Link>
@@ -139,18 +152,44 @@ class GraphTaskbar extends Component {
                     Uploading Adjacency Matrices
                     </DialogTitle>
                     <DialogContent dividers>
-                      <Typography gutterBottom>
+                      <Typography gutterBottom variant="body2">
                         The adjacency matrix input should be in the format of a .csv file. The first row should contain
                         either a &lsquo;+&rsquo; or a &lsquo;-&rsquo;, indicating whether the node is initially infected or not, respectively.
                       </Typography>
-                      <Typography gutterBottom>
+                      <Typography gutterBottom variant="body2">
                         The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
                       </Typography>
-                      <Typography gutterBottom>
+                      <Typography gutterBottom variant="body2">
                         An example of an adjacency matrix input is available below:
                       </Typography>
-                      <Typography gutterBottom>
-                        <a href="example_graph.csv" download>Example Adjacency Matrix Input</a>
+                      <TableContainer component={Paper} style={{marginBottom: "10px"}}>
+                        <Table color="secondary" size="small">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell align="center">+</TableCell>
+                              <TableCell align="center">-</TableCell>
+                              <TableCell align="center">+</TableCell>
+                              <TableCell align="center">-</TableCell>
+                              <TableCell align="center">-</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {rows.map((row) => (
+                              <TableRow key={row}>
+                                <TableCell align="center">
+                                  {row[0]}
+                                </TableCell>
+                                <TableCell align="center">{row[1]}</TableCell>
+                                <TableCell align="center">{row[2]}</TableCell>
+                                <TableCell align="center">{row[3]}</TableCell>
+                                <TableCell align="center">{row[4]}</TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                      <Typography gutterBottom variant="body2">
+                        <a href="example_graph.csv" download>Download the csv</a>
                       </Typography>
                     </DialogContent>
                   </Dialog>
@@ -162,7 +201,7 @@ class GraphTaskbar extends Component {
                 <Box display="flex" flexDirection="column">
                   <Tooltip title={
                     <React.Fragment>
-                      <Typography gutterBottom>
+                      <Typography variant="body2" gutterBottom>
                         Calculates and displays the smallest set of nodes needed to activate the entire graph
                       </Typography>
                     </React.Fragment>} placement="right">
@@ -172,7 +211,7 @@ class GraphTaskbar extends Component {
                   </Tooltip>
                   <Tooltip title={
                     <React.Fragment>
-                      <Typography gutterBottom>
+                      <Typography variant="body2" gutterBottom>
                         Calculates and displays the smallest set of nodes needed to activate the entire graph using a greedy algorithm.
                       </Typography>
                     </React.Fragment>} placement="right">
@@ -182,7 +221,7 @@ class GraphTaskbar extends Component {
                   </Tooltip>
                   <Tooltip title={
                     <React.Fragment>
-                      <Typography>
+                      <Typography variant="body2" gutterBottom>
                         Makes each node a seed independently at random with the probability p.
                       </Typography>
                     </React.Fragment>
@@ -210,46 +249,46 @@ class GraphTaskbar extends Component {
                   >
                     <Tooltip title={
                       <React.Fragment>
-                        <Typography gutterBottom>
+                        <Typography variant="body2" gutterBottom>
                           Deactivate all vertices
                         </Typography>
-                      </React.Fragment>} placement="left">
+                      </React.Fragment>} placement="left" variant="body2">
                       <IconButton onClick={this.resetInfections}>
                         <RotateLeftIcon/>
                       </IconButton>
                     </Tooltip>
                     <Tooltip title={<React.Fragment>
-                      <Typography gutterBottom>
+                      <Typography variant="body2" gutterBottom>
                         Return to the first iteration
                       </Typography>
-                    </React.Fragment>} placement="left">
+                    </React.Fragment>} placement="left" variant="body2">
                       <IconButton disabled={true}>
                         <FirstPageIcon/>
                       </IconButton>
                     </Tooltip>
                     <Tooltip title={<React.Fragment>
-                      <Typography gutterBottom>
+                      <Typography variant="body2" gutterBottom>
                         Go back an iteration
                       </Typography>
-                    </React.Fragment>} placement="left">
+                    </React.Fragment>} placement="left" variant="body2">
                       <IconButton disabled={true}>
                         <ChevronLeftIcon/>
                       </IconButton>
                     </Tooltip>
                     <Tooltip title={<React.Fragment>
-                      <Typography gutterBottom>
+                      <Typography variant="body2" gutterBottom>
                         Perform a single iteration
                       </Typography>
-                    </React.Fragment>} placement="left">
+                    </React.Fragment>} placement="left" variant="body2">
                       <IconButton onClick={this.percolationIteration}>
                         <ChevronRightIcon/>
                       </IconButton>
                     </Tooltip>
                     <Tooltip title={<React.Fragment>
-                      <Typography gutterBottom>
+                      <Typography variant="body2" gutterBottom>
                         Skip to the final iteration
                       </Typography>
-                    </React.Fragment>} placement="left">
+                    </React.Fragment>} placement="left" variant="body2">
                       <IconButton onClick={this.finalPercolationIteration}>
                         <LastPageIcon/>
                       </IconButton>

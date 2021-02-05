@@ -7,21 +7,25 @@ let darkTheme = createMuiTheme({
       fontWeight: 600,
       color: "#f8c90d",
       marginTop: 10,
-      marginBottom: 10
+      marginBottom: 10,
+      fontFamily: "Ubuntu"
     },
     button: {
       fontWeight: 700,
       fontSize: "16px"
     },
     overline: {
-      fontWeight: 500,
-      fontSize: "13px"
+      fontFamily: "Ubuntu",
+      fontWeight: 600,
+      fontSize: "14px"
     },
     caption: {
-      fontWeight: 500,
-      fontSize: "18px",
-      lineHeight: 1.75,
-      textTransform: "uppercase"
+      fontFamily: "Ubuntu",
+      fontWeight: 600,
+      fontSize: "24px"
+    },
+    body2: {
+      fontFamily: "Ubuntu"
     }
   },
   palette: {
