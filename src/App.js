@@ -23,19 +23,19 @@ class App extends React.Component{
           <div className="App">
             <RemoveScrollBar />
             <Switch>
-              <Route exact path="/">
+              <Route exact path="/bp/">
                 <Home />
               </Route>
-              <Route path="/learn">
+              <Route path="/bp/learn">
                 <Learn />
               </Route>
-              <Route path="/research">
+              <Route path="/bp/research">
                 <Research />
               </Route>
-              <Route path="/study">
+              <Route path="/bp/study">
                 <Study />
               </Route>
-              <Route path="/about-us">
+              <Route path="/bp/about-us">
                 <AboutUs />
               </Route>
             </Switch>
