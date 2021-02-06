@@ -44,7 +44,42 @@ const TOUR_STEPS = [
   },
   {
     selector: "[data-tour=\"graph-display-pane\"]",
-    content: "This is the graph display pane. You can zoom in or out, pan around, or drag the graph around."
+    content: "This is the graph display pane. It shows the graph that is being percolated on. Active vertices are red, and inactive vertices are blue. You can use the mouse to zoom in or out, pan around, or drag the graph around."
+  },
+  {
+    selector: "[data-tour=\"next-iteration-button\"]",
+    content: "Here's where you can visualize the percolation. This button performs one iteration of two-neighbor bootstrap percolation. Each inactive vertex that has at least two active neighbors is infected. Try clicking it now, and see what happens in the graph display pane."
+  },
+  {
+    selector: "[data-tour=\"graph-display-pane\"]",
+    content: "Vertices that were infected in the most recent iteration are green. All other active vertices are red."
+  },
+  {
+    selector: "[data-tour=\"last-iteration-button\"]",
+    content: "This button performs percolation iterations until no more vertices can be infected. Then it shows you the final result."
+  },
+  {
+    selector: "[data-tour=\"parameter-text-fields\"]",
+    content: <p>You can modify the parameters of bootstrap percolation. The <b>threshold</b> is the number of active neighbors required to infect an inactive vertex. The <b>probability</b> is the probability that an inactive vertex becomes infected if it has enough active neighbors.</p>
+  },
+  {
+    selector: "[data-tour=\"upload-adjacency-matrix-button\"]",
+    content: "If you want to visualize bootstrap percolation on a different graph, upload its adjacency matrix here. Click the help icon for details on the file format."
+  },
+  {
+    selector: "[data-tour=\"contagious-set-button\"]",
+    content: "This button finds the minimum contagious set of the current graph and renders it in the graph display pane. It uses an exponential-time algorithm, so it might load for a while if the graph is large."
+  },
+  {
+    selector: "[data-tour=\"contagious-set-button\"]",
+    content: "If the switch is engaged, this button uses a greedy algorithm instead. It still finds a small contagious set, but it might not be minimum, and it will be displayed much faster."
+  },
+  {
+    selector: "[data-tour=\"random-seed-set-button\"]",
+    content: "This button can also generate and display a seed set. It includes each vertex independently at random with the given probability."
+  },
+  {
+    content: "That's just about everything you need to know. Have fun percolating!"
   }
 ];
 
