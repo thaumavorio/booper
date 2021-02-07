@@ -3,8 +3,10 @@ import {AppBar, Box, IconButton, List, ListItem, ListItemText, Toolbar, Typograp
 import { Home } from "@material-ui/icons";
 import { styled } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
-// import { Switch } from "@material-ui/core";
+import { Checkbox } from "@material-ui/core";
 import PropTypes from "prop-types";
+import WbSunnyIcon from "@material-ui/icons/WbSunny";
+import Brightness3Icon from "@material-ui/icons/Brightness3";
 
 const navLinks = [
   { title: "Learn", path: "/bp/learn" },
@@ -41,13 +43,13 @@ class Header extends Component {
     this.props.sendTheme(this.state.darkMode);
   }
 
-  // toggleAlgorithmChoice = (event, value) => {
-  //   // value is true when the user engages the switch to choose the greedy algorithm, false otherwise
-  //   this.setState({
-  //     darkMode: !value
-  //   });
-  //   this.updateTheme();
-  // }
+  toggleAlgorithmChoice = (event, value) => {
+    // value is true when the user engages the checkbox for light mode
+    this.setState({
+      darkMode: !value
+    });
+    this.updateTheme();
+  }
 
   render() {
     return (
@@ -59,21 +61,24 @@ class Header extends Component {
                 <Home color="secondary" fontSize="large" />
               </Link>
             </IconButton>
-            <List component="nav" aria-labelledby="main navigation">
-              <LinkBox>
-                {navLinks.map(({ title, path }) => (
-                  <Link key={title} to={path} style={{textDecoration: "none"}}>
-                    <ListItem button>
-                      <ListItemText primary={<React.Fragment>
-                        <Typography variant="button" gutterBottom>
-                          { title }
-                        </Typography>
-                      </React.Fragment>}/>
-                    </ListItem>
-                  </Link>
-                ))}
-              </LinkBox>
-            </List>
+            <LinkBox>
+              <List component="nav" aria-labelledby="main navigation">
+                <LinkBox>
+                  {navLinks.map(({ title, path }) => (
+                    <Link key={title} to={path} style={{textDecoration: "none"}}>
+                      <ListItem button>
+                        <ListItemText primary={<React.Fragment>
+                          <Typography variant="button" gutterBottom>
+                            { title }
+                          </Typography>
+                        </React.Fragment>}/>
+                      </ListItem>
+                    </Link>
+                  ))}
+                </LinkBox>
+              </List>
+              <Checkbox color="secondary" onChange={this.toggleAlgorithmChoice} checkedIcon={<WbSunnyIcon fontSize="large" color="secondary"/>} icon={<Brightness3Icon fontSize="large" color="secondary"/>}/>
+            </LinkBox>
           </HeaderBox>
         </Toolbar>
       </AppBar>
@@ -81,8 +86,7 @@ class Header extends Component {
   }
 }
 
-// <Switch color="secondary" onChange={this.toggleAlgorithmChoice}/>
-// { this.state.darkMode ? "Dark" : "Light" }
+
 
 Header.propTypes = {
   sendTheme: PropTypes.func

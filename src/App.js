@@ -10,15 +10,28 @@ import AboutUs from "./page_components/AboutUs";
 import Header from "./components/Header";
 import {MuiThemeProvider} from "@material-ui/core/styles";
 import darkTheme from "./utils/darkTheme";
+import lightTheme from "./utils/lightTheme";
 
 class App extends React.Component{
 
-  getTheme = (event, value) => value
+  constructor(props) {
+    super(props);
+    this.state = {
+      darkTheme: true
+    };
+  }
+
+  getTheme = (event) => {
+    this.setState({
+      darkTheme: !event
+    });
+    return event;
+  }
 
   render(){
     return(
       <Router>
-        <MuiThemeProvider theme={darkTheme}>
+        <MuiThemeProvider theme={this.state.darkTheme ? darkTheme : lightTheme}>
           <Header sendTheme={this.getTheme}/>
           <div className="App">
             <RemoveScrollBar />

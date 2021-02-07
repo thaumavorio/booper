@@ -5,55 +5,60 @@ let lightTheme = createMuiTheme({
     h3: {
       fontSize: "24px",
       fontWeight: 600,
-      color: "#030f28",
+      color: "#302d27",
       marginTop: 10,
-      marginBottom: 10
+      marginBottom: 10,
+      fontFamily: "Ubuntu"
     },
     button: {
-      fontWeight: 700
+      fontWeight: 700,
+      fontSize: "16px"
     },
     overline: {
-      fontWeight: 500,
-      fontSize: "13px"
+      fontFamily: "Ubuntu",
+      fontWeight: 600,
+      fontSize: "14px"
     },
     caption: {
-      fontWeight: 500,
-      fontSize: "18px",
-      lineHeight: 1.75,
-      textTransform: "uppercase"
+      fontFamily: "Ubuntu",
+      fontWeight: 600,
+      fontSize: "24px"
+    },
+    body2: {
+      fontFamily: "Ubuntu"
     }
   },
   palette: {
     primary: {
-      main: "#6bc3b8",
-      contrastText: "#302d27",
-      hover: "#221B2C"
+      main: "#11eba4",
+      contrastText: "#26294f",
+      hover: "#ffdd84"
       // main: "#221B2C",
     },
     secondary: {
-      main: "#e3e3d6"
+      main: "#9e2c65"
     },
     info: {
       main: "#7791a1"
     },
     inactive: {
-      main: "#00b5ff"
+      main: "#0096c4"
     },
     active: {
-      main: "#f53500"
+      main: "#cf3401"
     },
     recentlyActive: {
-      main: "#ff6dcf"
+      main: "#3b9138"
     },
     link: {
-      main: "#a9a972"
+      main: "#a07900"
     },
     background: {
-      paper: "#9898e7",
-      main: "#e3e3d6"
+      paper: "#bea5c5",
+      main: "#f8f7f7"
     },
     text: {
-      primary: "#2f1c01"
+      primary: "#26294f"
     }
   },
   overrides: {
@@ -64,17 +69,17 @@ let lightTheme = createMuiTheme({
     },
     MuiListItem: {
       button: {
-        color: "#302d27",
-        backgroundColor: "#6bc3b8",
+        color: "#26294f",
+        backgroundColor: "#11eba4",
         "&:hover": {
-          backgroundColor: "#cb9531"
+          backgroundColor: "#ffdd84"
         }
       }
     },
     MuiIconButton: {
       root: {
         "&:hover": {
-          backgroundColor: "#221B2C"
+          backgroundColor: "#ffdd84"
         }
       }
     }
