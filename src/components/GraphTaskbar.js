@@ -115,7 +115,7 @@ class GraphTaskbar extends Component {
           <Box style={{padding: 30}} width={TOOLBAR_WIDTH}>
             <Container>
               <h3>GRAPH</h3>
-              <Box display="flex" flexDirection="row">
+              <Box display="flex" flexDirection="row" data-tour="upload-adjacency-matrix-button">
                 <Button variant="outlined" component="label" style={{  fontSize: "12px", marginBottom: "10px", width: TOOLBAR_WIDTH*0.8  }}>
                     Upload Adjacency Matrix
                   <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
@@ -151,7 +151,7 @@ class GraphTaskbar extends Component {
               <Box display="flex" flexDirection="column">
                 <Box display="flex" flexDirection="row">
                   <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
-                    <TaskbarButton variant="outlined" onClick={this.getContagiousSet}>
+                    <TaskbarButton variant="outlined" onClick={this.getContagiousSet} data-tour="contagious-set-button">
                       <Switch size="small" onChange={this.toggleAlgorithmChoice} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}/>
                       { this.state.useMinAlgorithm ? "Minimum Contagious Set" : "Greedy Contagious Set" }
                     </TaskbarButton>
@@ -159,7 +159,7 @@ class GraphTaskbar extends Component {
                 </Box>
                 <Box display="flex" flexDirection="row">
                   <Tooltip title={"Makes each node a seed independently at random with the probability p."}>
-                    <TaskbarButton variant="outlined" onClick={this.randomSeedSet}>
+                    <TaskbarButton variant="outlined" onClick={this.randomSeedSet} data-tour="random-seed-set-button">
                       <TextField label="p" id="seed-probability"
                         type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 }}}
                         defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation} style={{ marginRight: 20}}
@@ -194,17 +194,17 @@ class GraphTaskbar extends Component {
                     </IconButton>
                   </Tooltip>
                   <Tooltip title={"Perform a single iteration"}>
-                    <IconButton onClick={this.percolationIteration}>
+                    <IconButton onClick={this.percolationIteration} data-tour="next-iteration-button">
                       <ChevronRightIcon/>
                     </IconButton>
                   </Tooltip>
                   <Tooltip title={"Skip to the final iteration"}>
-                    <IconButton onClick={this.finalPercolationIteration}>
+                    <IconButton onClick={this.finalPercolationIteration} data-tour="last-iteration-button">
                       <LastPageIcon/>
                     </IconButton>
                   </Tooltip>
                 </ButtonGroup>
-                <Box display="flex" flexDirection="row" alignItems="center">
+                <Box display="flex" flexDirection="row" alignItems="center" data-tour="parameter-text-fields">
                   <div>
                     <TextField id="bootstrap-percolation-threshold" label="Threshold" type="number" InputProps={{ inputProps: { min: 0 }}} onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.props.threshold} style={{width: "50%"}} />
                     <TextField label="Probability" type="number" InputProps={{ inputProps: { min: 0, max: 1 }}} onChange={this.updateBootstrapPercolationProbability} defaultValue={1} style={{width: "50%"}} />
