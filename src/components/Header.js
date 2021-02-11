@@ -43,7 +43,7 @@ class Header extends Component {
     this.props.sendTheme(this.state.darkMode);
   }
 
-  toggleAlgorithmChoice = (event, value) => {
+  toggleDarkMode = (event, value) => {
     // value is true when the user engages the checkbox for light mode
     this.setState({
       darkMode: !value
@@ -77,7 +77,7 @@ class Header extends Component {
                   ))}
                 </LinkBox>
               </List>
-              <Checkbox color="secondary" onChange={this.toggleAlgorithmChoice} checkedIcon={<WbSunnyIcon fontSize="large" color="secondary"/>} icon={<Brightness3Icon fontSize="large" color="secondary"/>}/>
+              <Checkbox color="secondary" onChange={this.toggleDarkMode} checkedIcon={<WbSunnyIcon fontSize="large" color="secondary"/>} icon={<Brightness3Icon fontSize="large" color="secondary"/>}/>
             </LinkBox>
           </HeaderBox>
         </Toolbar>

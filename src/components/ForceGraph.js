@@ -9,6 +9,7 @@ import GraphTaskbar from "./GraphTaskbar";
 import { withTheme } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import {LoadingSpinnerComponent} from "./LoadingSpinnerComponent";
+import Tour from "reactour";
 
 /**
  * Create the default graph. Users will see this graph in the display pane when they first open the Study tab in Booper.
@@ -40,6 +41,51 @@ const initGraph = (() => {
   return graph;
 })();
 
+const TOUR_STEPS = [
+  {
+    content: "Welcome our study tool. Here, you can visualize bootstrap percolation on any graph. Let us show you around before you dive in."
+  },
+  {
+    selector: "[data-tour=\"graph-display-pane\"]",
+    content: "This is the graph display pane. It shows the graph that is being percolated on. Active vertices are red, and inactive vertices are blue. You can use the mouse to zoom in or out, pan around, or drag the graph around."
+  },
+  {
+    selector: "[data-tour=\"next-iteration-button\"]",
+    content: "Here's where you can visualize the percolation. This button performs one iteration of two-neighbor bootstrap percolation. Each inactive vertex that has at least two active neighbors is infected. Try clicking it now, and see what happens in the graph display pane."
+  },
+  {
+    selector: "[data-tour=\"graph-display-pane\"]",
+    content: "Vertices that were infected in the most recent iteration are green. All other active vertices are red."
+  },
+  {
+    selector: "[data-tour=\"last-iteration-button\"]",
+    content: "This button performs percolation iterations until no more vertices can be infected. Then it shows you the final result."
+  },
+  {
+    selector: "[data-tour=\"parameter-text-fields\"]",
+    content: <p>You can modify the parameters of bootstrap percolation. The <b>threshold</b> is the number of active neighbors required to infect an inactive vertex. The <b>probability</b> is the probability that an inactive vertex becomes infected if it has enough active neighbors.</p>
+  },
+  {
+    selector: "[data-tour=\"upload-adjacency-matrix-button\"]",
+    content: "If you want to visualize bootstrap percolation on a different graph, upload its adjacency matrix here. See the tooltip for details on the file format."
+  },
+  {
+    selector: "[data-tour=\"min-contagious-set-button\"]",
+    content: "This button finds a minimum contagious set of the current graph and renders it in the graph display pane. It uses an exponential-time algorithm, so it might load for a while if the graph is large."
+  },
+  {
+    selector: "[data-tour=\"greedy-contagious-set-button\"]",
+    content: "This button has similar functionality, but it uses a greedy algorithm instead. It finds a (usually small, but often not minimum) contagious set, which will be displayed much faster."
+  },
+  {
+    selector: "[data-tour=\"random-seed-set-button\"]",
+    content: "This button can also generate and display a seed set. It includes each vertex independently at random with the given probability."
+  },
+  {
+    content: "That's just about everything you need to know. Have fun percolating!"
+  }
+];
+
 class ForceGraph extends React.Component{
   /**
    * Instantiates a ForceGraph component with the default initial state.
@@ -51,6 +97,7 @@ class ForceGraph extends React.Component{
       graph: initGraph,
       forceData: initGraph.getGraphData(),
       helpOpen: false,
+      tourOpen: true,
       windowSize: {
         height: window.innerHeight,
         width: window.innerWidth
@@ -355,6 +402,13 @@ class ForceGraph extends React.Component{
   }
 
   /**
+   * Closes the tour that shows users how to use Booper, allowing them to start actually using it.
+   */
+  closeTour = () => {
+    this.setState({tourOpen: false});
+  }
+
+  /**
    * When a component is inside another component and the user clicks on the child component, prevents the parent component from reacting the click.
    * @param {Object} event an event object representing a mouse click
    */
@@ -364,6 +418,8 @@ class ForceGraph extends React.Component{
 
   render() {
     const TOOLBAR_WIDTH = 300;
+    const HEIGHT_OFFSET = 150;
+
     setTimeout(() => {
       this.graphRef.current.d3Force("collide", forceCollide());
       this.graphRef.current.d3Force("center", null);
@@ -391,17 +447,20 @@ class ForceGraph extends React.Component{
           activeVerticesCount={this.state.activeVerticesCount}
           inactiveVerticesCount={this.state.forceData.nodes.length - this.state.activeVerticesCount}
         />
-        <ForceGraph2D graphData={this.state.forceData}
-          nodeColor={d => d.recentlyInfected ? this.props.theme.palette.recentlyActive.main : d.active ? this.props.theme.palette.active.main : this.props.theme.palette.inactive.main}
-          linkColor={() => this.props.theme.palette.link.main}
-          backgroundColor={this.props.theme.palette.background.main}
-          linkOpacity={0.7}
-          linkWidth={3.5}
-          width={this.state.windowSize.width - TOOLBAR_WIDTH}
-          height={this.state.windowSize.height}
-          ref={this.graphRef}
-        />
+        <div data-tour="graph-display-pane">
+          <ForceGraph2D graphData={this.state.forceData}
+            nodeColor={d => d.recentlyInfected ? this.props.theme.palette.recentlyActive.main : d.active ? this.props.theme.palette.active.main : this.props.theme.palette.inactive.main}
+            linkColor={() => this.props.theme.palette.link.main}
+            backgroundColor={this.props.theme.palette.background.main}
+            linkOpacity={0.7}
+            linkWidth={3.5}
+            width={this.state.windowSize.width - TOOLBAR_WIDTH}
+            height={this.state.windowSize.height - HEIGHT_OFFSET}
+            ref={this.graphRef}
+          />
+        </div>
       </Box>
+      <Tour steps={TOUR_STEPS} isOpen={this.state.tourOpen} onRequestClose={this.closeTour} />
     </div>;
   }
 }

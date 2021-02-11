@@ -142,7 +142,7 @@ class GraphTaskbar extends Component {
                       </Typography>
                     </React.Fragment>
                   } interactive={true} placement="right">
-                    <TaskbarButton variant="contained" component="label">
+                    <TaskbarButton variant="contained" component="label" data-tour="upload-adjacency-matrix-button">
                       Upload Adjacency Matrix
                       <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden/>
                     </TaskbarButton>
@@ -205,7 +205,7 @@ class GraphTaskbar extends Component {
                         Calculates and displays the smallest set of nodes needed to activate the entire graph
                       </Typography>
                     </React.Fragment>} placement="right">
-                    <TaskbarButton variant="contained" onClick={this.getMinContagiousSet}>
+                    <TaskbarButton variant="contained" onClick={this.getMinContagiousSet} data-tour="min-contagious-set-button">
                     Minimum Contagious Set
                     </TaskbarButton>
                   </Tooltip>
@@ -215,7 +215,7 @@ class GraphTaskbar extends Component {
                         Calculates and displays the smallest set of nodes needed to activate the entire graph using a greedy algorithm.
                       </Typography>
                     </React.Fragment>} placement="right">
-                    <TaskbarButton variant="contained" onClick={this.getGreedyContagiousSet}>
+                    <TaskbarButton variant="contained" onClick={this.getGreedyContagiousSet} data-tour="greedy-contagious-set-button">
                     Greedy Contagious Set
                     </TaskbarButton>
                   </Tooltip>
@@ -226,7 +226,7 @@ class GraphTaskbar extends Component {
                       </Typography>
                     </React.Fragment>
                   } placement="right">
-                    <TaskbarButton variant="contained" onClick={this.randomSeedSet} style={{justifyContent: "space-between"}}>
+                    <TaskbarButton variant="contained" onClick={this.randomSeedSet} style={{justifyContent: "space-between"}} data-tour="random-seed-set-button">
                       <TextField label="probability" id="seed-probability"
                         type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
                         defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
@@ -280,7 +280,7 @@ class GraphTaskbar extends Component {
                         Perform a single iteration
                       </Typography>
                     </React.Fragment>} placement="left" variant="body2">
-                      <IconButton onClick={this.percolationIteration}>
+                      <IconButton onClick={this.percolationIteration} data-tour="next-iteration-button">
                         <ChevronRightIcon/>
                       </IconButton>
                     </Tooltip>
@@ -289,12 +289,12 @@ class GraphTaskbar extends Component {
                         Skip to the final iteration
                       </Typography>
                     </React.Fragment>} placement="left" variant="body2">
-                      <IconButton onClick={this.finalPercolationIteration}>
+                      <IconButton onClick={this.finalPercolationIteration} data-tour="last-iteration-button">
                         <LastPageIcon/>
                       </IconButton>
                     </Tooltip>
                   </ButtonGroup>
-                  <Box display="flex" flexDirection="row" alignItems="center">
+                  <Box display="flex" flexDirection="row" alignItems="center" data-tour="parameter-text-fields">
                     <TextField label="THRESHOLD" id="bootstrap-percolation-threshold"
                       type="number" InputProps={{ inputProps: { min: 1, step: 1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
                       variant="outlined" fullWidth={true} onChange={this.updateBootstrapPercolationThreshold}
