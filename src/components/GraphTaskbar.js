@@ -118,7 +118,7 @@ class GraphTaskbar extends Component {
               <Box display="flex" flexDirection="row" data-tour="upload-adjacency-matrix-button">
                 <Button variant="outlined" component="label" style={{  fontSize: "12px", marginBottom: "10px", width: TOOLBAR_WIDTH*0.8  }}>
                     Upload Adjacency Matrix
-                  <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden />
+                  <input id="uploadAdjacencyMatrix" type="file" accept=".csv,.tsv" onChange={this.readAdjacencyMatrix} hidden />
                 </Button>
                 <IconButton color="Info" variant="contained" component="label" onClick={this.helpIconOpen}>
                   <HelpIcon/>

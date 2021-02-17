@@ -158,7 +158,7 @@ class ForceGraph extends React.Component{
     reader.onload = (event) => {
       // Parse input file into a 2-D array so each entry is eaily accessible.
       const string = event.target.result.trim();
-      const parseResults = readString(string, {delimiter: ","});
+      const parseResults = readString(string, {delimitersToGuess: [",", "\t"]});
       // Check for parsing errors.
       if(parseResults.errors.length > 0) {
         let errorMessage = "Parsing error.\n";
