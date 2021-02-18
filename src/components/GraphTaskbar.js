@@ -31,14 +31,14 @@ import PropTypes from "prop-types";
 import {withStyles, withTheme} from "@material-ui/core/styles";
 
 
-const TOOLBAR_WIDTH = 300;
+// const TOOLBAR_WIDTH = 300;
 
 // Local Components
 const TaskbarButton = withStyles(theme => ({
   root: {
-    fontSize: "14px",
-    marginBottom: "10px",
-    width: "100%",
+    fontSize: "0.8rem",
+    marginBottom: "5%",
+    width: "80%",
     color: theme.palette.primary.contrastText,
     backgroundColor: theme.palette.primary.main,
     "&:hover": {
@@ -121,11 +121,11 @@ class GraphTaskbar extends Component {
       ];
       return (
         <Box>
-          <Paper className='toolbar-surface' elevation={5} style={{marginRight: 10}}>
-            <Box style={{padding: 30}} width={TOOLBAR_WIDTH}>
+          <Paper className='toolbar-surface' style={{marginRight: 10}}>
+            <Box style={{paddingTop: "2%"}}>
               <Container>
                 <Typography variant="h3">Graph</Typography>
-                <Box display="flex" flexDirection="row">
+                <Box display="flex" flexDirection="row" justifyContent="center">
                   <Tooltip title={
                     <React.Fragment>
                       <Typography gutterBottom variant="body2">
@@ -198,7 +198,7 @@ class GraphTaskbar extends Component {
               <Divider variant = "middle"/>
               <Container>
                 <Typography variant="h3">Seed Sets</Typography>
-                <Box display="flex" flexDirection="column">
+                <Box display="flex" flexDirection="column" alignItems="center">
                   <Tooltip title={
                     <React.Fragment>
                       <Typography variant="body2" gutterBottom>
@@ -226,12 +226,18 @@ class GraphTaskbar extends Component {
                       </Typography>
                     </React.Fragment>
                   } placement="right">
-                    <TaskbarButton variant="contained" onClick={this.randomSeedSet} style={{justifyContent: "space-between"}} data-tour="random-seed-set-button">
-                      <TextField label="probability" id="seed-probability"
-                        type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
-                        defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
-                        variant="outlined" fullWidth={true} style={{marginTop: 5}} color="secondary"/>
-                      p-Random Seed Set
+                    <TaskbarButton variant="contained" onClick={this.randomSeedSet} data-tour="random-seed-set-button">
+                      <Box display="flex" flexDirection="row" alignItems="center" style={{justifyContent: "space-between"}}>
+                        <div style={{width: "50%"}}>
+                          <TextField label="probability" id="seed-probability"
+                            type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }}
+                            defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
+                            variant="outlined" style={{marginTop: 5}} color="secondary"/>
+                        </div>
+                        <div style={{width: "50%", justifyContent: "center"}}>
+                          p-Random Seed Set
+                        </div>
+                      </Box>
                     </TaskbarButton>
                   </Tooltip>
                 </Box>

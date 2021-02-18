@@ -3,7 +3,7 @@ import ForceGraph2D from "react-force-graph-2d";
 import { forceCollide, forceX, forceY, forceZ } from "d3-force-3d";
 import Graph from "../classes/Graph";
 import update from "immutability-helper";
-import { Box } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { trackPromise } from "react-promise-tracker";
 import GraphTaskbar from "./GraphTaskbar";
 import { withTheme } from "@material-ui/core/styles";
@@ -432,33 +432,39 @@ class ForceGraph extends React.Component{
     return <div>
       <LoadingSpinnerComponent />
       <Box display="flex" flexDirection="row" alignItems="center" style={{backgroundColor: this.props.theme.palette.background.main}}>
-        <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
-          getMinContagiousSet={this.getMinContagiousSet}
-          getGreedyContagiousSet={this.getGreedyContagiousSet}
-          randomSeedSet={this.randomSeedSet}
-          stopPropagation={this.stopPropagation}
-          resetInfections={this.resetInfections}
-          percolationIteration={this.percolationIteration}
-          finalPercolationIteration={this.finalPercolationIteration}
-          updateBootstrapPercolationThreshold={this.updateBootstrapPercolationThreshold}
-          updateBootstrapPercolationProbability={this.updateBootstrapPercolationProbability}
-          threshold={this.state.bootstrapPercolationThreshold}
-          iteration={this.state.bootstrapPercolationIteration}
-          activeVerticesCount={this.state.activeVerticesCount}
-          inactiveVerticesCount={this.state.forceData.nodes.length - this.state.activeVerticesCount}
-        />
-        <div data-tour="graph-display-pane">
-          <ForceGraph2D graphData={this.state.forceData}
-            nodeColor={d => d.recentlyInfected ? this.props.theme.palette.recentlyActive.main : d.active ? this.props.theme.palette.active.main : this.props.theme.palette.inactive.main}
-            linkColor={() => this.props.theme.palette.link.main}
-            backgroundColor={this.props.theme.palette.background.main}
-            linkOpacity={0.7}
-            linkWidth={3.5}
-            width={this.state.windowSize.width - TOOLBAR_WIDTH}
-            height={this.state.windowSize.height - HEIGHT_OFFSET}
-            ref={this.graphRef}
-          />
-        </div>
+        <Grid container spacing={0} direction="row" style={{flexWrap: "nowrap"}}>
+          <Grid item xs={"3"}>
+            <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
+              getMinContagiousSet={this.getMinContagiousSet}
+              getGreedyContagiousSet={this.getGreedyContagiousSet}
+              randomSeedSet={this.randomSeedSet}
+              stopPropagation={this.stopPropagation}
+              resetInfections={this.resetInfections}
+              percolationIteration={this.percolationIteration}
+              finalPercolationIteration={this.finalPercolationIteration}
+              updateBootstrapPercolationThreshold={this.updateBootstrapPercolationThreshold}
+              updateBootstrapPercolationProbability={this.updateBootstrapPercolationProbability}
+              threshold={this.state.bootstrapPercolationThreshold}
+              iteration={this.state.bootstrapPercolationIteration}
+              activeVerticesCount={this.state.activeVerticesCount}
+              inactiveVerticesCount={this.state.forceData.nodes.length - this.state.activeVerticesCount}
+            />
+          </Grid>
+          <Grid item xs={"9"}>
+            <div data-tour="graph-display-pane" style={{height:"100%"}}>
+              <ForceGraph2D graphData={this.state.forceData}
+                nodeColor={d => d.recentlyInfected ? this.props.theme.palette.recentlyActive.main : d.active ? this.props.theme.palette.active.main : this.props.theme.palette.inactive.main}
+                linkColor={() => this.props.theme.palette.link.main}
+                backgroundColor={this.props.theme.palette.background.main}
+                linkOpacity={0.7}
+                linkWidth={3.5}
+                width={this.state.windowSize.width - TOOLBAR_WIDTH}
+                height={this.state.windowSize.height - HEIGHT_OFFSET}
+                ref={this.graphRef}
+              />
+            </div>
+          </Grid>
+        </Grid>
       </Box>
       <Tour steps={TOUR_STEPS} isOpen={this.state.tourOpen} onRequestClose={this.closeTour} />
     </div>;

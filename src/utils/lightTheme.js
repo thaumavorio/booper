@@ -51,7 +51,7 @@ let lightTheme = createMuiTheme({
       main: "#3b9138"
     },
     link: {
-      main: "#a07900"
+      main: "#3e3434"
     },
     background: {
       paper: "#bea5c5",
