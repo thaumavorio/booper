@@ -9,6 +9,7 @@ import { withTheme } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import {LoadingSpinnerComponent} from "./LoadingSpinnerComponent";
 import Tour from "reactour";
+import { readString } from "react-papaparse";
 
 /**
  * Create the default graph. Users will see this graph in the display pane when they first open the Study tab in Booper.
@@ -159,12 +160,18 @@ class ForceGraph extends React.Component{
     reader.onload = (event) => {
       // Parse input file into a 2-D array so each entry is eaily accessible.
       const string = event.target.result.trim();
-      const rows = string.split("\n");
-      const seeds = rows[0].trim().split(","); // an array defining which vertices are seeds in the desired graph
-      const adjacencyMatrix = []; // the adjacency matrix of the desired graph
-      for(let i = 1; i < rows.length; i++) {
-        adjacencyMatrix[i - 1] = rows[i].trim().split(",");
+      const parseResults = readString(string, {delimitersToGuess: [",", "\t"]});
+      // Check for parsing errors.
+      if(parseResults.errors.length > 0) {
+        let errorMessage = "Parsing error.\n";
+        for(let i = 0; i < parseResults.errors.length; i++) {
+          errorMessage += `Line ${parseResults.errors[i].row}: ${parseResults.errors[i].message}.\n`;
+        }
+        window.alert(errorMessage);
+        return;
       }
+      const seeds = parseResults.data[0]; // an array defining which vertices are seeds in the desired graph
+      const adjacencyMatrix = parseResults.data.slice(1); // the adjacency matrix of the desired graph
 
       // Check that the input is valid.
       if(ForceGraph.hasValidShape(seeds, adjacencyMatrix) && ForceGraph.hasValidEntries(seeds, adjacencyMatrix) && ForceGraph.representsValidGraph(adjacencyMatrix)) {
