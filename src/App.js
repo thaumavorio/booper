@@ -1,6 +1,5 @@
 import "./App.css";
 import React from "react";
-import { RemoveScrollBar } from "react-remove-scroll-bar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./page_components/Home";
 import Learn from "./page_components/Learn";
@@ -8,7 +7,7 @@ import Research from "./page_components/Research";
 import Study from "./page_components/Study.js";
 import AboutUs from "./page_components/AboutUs";
 import Header from "./components/Header";
-import {MuiThemeProvider} from "@material-ui/core/styles";
+import { MuiThemeProvider } from "@material-ui/core/styles";
 import darkTheme from "./utils/darkTheme";
 import lightTheme from "./utils/lightTheme";
 
@@ -34,7 +33,6 @@ class App extends React.Component{
         <MuiThemeProvider theme={this.state.darkTheme ? darkTheme : lightTheme}>
           <Header sendTheme={this.getTheme}/>
           <div className="App">
-            <RemoveScrollBar />
             <Switch>
               <Route exact path="/bp/">
                 <Home />

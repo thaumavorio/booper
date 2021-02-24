@@ -3,26 +3,26 @@ import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 let lightTheme = createMuiTheme({
   typography: {
     h3: {
-      fontSize: "24px",
+      fontSize: "1.75rem",
       fontWeight: 600,
       color: "#302d27",
-      marginTop: 10,
-      marginBottom: 10,
+      marginTop: "2%",
+      marginBottom: "2%",
       fontFamily: "Ubuntu"
     },
     button: {
       fontWeight: 700,
-      fontSize: "16px"
+      fontSize: "1rem"
     },
     overline: {
       fontFamily: "Ubuntu",
       fontWeight: 600,
-      fontSize: "14px"
+      fontSize: "0.8rem"
     },
     caption: {
       fontFamily: "Ubuntu",
       fontWeight: 600,
-      fontSize: "24px"
+      fontSize: "1.2rem"
     },
     body2: {
       fontFamily: "Ubuntu"

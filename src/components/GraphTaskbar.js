@@ -30,15 +30,14 @@ import LastPageIcon from "@material-ui/icons/LastPage";
 import PropTypes from "prop-types";
 import {withStyles, withTheme} from "@material-ui/core/styles";
 
-
-// const TOOLBAR_WIDTH = 300;
-
 // Local Components
 const TaskbarButton = withStyles(theme => ({
   root: {
     fontSize: "0.8rem",
     marginBottom: "5%",
     width: "80%",
+    paddingLeft: "12px",
+    paddingRight: "12px",
     color: theme.palette.primary.contrastText,
     backgroundColor: theme.palette.primary.main,
     "&:hover": {
@@ -121,8 +120,8 @@ class GraphTaskbar extends Component {
       ];
       return (
         <Box>
-          <Paper className='toolbar-surface' style={{marginRight: 10}}>
-            <Box style={{paddingTop: "2%"}}>
+          <Paper className='toolbar-surface' elevation={10}>
+            <Box style={{paddingTop: "2%", paddingBottom: "2%"}}>
               <Container>
                 <Typography variant="h3">Graph</Typography>
                 <Box display="flex" flexDirection="row" justifyContent="center">
@@ -228,15 +227,17 @@ class GraphTaskbar extends Component {
                   } placement="right">
                     <TaskbarButton variant="contained" onClick={this.randomSeedSet} data-tour="random-seed-set-button">
                       <Box display="flex" flexDirection="row" alignItems="center" style={{justifyContent: "space-between"}}>
-                        <div style={{width: "50%"}}>
-                          <TextField label="probability" id="seed-probability"
-                            type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }}
-                            defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
-                            variant="outlined" style={{marginTop: 5}} color="secondary"/>
-                        </div>
-                        <div style={{width: "50%", justifyContent: "center"}}>
-                          p-Random Seed Set
-                        </div>
+                        <Grid container spacing={1}>
+                          <Grid item xs={12} lg={6} alignItems="left">
+                            <TextField label="probability" id="seed-probability"
+                              type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }}
+                              defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
+                              variant="outlined" style={{marginTop: 5, textAlign: "left"}} color="secondary" size="small"/>
+                          </Grid>
+                          <Grid item xs={12} lg={6}>
+                            p-Random Seed Set
+                          </Grid>
+                        </Grid>
                       </Box>
                     </TaskbarButton>
                   </Tooltip>
@@ -246,8 +247,18 @@ class GraphTaskbar extends Component {
               <Container>
                 <Typography variant="h3">Bootstrap Percolation</Typography>
                 <Box display="flex" flexDirection="column" alignItems="center">
+                  <Box display="flex" flexDirection="row" alignItems="center" data-tour="parameter-text-fields">
+                    <TextField label="THRESHOLD" id="bootstrap-percolation-threshold"
+                      type="number" InputProps={{ inputProps: { min: 1, step: 1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
+                      variant="outlined" fullWidth={true} onChange={this.updateBootstrapPercolationThreshold}
+                      defaultValue={this.props.threshold} style={{margin: 5, marginTop: 15}} color="secondary" size="small"/>
+                    <TextField label="PROBABILITY" type="number"
+                      InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
+                      variant="outlined" fullWidth={true} onChange={this.updateBootstrapPercolationProbability}
+                      defaultValue={1} style={{margin: 5, marginTop: 15}} color="secondary" size="small"/>
+                  </Box>
                   <ButtonGroup
-                    size="medium"
+                    size="large"
                     variant="outlined"
                     orientation="horizontal"
                     aria-label = "horizontal contained primary button group"
@@ -300,16 +311,6 @@ class GraphTaskbar extends Component {
                       </IconButton>
                     </Tooltip>
                   </ButtonGroup>
-                  <Box display="flex" flexDirection="row" alignItems="center" data-tour="parameter-text-fields">
-                    <TextField label="THRESHOLD" id="bootstrap-percolation-threshold"
-                      type="number" InputProps={{ inputProps: { min: 1, step: 1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
-                      variant="outlined" fullWidth={true} onChange={this.updateBootstrapPercolationThreshold}
-                      defaultValue={this.props.threshold} style={{margin: 5, marginTop: 15}} color="secondary"/>
-                    <TextField label="PROBABILITY" type="number"
-                      InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
-                      variant="outlined" fullWidth={true} onChange={this.updateBootstrapPercolationProbability}
-                      defaultValue={1} style={{margin: 5, marginTop: 15}} color="secondary"/>
-                  </Box>
                   <Grid container alignItems="center" spacing={1}>
                     <Grid item xs={8} style={{textAlign: "right"}}>
                       <Typography variant="overline" gutterBottom>Iteration:</Typography>

@@ -53,7 +53,7 @@ class Header extends Component {
 
   render() {
     return (
-      <AppBar color="primary" position="static">
+      <AppBar color="primary" position="sticky">
         <Toolbar>
           <HeaderBox>
             <IconButton edge="start" aria-label="home">
