@@ -7,7 +7,7 @@ import { trackPromise } from "react-promise-tracker";
 import GraphTaskbar from "./GraphTaskbar";
 import { withTheme } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
-import {LoadingSpinnerComponent} from "./LoadingSpinnerComponent";
+import { LoadingSpinnerComponent } from "./LoadingSpinnerComponent";
 import Tour from "reactour";
 import { readString } from "react-papaparse";
 

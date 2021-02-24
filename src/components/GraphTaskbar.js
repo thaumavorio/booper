@@ -28,7 +28,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import PropTypes from "prop-types";
-import {withStyles, withTheme} from "@material-ui/core/styles";
+import { withStyles, withTheme } from "@material-ui/core/styles";
 
 // Local Components
 const TaskbarButton = withStyles(theme => ({
