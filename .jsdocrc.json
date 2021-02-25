@@ -1,0 +1,9 @@
+{
+    "plugins": [
+        "@pixi/jsdoc-template/plugins/es6-fix"
+    ],
+    "opts": {
+        "destination": "./doc/",
+        "recurse": true
+    }
+}
