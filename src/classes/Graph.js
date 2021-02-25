@@ -25,10 +25,6 @@ export default class Graph {
 
   /**
    * Adds an edge to the graph.
-   *
-   * Graphs are assumed to be simple. We do not check if the new edge already
-   * exists in the graph.
-   *
    * @param {number} u The first of the two vertices in the edge.
    * @param {number} v The second of the two vertices in the edge.
    */
@@ -85,7 +81,7 @@ export default class Graph {
 
   /**
    * Activates the given vertices in the graph.
-   * @param {iterable} vs The vertex to activate.
+   * @param {iterable} vs The vertices to activate.
    * @return {Graph} The graph.
    */
   activateVertices(vs) {
@@ -106,8 +102,8 @@ export default class Graph {
   }
 
   /**
-   * Iterates through every vertex in the graph, activating each with the given
-   * probability.
+   * First deactivates every vertex in the graph, then iterates through every
+   * vertex in the graph, activating each with the given probability.
    * @param {number} inclusionProbability The probability that a vertex will be activated.
    * @return {Graph} The graph.
    */
@@ -207,7 +203,7 @@ export default class Graph {
 
   /**
    * Returns a minimum contagious set by contacting the back-end server
-   * which greedily finds such a set.
+   * which finds such a set.
    * @param {threshold} threshold The threshold we use for bootstrap
    * percolation.
    * @return {Promise} A Promise whose result will be a vertex list which
@@ -221,8 +217,9 @@ export default class Graph {
   /**
    * Given the old force graph data, returns an updated graph data list with
    * current vertex and edge information.
-   * @param {Object} oldData An object containing the vertices (as nodes) and
-   * edges (as links) lists from the old force graph data.
+   * @param {Object} [oldData = {nodes: [], links: []}] An object containing
+   * the vertices (as nodes) and edges (as links) lists from the old force
+   * graph data.
    * @return {Object} An object containing the update vertices (as nodes) and
    * edges (as links) lists for the force graph drawing.
    */
