@@ -28,7 +28,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"[/\\\\\\]node_modules[/\\\\\\](?!bezier-js)\" --passWithNoTests",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "jsdoc": "jsdoc -c .jsdocrc.json src/"
   },
   "eslintConfig": {
     "extends": [
@@ -49,8 +50,10 @@
     ]
   },
   "devDependencies": {
+    "@pixi/jsdoc-template": "^2.6.0",
     "eslint": "^7.17.0",
-    "eslint-plugin-react": "^7.22.0"
+    "eslint-plugin-react": "^7.22.0",
+    "jsdoc": "^3.6.6"
   },
   "homepage": "/bp/"
 }
