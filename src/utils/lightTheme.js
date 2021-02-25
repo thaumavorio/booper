@@ -5,7 +5,7 @@ let lightTheme = createMuiTheme({
     h3: {
       fontSize: "1.75rem",
       fontWeight: 600,
-      color: "#302d27",
+      color: "#1708A3",
       marginTop: "2%",
       marginBottom: "2%",
       fontFamily: "Ubuntu"
@@ -30,35 +30,35 @@ let lightTheme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: "#11eba4",
+      main: "#ffdd84",
       contrastText: "#26294f",
-      hover: "#ffdd84"
+      hover: "#7A6EEB"
       // main: "#221B2C",
     },
     secondary: {
-      main: "#9e2c65"
+      main: "#26294f"
     },
     info: {
       main: "#7791a1"
     },
     inactive: {
-      main: "#0096c4"
+      main: "#009969"
     },
     active: {
-      main: "#cf3401"
+      main: "#a00000"
     },
     recentlyActive: {
-      main: "#3b9138"
+      main: "#cd00ad"
     },
     link: {
-      main: "#3e3434"
+      main: "#002f2b"
     },
     background: {
-      paper: "#bea5c5",
-      main: "#f8f7f7"
+      paper: "#EBDFB0",
+      main: "#DDEBE2"
     },
     text: {
-      primary: "#26294f"
+      primary: "#1708A3"
     }
   },
   overrides: {
@@ -69,17 +69,17 @@ let lightTheme = createMuiTheme({
     },
     MuiListItem: {
       button: {
-        color: "#26294f",
-        backgroundColor: "#11eba4",
+        color: "#1708A3",
+        backgroundColor: "#ffdd84",
         "&:hover": {
-          backgroundColor: "#ffdd84"
+          backgroundColor: "#7A6EEB"
         }
       }
     },
     MuiIconButton: {
       root: {
         "&:hover": {
-          backgroundColor: "#ffdd84"
+          backgroundColor: "#7A6EEB"
         }
       }
     }
