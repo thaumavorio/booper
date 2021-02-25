@@ -22,7 +22,7 @@ class Research extends Component {
   render() {
     return (
       <div>
-        <h1>Research</h1>
+        <marquee><h1>Research</h1></marquee>
       </div>
     );
   }

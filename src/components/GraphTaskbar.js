@@ -26,32 +26,43 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  Grid,
   IconButton,
+  Link,
   Paper,
-  Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
   Tooltip,
   Typography
 } from "@material-ui/core";
-import HelpIcon from "@material-ui/icons/Help";
 import RotateLeftIcon from "@material-ui/icons/RotateLeft";
 import FirstPageIcon from "@material-ui/icons/FirstPage";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
-import { styled } from "@material-ui/core/styles";
-import { LoadingSpinnerComponent } from "./LoadingSpinnerComponent";
 import PropTypes from "prop-types";
-
-
-const TOOLBAR_WIDTH = 300;
+import { withStyles, withTheme } from "@material-ui/core/styles";
 
 // Local Components
-const TaskbarButton = styled(Button)({
-  fontSize: "11px",
-  marginBottom: "10px",
-  width: "100%"
-});
+const TaskbarButton = withStyles(theme => ({
+  root: {
+    fontSize: "0.8rem",
+    marginBottom: "5%",
+    width: "80%",
+    paddingLeft: "12px",
+    paddingRight: "12px",
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.main,
+    "&:hover": {
+      background: theme.palette.primary.hover,
+    }
+  }
+}))(Button);
 
 class GraphTaskbar extends Component {
   constructor(props){
@@ -68,13 +79,12 @@ class GraphTaskbar extends Component {
       this.props.readAdjacencyMatrix(evt);
     }
 
-    getContagiousSet = () => {
-      if(this.state.useMinAlgorithm){
-        this.props.getMinContagiousSet();
-      }
-      else {
-        this.props.getGreedyContagiousSet();
-      }
+    getMinContagiousSet = () => {
+      this.props.getMinContagiousSet();
+    }
+
+    getGreedyContagiousSet = () => {
+      this.props.getGreedyContagiousSet();
     }
 
     randomSeedSet = () => {
@@ -116,142 +126,260 @@ class GraphTaskbar extends Component {
     helpIconClose = () => {
       this.setState({helpOpen: false});
     }
+    // End of Taskbar functions
 
-  toggleAlgorithmChoice = (event, value) => {
-    // value is true when the user engages the switch to choose the greedy algorithm, false otherwise
-    this.setState({
-      useMinAlgorithm: !value
-    });
-  }
-  // End of Taskbar functions
-
-  render() {
-    return (
-      <div>
-        <LoadingSpinnerComponent />
-        <Paper className='toolbar-surface' elevation={10}>
-          <Box style={{padding: 30}} width={TOOLBAR_WIDTH}>
-            <Container>
-              <h3>GRAPH</h3>
-              <Box display="flex" flexDirection="row" data-tour="upload-adjacency-matrix-button">
-                <Button variant="outlined" component="label" style={{  fontSize: "12px", marginBottom: "10px", width: TOOLBAR_WIDTH*0.8  }}>
-                    Upload Adjacency Matrix
-                  <input id="uploadAdjacencyMatrix" type="file" accept=".csv,.tsv" onChange={this.readAdjacencyMatrix} hidden />
-                </Button>
-                <IconButton color="Info" variant="contained" component="label" onClick={this.helpIconOpen}>
-                  <HelpIcon/>
-                </IconButton>
-                <Dialog onClose={this.helpIconClose} open={this.state.helpOpen}>
-                  <DialogTitle id="customized-dialog-title" onClose={this.helpIconClose}>
-                                    Uploading Adjacency Matrices
-                  </DialogTitle>
-                  <DialogContent dividers>
-                    <Typography gutterBottom>
+    render() {
+      const rows = [
+        [ 0,1,0,1,0 ],
+        [ 1,0,0,0,1 ],
+        [ 0,0,0,1,1 ],
+        [ 1,0,1,0,1 ],
+        [ 0,1,1,1,0 ]
+      ];
+      return (
+        <Box>
+          <Paper className='toolbar-surface' elevation={10}>
+            <Box style={{paddingTop: "2%", paddingBottom: "2%"}}>
+              <Container>
+                <Typography variant="h3">Graph</Typography>
+                <Box display="flex" flexDirection="row" justifyContent="center">
+                  <Tooltip title={
+                    <React.Fragment>
+                      <Typography gutterBottom variant="body2">
+                      The adjacency matrix input should be in the format of a .csv file. The first row should contain
+                      either a &lsquo;+&rsquo; or a &lsquo;-&rsquo;, indicating whether the node is initially infected or not, respectively.
+                      </Typography>
+                      <Typography gutterBottom variant="body2">
+                      The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
+                      </Typography>
+                      <Typography gutterBottom variant="body2">
+                        <Link onClick={this.helpIconOpen} color="secondary">
+                        See more..
+                        </Link>
+                      </Typography>
+                    </React.Fragment>
+                  } interactive={true} placement="right">
+                    <TaskbarButton variant="contained" component="label" data-tour="upload-adjacency-matrix-button">
+                      Upload Adjacency Matrix
+                      <input id="uploadAdjacencyMatrix" type="file" accept=".csv" onChange={this.readAdjacencyMatrix} hidden/>
+                    </TaskbarButton>
+                  </Tooltip>
+                  <Dialog onClose={this.helpIconClose} open={this.state.helpOpen}>
+                    <DialogTitle id="customized-dialog-title" onClose={this.helpIconClose}>
+                    Uploading Adjacency Matrices
+                    </DialogTitle>
+                    <DialogContent dividers>
+                      <Typography gutterBottom variant="body2">
                         The adjacency matrix input should be in the format of a .csv file. The first row should contain
                         either a &lsquo;+&rsquo; or a &lsquo;-&rsquo;, indicating whether the node is initially infected or not, respectively.
-                    </Typography>
-                    <Typography gutterBottom>
+                      </Typography>
+                      <Typography gutterBottom variant="body2">
                         The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
-                    </Typography>
-                    <Typography gutterBottom>
+                      </Typography>
+                      <Typography gutterBottom variant="body2">
                         An example of an adjacency matrix input is available below:
-                    </Typography>
-                    <Typography gutterBottom>
-                      <a href="example_graph.csv" download>Example Adjacency Matrix Input</a>
-                    </Typography>
-                  </DialogContent>
-                </Dialog>
-              </Box>
-            </Container>
-            <Divider variant = "middle"/>
-            <Container>
-              <h3>SEED SETS</h3>
-              <Box display="flex" flexDirection="column">
-                <Box display="flex" flexDirection="row">
-                  <Tooltip title={"Calculates and displays the smallest set of nodes needed to activate the entire graph."}>
-                    <TaskbarButton variant="outlined" onClick={this.getContagiousSet} data-tour="contagious-set-button">
-                      <Switch size="small" onChange={this.toggleAlgorithmChoice} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}/>
-                      { this.state.useMinAlgorithm ? "Minimum Contagious Set" : "Greedy Contagious Set" }
+                      </Typography>
+                      <TableContainer component={Paper} style={{marginBottom: "10px"}}>
+                        <Table color="secondary" size="small">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell align="center">+</TableCell>
+                              <TableCell align="center">-</TableCell>
+                              <TableCell align="center">+</TableCell>
+                              <TableCell align="center">-</TableCell>
+                              <TableCell align="center">-</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {rows.map((row) => (
+                              <TableRow key={row}>
+                                <TableCell align="center">
+                                  {row[0]}
+                                </TableCell>
+                                <TableCell align="center">{row[1]}</TableCell>
+                                <TableCell align="center">{row[2]}</TableCell>
+                                <TableCell align="center">{row[3]}</TableCell>
+                                <TableCell align="center">{row[4]}</TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                      <Typography gutterBottom variant="body2">
+                        <a href="example_graph.csv" download>Download the csv</a>
+                      </Typography>
+                    </DialogContent>
+                  </Dialog>
+                </Box>
+              </Container>
+              <Divider variant = "middle"/>
+              <Container>
+                <Typography variant="h3">Seed Sets</Typography>
+                <Box display="flex" flexDirection="column" alignItems="center">
+                  <Tooltip title={
+                    <React.Fragment>
+                      <Typography variant="body2" gutterBottom>
+                        Calculates and displays the smallest set of nodes needed to activate the entire graph
+                      </Typography>
+                    </React.Fragment>} placement="right">
+                    <TaskbarButton variant="contained" onClick={this.getMinContagiousSet} data-tour="min-contagious-set-button">
+                    Minimum Contagious Set
+                    </TaskbarButton>
+                  </Tooltip>
+                  <Tooltip title={
+                    <React.Fragment>
+                      <Typography variant="body2" gutterBottom>
+                        Calculates and displays the smallest set of nodes needed to activate the entire graph using a greedy algorithm.
+                      </Typography>
+                    </React.Fragment>} placement="right">
+                    <TaskbarButton variant="contained" onClick={this.getGreedyContagiousSet} data-tour="greedy-contagious-set-button">
+                    Greedy Contagious Set
+                    </TaskbarButton>
+                  </Tooltip>
+                  <Tooltip title={
+                    <React.Fragment>
+                      <Typography variant="body2" gutterBottom>
+                        Makes each node a seed independently at random with the probability p.
+                      </Typography>
+                    </React.Fragment>
+                  } placement="right">
+                    <TaskbarButton variant="contained" onClick={this.randomSeedSet} data-tour="random-seed-set-button">
+                      <Box display="flex" flexDirection="row" alignItems="center" style={{justifyContent: "space-between"}}>
+                        <Grid container spacing={1}>
+                          <Grid item xs={12} lg={6} alignItems="left">
+                            <TextField label="probability" id="seed-probability"
+                              type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }}
+                              defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
+                              variant="outlined" style={{marginTop: 5, textAlign: "left"}} color="secondary" size="small"/>
+                          </Grid>
+                          <Grid item xs={12} lg={6}>
+                            p-Random Seed Set
+                          </Grid>
+                        </Grid>
+                      </Box>
                     </TaskbarButton>
                   </Tooltip>
                 </Box>
-                <Box display="flex" flexDirection="row">
-                  <Tooltip title={"Makes each node a seed independently at random with the probability p."}>
-                    <TaskbarButton variant="outlined" onClick={this.randomSeedSet} data-tour="random-seed-set-button">
-                      <TextField label="p" id="seed-probability"
-                        type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 }}}
-                        defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation} style={{ marginRight: 20}}
-                        variant="filled"/>
-                          p-Random Seed Set
-                    </TaskbarButton>
-                  </Tooltip>
+              </Container>
+              <Divider variant="middle"/>
+              <Container>
+                <Typography variant="h3">Bootstrap Percolation</Typography>
+                <Box display="flex" flexDirection="column" alignItems="center">
+                  <Box display="flex" flexDirection="row" alignItems="center" data-tour="parameter-text-fields">
+                    <TextField label="THRESHOLD" id="bootstrap-percolation-threshold"
+                      type="number" InputProps={{ inputProps: { min: 1, step: 1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
+                      variant="outlined" fullWidth={true} onChange={this.updateBootstrapPercolationThreshold}
+                      defaultValue={this.props.threshold} style={{margin: 5, marginTop: 15}} color="secondary" size="small"/>
+                    <TextField label="PROBABILITY" type="number"
+                      InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }} classes={{ label: { root: { fontSize: "15px" }}}}
+                      variant="outlined" fullWidth={true} onChange={this.updateBootstrapPercolationProbability}
+                      defaultValue={1} style={{margin: 5, marginTop: 15}} color="secondary" size="small"/>
+                  </Box>
+                  <ButtonGroup
+                    size="large"
+                    variant="outlined"
+                    orientation="horizontal"
+                    aria-label = "horizontal contained primary button group"
+                    color="inherit"
+                  >
+                    <Tooltip title={
+                      <React.Fragment>
+                        <Typography variant="body2" gutterBottom>
+                          Deactivate all vertices
+                        </Typography>
+                      </React.Fragment>} placement="left" variant="body2">
+                      <IconButton onClick={this.resetInfections}>
+                        <RotateLeftIcon/>
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title={<React.Fragment>
+                      <Typography variant="body2" gutterBottom>
+                        Return to the first iteration
+                      </Typography>
+                    </React.Fragment>} placement="left" variant="body2">
+                      <IconButton disabled={true}>
+                        <FirstPageIcon/>
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title={<React.Fragment>
+                      <Typography variant="body2" gutterBottom>
+                        Go back an iteration
+                      </Typography>
+                    </React.Fragment>} placement="left" variant="body2">
+                      <IconButton disabled={true}>
+                        <ChevronLeftIcon/>
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title={<React.Fragment>
+                      <Typography variant="body2" gutterBottom>
+                        Perform a single iteration
+                      </Typography>
+                    </React.Fragment>} placement="left" variant="body2">
+                      <IconButton onClick={this.percolationIteration} data-tour="next-iteration-button">
+                        <ChevronRightIcon/>
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title={<React.Fragment>
+                      <Typography variant="body2" gutterBottom>
+                        Skip to the final iteration
+                      </Typography>
+                    </React.Fragment>} placement="left" variant="body2">
+                      <IconButton onClick={this.finalPercolationIteration} data-tour="last-iteration-button">
+                        <LastPageIcon/>
+                      </IconButton>
+                    </Tooltip>
+                  </ButtonGroup>
+                  <Grid container alignItems="center" spacing={1}>
+                    <Grid item xs={8} style={{textAlign: "right"}}>
+                      <Typography variant="overline" gutterBottom>Iteration:</Typography>
+                    </Grid>
+                    <Grid item xs={4} style={{textAlign: "left"}}>
+                      <Typography variant="caption">{this.props.iteration}</Typography>
+                    </Grid>
+                    <Grid item xs={8} style={{textAlign: "right"}}>
+                      <Typography variant="overline" gutterBottom>Active Vertices:</Typography>
+                    </Grid>
+                    <Grid item xs={4} style={{textAlign: "left"}}>
+                      <Typography variant="caption" gutterBottom>{this.props.activeVerticesCount}</Typography>
+                    </Grid>
+                    <Grid item xs={8} style={{textAlign: "right"}}>
+                      <Typography variant="overline" gutterBottom>Inactive Vertices:</Typography>
+                    </Grid>
+                    <Grid item xs={4} style={{textAlign: "left"}}>
+                      <Typography variant="caption" gutterBottom>{this.props.inactiveVerticesCount}</Typography>
+                    </Grid>
+                  </Grid>
                 </Box>
-              </Box>
-            </Container>
-            <Divider variant = "middle"/>
-            <Container>
-              <h3>BOOTSTRAP PERCOLATION</h3>
-              <Box display="flex" flexDirection="column" alignItems="center">
-                <ButtonGroup
-                  orientation="horizontal"
-                  aria-label = "horizontal contained primary button group"
-                >
-                  <Tooltip title={"Deactivate all vertices"}>
-                    <IconButton onClick={this.resetInfections}>
-                      <RotateLeftIcon/>
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title={"Return to the first iteration"}>
-                    <IconButton disabled={true}>
-                      <FirstPageIcon/>
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title={"Go back an iteration"}>
-                    <IconButton disabled={true}>
-                      <ChevronLeftIcon/>
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title={"Perform a single iteration"}>
-                    <IconButton onClick={this.percolationIteration} data-tour="next-iteration-button">
-                      <ChevronRightIcon/>
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title={"Skip to the final iteration"}>
-                    <IconButton onClick={this.finalPercolationIteration} data-tour="last-iteration-button">
-                      <LastPageIcon/>
-                    </IconButton>
-                  </Tooltip>
-                </ButtonGroup>
-                <Box display="flex" flexDirection="row" alignItems="center" data-tour="parameter-text-fields">
-                  <div>
-                    <TextField id="bootstrap-percolation-threshold" label="Threshold" type="number" InputProps={{ inputProps: { min: 0 }}} onChange={this.updateBootstrapPercolationThreshold} defaultValue={this.props.threshold} style={{width: "50%"}} />
-                    <TextField label="Probability" type="number" InputProps={{ inputProps: { min: 0, max: 1 }}} onChange={this.updateBootstrapPercolationProbability} defaultValue={1} style={{width: "50%"}} />
-                  </div>
-                </Box>
-                <Typography variant="overline" gutterBottom>Iteration: {this.props.iteration}</Typography>
-                <Typography variant="overline" gutterBottom>Active Vertices: {this.props.activeVerticesCount}</Typography>
-                <Typography variant="overline" gutterBottom>Inactive Vertices: {this.props.inactiveVerticesCount}</Typography>
-              </Box>
-            </Container>
-            <Divider variant = "middle"/>
-            <Container>
-              <h3>LEGEND</h3>
-              <div style={{textAlign:"left", marginLeft:TOOLBAR_WIDTH / 2 - 100}}>
-                <div className='legend-entry legend-entry-inactive'></div>
-                            &nbsp;<Typography variant="overline" gutterBottom>Inactive Node</Typography>
-                <br/>
-                <div className='legend-entry legend-entry-active'></div>
-                            &nbsp;<Typography variant="overline" gutterBottom>Active Node</Typography>
-                <br/>
-                <div className='legend-entry legend-entry-recently-activated'></div>
-                            &nbsp;<Typography variant="overline" gutterBottom>Recently Infected Node</Typography>
-              </div>
-            </Container>
-          </Box>
-        </Paper>
-      </div>
-    );
-  }
+              </Container>
+              <Divider variant="middle"/>
+              <Container>
+                <Typography variant="h3">Legend</Typography>
+                <Grid container spacing={1}>
+                  <Grid item xs={8} style={{textAlign: "right"}}>
+                    <Typography variant="overline" gutterBottom>Inactive</Typography>
+                  </Grid>
+                  <Grid item xs={4} style={{textAlign: "left", alignContent: "center"}}>
+                    <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.inactive.main}} />
+                  </Grid>
+                  <Grid item xs={8} style={{textAlign: "right"}}>
+                    <Typography variant="overline" gutterBottom>Active</Typography>
+                  </Grid>
+                  <Grid item xs={4} style={{textAlign: "left"}}>
+                    <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.active.main}} />
+                  </Grid>
+                  <Grid item xs={8} style={{textAlign: "right"}}>
+                    <Typography variant="overline" gutterBottom>Recently Activated</Typography>
+                  </Grid>
+                  <Grid item xs={4} style={{textAlign: "left"}}>
+                    <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.recentlyActive.main}}/>
+                  </Grid>
+                </Grid>
+              </Container>
+            </Box>
+          </Paper>
+        </Box>
+      );
+    }
 
 
 }
@@ -270,7 +398,26 @@ GraphTaskbar.propTypes = {
   threshold: PropTypes.number,
   iteration: PropTypes.number,
   activeVerticesCount: PropTypes.number,
-  inactiveVerticesCount: PropTypes.number
+  inactiveVerticesCount: PropTypes.number,
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      background: PropTypes.shape({
+        main: PropTypes.string.isRequired
+      }).isRequired,
+      active: PropTypes.shape({
+        main: PropTypes.string.isRequired
+      }).isRequired,
+      inactive: PropTypes.shape({
+        main: PropTypes.string.isRequired
+      }).isRequired,
+      link: PropTypes.shape({
+        main: PropTypes.string.isRequired
+      }).isRequired,
+      recentlyActive: PropTypes.shape({
+        main: PropTypes.string.isRequired
+      }).isRequired
+    }).isRequired
+  }).isRequired
 };
 
-export default GraphTaskbar;
+export default withTheme(GraphTaskbar);
