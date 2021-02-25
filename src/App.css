@@ -18,3 +18,8 @@
 .legend-entry-inactive {background-color: #5375e2}
 .legend-entry-active {background-color: #f65868}
 .legend-entry-recently-activated {background-color: #228b22}
+
+.text-page {
+  width: 60rem;
+  margin: 0 auto;
+}
