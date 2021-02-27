@@ -232,7 +232,7 @@ class GraphTaskbar extends Component {
                           </Grid>
                           <Grid item xs={12} lg={6} xl={4}>
                             <TextField label="edge" id="edge-probability"
-                              type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }}
+                              type="number" InputProps={{ inputProps: { min: 0, max: "1.0000", step: 0.1 } }}
                               defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
                               variant="outlined" style={{marginTop: 5, textAlign: "left"}} color="secondary" size="small"/>
                           </Grid>
