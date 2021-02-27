@@ -142,7 +142,7 @@ class GraphTaskbar extends Component {
             <Box style={{paddingTop: "2%", paddingBottom: "2%"}}>
               <Container>
                 <Typography variant="h3">Graph</Typography>
-                <Box display="flex" flexDirection="row" justifyContent="center">
+                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                   <Tooltip title={
                     <React.Fragment>
                       <Typography gutterBottom variant="body2">
@@ -210,6 +210,35 @@ class GraphTaskbar extends Component {
                       </Typography>
                     </DialogContent>
                   </Dialog>
+                  <Tooltip title={
+                    <React.Fragment>
+                      <Typography variant="body2" gutterBottom>
+                        Generates an Erdős-Rényi graph with the given number of nodes. Each pair of vertices is made adjacent independently at random with the given edge probability.
+                      </Typography>
+                    </React.Fragment>
+                  } placement="right">
+                    <TaskbarButton variant="contained">
+                      <Box display="flex" flexDirection="row" alignItems="center" style={{justifyContent: "space-between"}}>
+                        <Grid container spacing={1} justify="space-between">
+                          <Grid item xs={12} lg={6} xl={4}>
+                            <TextField label="nodes" id="num-nodes"
+                              type="number" InputProps={{ inputProps: { min: 0, step: 1 } }}
+                              defaultValue={5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
+                              variant="outlined" style={{marginTop: 5, textAlign: "left"}} color="secondary" size="small"/>
+                          </Grid>
+                          <Grid item xs={12} lg={6} xl={4}>
+                            <TextField label="edge" id="edge-probability"
+                              type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }}
+                              defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
+                              variant="outlined" style={{marginTop: 5, textAlign: "left"}} color="secondary" size="small"/>
+                          </Grid>
+                          <Grid item xs={12} xl={4}>
+                            Random Graph
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </TaskbarButton>
+                  </Tooltip>
                 </Box>
               </Container>
               <Divider variant = "middle"/>
