@@ -79,6 +79,10 @@ class GraphTaskbar extends Component {
       this.props.readAdjacencyMatrix(evt);
     }
 
+    randomGraph = () => {
+      this.props.randomGraph();
+    }
+
     getMinContagiousSet = () => {
       this.props.getMinContagiousSet();
     }
@@ -217,7 +221,7 @@ class GraphTaskbar extends Component {
                       </Typography>
                     </React.Fragment>
                   } placement="right">
-                    <TaskbarButton variant="contained">
+                    <TaskbarButton variant="contained" onClick={this.randomGraph}>
                       <Box display="flex" flexDirection="row" alignItems="center" style={{justifyContent: "space-between"}}>
                         <Grid container spacing={1} justify="space-between">
                           <Grid item xs={12} lg={6} xl={4}>
@@ -415,6 +419,7 @@ class GraphTaskbar extends Component {
 
 GraphTaskbar.propTypes = {
   readAdjacencyMatrix: PropTypes.func,
+  randomGraph: PropTypes.func,
   getMinContagiousSet: PropTypes.func,
   getGreedyContagiousSet: PropTypes.func,
   randomSeedSet: PropTypes.func,

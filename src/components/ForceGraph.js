@@ -291,6 +291,33 @@ class ForceGraph extends React.Component{
   }
 
   /**
+   * Generates and displays an Erdos-Renyi graph given parameters specified by the user in text fields.
+   * Adds the given number of vertices.
+   * For each pair of vertices, adds an edge independently at random with the given edge probability.
+   */
+  randomGraph = () => {
+    const numNodes = parseInt(document.getElementById("num-nodes").value); // number of nodes in the graph
+    const edgeProbability = parseFloat(document.getElementById("edge-probability").value); // probability that a pair of nodes are adjacent
+    if(!isNaN(numNodes) && !isNaN(edgeProbability)) {
+      const graph = new Graph();
+      for(let i = 0; i < numNodes; i++) {
+        graph.addVertex(i);
+        for(let j = 0; j < i; j++) {
+          if(Math.random() < edgeProbability) {
+            graph.addEdge(j, i);
+          }
+        }
+      }
+      this.setState({
+        graph,
+        forceData: graph.getGraphData(),
+        bootstrapPercolationIteration: 0,
+        activeVerticesCount: 0,
+      });
+    }
+  }
+
+  /**
    * Finds a minimum contagious set of the currently displayed graph.
    * Sends the graph and treshold in an HTTP request to a server, which performs the algorithm and sends the result in a response object.
    * When the response object is received, the minimum contagious set is rendered.
@@ -453,8 +480,9 @@ class ForceGraph extends React.Component{
 
     return <div>
       <LoadingSpinnerComponent />
-      <div style={{zIndex: 2, float: "left", position: "absolute", alignItems: "center", maxWidth: "25%"}}>
+      <div style={{zIndex: 1, float: "left", position: "absolute", alignItems: "center", maxWidth: "25%"}}>
         <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
+          randomGraph={this.randomGraph}
           getMinContagiousSet={this.getMinContagiousSet}
           getGreedyContagiousSet={this.getGreedyContagiousSet}
           randomSeedSet={this.randomSeedSet}
