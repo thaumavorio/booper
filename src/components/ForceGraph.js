@@ -88,6 +88,10 @@ const TOUR_STEPS = [
     content: "If you want to visualize bootstrap percolation on a different graph, upload its adjacency matrix here. See the tooltip for details on the file format."
   },
   {
+    selector: "[data-tour=\"random-graph-button\"]",
+    content: "Or you can use this button to generate a random graph with given parameters."
+  },
+  {
     selector: "[data-tour=\"min-contagious-set-button\"]",
     content: "This button finds a minimum contagious set of the current graph and renders it in the graph display pane. It uses an exponential-time algorithm, so it might load for a while if the graph is large."
   },

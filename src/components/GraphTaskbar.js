@@ -221,7 +221,7 @@ class GraphTaskbar extends Component {
                       </Typography>
                     </React.Fragment>
                   } placement="right">
-                    <TaskbarButton variant="contained" onClick={this.randomGraph}>
+                    <TaskbarButton variant="contained" onClick={this.randomGraph} data-tour="random-graph-button">
                       <Box display="flex" flexDirection="row" alignItems="center" style={{justifyContent: "space-between"}}>
                         <Grid container spacing={1} justify="space-between">
                           <Grid item xs={12} lg={6} xl={4}>
