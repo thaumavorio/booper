@@ -215,8 +215,7 @@ export default class Graph {
    * approximates a minimal contagious set of the graph.
    */
   findContagiousSetGreedily(threshold) {
-    return fetch(`https://thaumic.dev/booper/greedy?graph=${this.getWebGraphJSON()}&threshold=${threshold}`)
-      .then(res => res.json());
+    return fetch(`https://thaumic.dev/booper/greedy?graph=${this.getWebGraphJSON()}&threshold=${threshold}`);
   }
 
   /**
@@ -228,8 +227,7 @@ export default class Graph {
    * represents a minimal contagious set of the graph.
    */
   findMinimalContagiousSet(threshold) {
-    return fetch(`https://thaumic.dev/booper/min?graph=${this.getWebGraphJSON()}&threshold=${threshold}`)
-      .then(res => res.json());
+    return fetch(`https://thaumic.dev/booper/min?graph=${this.getWebGraphJSON()}&threshold=${threshold}`);
   }
 
   /**

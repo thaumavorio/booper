@@ -298,6 +298,13 @@ class ForceGraph extends React.Component{
   getMinContagiousSet = () => {
     trackPromise(
       this.state.graph.findMinimalContagiousSet(this.state.bootstrapPercolationThreshold)
+        .then(res => {
+          if (res.status === 504) {
+            throw new Error("Timeout while finding minimum contagious set");
+          }
+          return res;
+        })
+        .then(res => res.json())
         .then(infectedVerts => this.setState(function(state){
           const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
           g.activateVertices(infectedVerts);
@@ -306,7 +313,8 @@ class ForceGraph extends React.Component{
             forceData: g.getGraphData(state.forceData),
             bootstrapPercolationIteration: 0,
             activeVerticesCount: g.getActiveVerticesCount() };
-        })));
+        }))
+        .catch(error => console.error(error.message)));
   };
 
   /**
@@ -317,6 +325,7 @@ class ForceGraph extends React.Component{
   getGreedyContagiousSet = () => {
     trackPromise(
       this.state.graph.findContagiousSetGreedily(this.state.bootstrapPercolationThreshold)
+        .then(res => res.json())
         .then(infectedVerts => this.setState(function(state){
           const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
           g.activateVertices(infectedVerts);
