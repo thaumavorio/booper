@@ -17,15 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import React, {Component} from "react";
+import ForceGraph from "../components/ForceGraph";
 
-class Learn extends Component {
-  render() {
+class Study extends Component {
+  render(): JSX.Element {
     return (
       <div>
-        <marquee><h1>Learn</h1></marquee>
+        <ForceGraph />
       </div>
     );
   }
 }
 
-export default Learn;
+export default Study;
