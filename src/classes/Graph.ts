@@ -18,70 +18,82 @@
  */
 /** @module Graph */
 
+import type { GraphData, NodeObject, LinkObject } from "react-force-graph-2d";
+
+type Vertex = number;
+
 /**
  * A simple graph capable of being used in activation processes.
  */
 export default class Graph {
-  /**
-   * Instantiates an empty graph.
-   */
-  constructor() {
-    /** @private */ this.adj = new Map();
-    /** @private */ this.activeVertices = new Set();    // all active vertices
-    /** @private */ this.recentlyInfected = new Set();  // vertices that were infected in the most recent percolation iteration
-  }
+  private adj = new Map<Vertex, Set<Vertex>>();
+  private activeVertices = new Set<Vertex>();   // All active vertices
+  private recentlyInfected = new Set<Vertex>(); // Vertices that were infected in the most recent percolation iteration
 
   /**
    * Adds a vertex to the graph.
    *
    * By default, the new vertex has no adjacent vertices.
-   * @param {number} v The vertex to add.
+   * @param {Vertex} v The vertex to add.
    */
-  addVertex(v) {
+  addVertex(v: Vertex): void {
     this.adj.set(v, new Set());
   }
 
   /**
    * Adds an edge to the graph.
-   * @param {number} u The first of the two vertices in the edge.
-   * @param {number} v The second of the two vertices in the edge.
+   * @param {Vertex} u The first of the two vertices in the edge.
+   * @param {Vertex} v The second of the two vertices in the edge.
    */
-  addEdge(u, v) {
-    this.adj.get(u).add(v);
-    this.adj.get(v).add(u);
+  addEdge(u: Vertex, v: Vertex): void {
+    const neighbors1 = this.adj.get(u);
+    const neighbors2 = this.adj.get(v);
+
+    if (neighbors1 === undefined || neighbors2 === undefined) {
+      throw new Error("Vertex does not exist");
+    }
+
+    neighbors1.add(v);
+    neighbors2.add(u);
   }
 
   /**
    * Returns the vertex set.
    * @returns {iterable} An iterable over the vertices of the graph.
    */
-  getVertices() {
+  getVertices(): Iterable<Vertex> {
     return this.adj.keys();
   }
 
   /**
    * Returns the set of neighbors of the given vertex.
-   * @param {number} v The vertex whose neighborhood we will return.
-   * @returns {iterable} An iterable over the neighbors of the given vertex.
+   * @param {Vertex} v The vertex whose neighborhood we will return.
+   * @returns {Set<Vertex>} An set of the neighbors of the given vertex.
    */
-  getNeighbors(v) {
-    return this.adj.get(v);
+  getNeighbors(v: Vertex): Set<Vertex> {
+    const neighbors = this.adj.get(v);
+
+    if (neighbors === undefined) {
+      throw new Error("Vertex does not exist");
+    }
+
+    return neighbors;
   }
 
   /**
    * Returns the degree of the given vertex.
-   * @param {number} v The vertex whose degree we will return.
+   * @param {Vertex} v The vertex whose degree we will return.
    * @returns {number} The degree of the given vertex.
    */
-  getDegree(v) {
+  getDegree(v: Vertex): number {
     return this.getNeighbors(v).size;
   }
 
   /**
-   * Returns the number of active vertices in the graph.
-   * @returns {number} The number of active vertices in the graph.
+   * Returns the Vertex of active vertices in the graph.
+   * @returns {Vertex} The Vertex of active vertices in the graph.
    */
-  getActiveVerticesCount() {
+  getActiveVerticesCount(): number {
     return this.activeVertices.size;
   }
 
@@ -89,20 +101,20 @@ export default class Graph {
    * Activates the given vertex in the graph.
    *
    * If the vertex is already active, this is equivalent to doing nothing.
-   * @param {number} v The vertex to activate.
-   * @return {Set<number>} The set of active vertices after the addition of the vertex.
+   * @param {Vertex} v The vertex to activate.
+   * @return {Set<Vertex>} The set of active vertices after the addition of the vertex.
    */
-  activateVertex(v) {
+  activateVertex(v: Vertex): Set<Vertex> {
     console.log("Activate Vertex call: " + v.toString());
-    return this.activeVertices.add(v.toString());
+    return this.activeVertices.add(v);
   }
 
   /**
    * Activates the given vertices in the graph.
-   * @param {iterable} vs The vertices to activate.
+   * @param {Iterable<Vertex>} vs The vertices to activate.
    * @return {Graph} The graph.
    */
-  activateVertices(vs) {
+  activateVertices(vs: Iterable<Vertex>): this {
     for (const v of vs) {
       this.activateVertex(v);
     }
@@ -113,7 +125,7 @@ export default class Graph {
    * Deactivates all vertices in the graph.
    * @return {Graph} The graph.
    */
-  deactivateAllVertices() {
+  deactivateAllVertices(): this {
     this.activeVertices.clear();
     this.recentlyInfected.clear();
     return this;
@@ -125,7 +137,7 @@ export default class Graph {
    * @param {number} inclusionProbability The probability that a vertex will be activated.
    * @return {Graph} The graph.
    */
-  randomSeedSet(inclusionProbability) {
+  randomSeedSet(inclusionProbability: number): this {
     this.deactivateAllVertices();
     for(const v of this.getVertices()) {
       if(Math.random() < inclusionProbability){
@@ -145,7 +157,7 @@ export default class Graph {
    * @return {boolean} If any inactive vertices had enough active neighbors to
    * be activated, false. Otherwise, true.
    */
-  bootstrapPercolationIteration(threshold, infectionProbability) {
+  bootstrapPercolationIteration(threshold: number, infectionProbability: number): boolean {
     const vertices = this.getVertices();
     this.recentlyInfected.clear();
     let done = true;
@@ -153,7 +165,7 @@ export default class Graph {
     for (const v of vertices) {
       console.log("Looking at", v);
 
-      if (this.activeVertices.has(v.toString())) {
+      if (this.activeVertices.has(v)) {
         console.log("\tIt's already active.");
         continue;
       }
@@ -161,7 +173,7 @@ export default class Graph {
       const neighbors = this.getNeighbors(v);
       let count = 0;
       for (const n of neighbors) {
-        if (this.activeVertices.has(n.toString())) {
+        if (this.activeVertices.has(n)) {
           count++;
         }
       }
@@ -187,7 +199,7 @@ export default class Graph {
    * An iterator over the edges in the graph.
    * @return {Generator} An iterable over the edges in the graph.
    */
-  *getEdges() {
+  *getEdges(): Generator<Vertex[]> {
     for (const v of this.getVertices()) {
       for (const n of this.getNeighbors(v)) {
         if (v < n) { // TODO: assumes simple. is this ok?
@@ -202,7 +214,7 @@ export default class Graph {
    * back-end.
    * @return {string} A JSON string representing the graph.
    */
-  getWebGraphJSON() {
+  getWebGraphJSON(): string {
     return JSON.stringify({ webGraphVertices: Array.from(this.getVertices()), webGraphEdges: Array.from(this.getEdges()) });
   }
 
@@ -211,10 +223,10 @@ export default class Graph {
    * which greedily finds such a set.
    * @param {threshold} threshold The threshold we use for bootstrap
    * percolation.
-   * @return {Promise} A Promise whose result will be a vertex list which
-   * approximates a minimal contagious set of the graph.
+   * @return {Promise<string>} A Promise whose result will be a vertex list
+   * which approximates a minimal contagious set of the graph.
    */
-  findContagiousSetGreedily(threshold) {
+  findContagiousSetGreedily(threshold: number): Promise<string> {
     return fetch(`https://thaumic.dev/booper/greedy?graph=${this.getWebGraphJSON()}&threshold=${threshold}`)
       .then(res => res.json());
   }
@@ -224,10 +236,10 @@ export default class Graph {
    * which finds such a set.
    * @param {threshold} threshold The threshold we use for bootstrap
    * percolation.
-   * @return {Promise} A Promise whose result will be a vertex list which
-   * represents a minimal contagious set of the graph.
+   * @return {Promise<string>} A Promise whose result will be a vertex list
+   * which represents a minimal contagious set of the graph.
    */
-  findMinimalContagiousSet(threshold) {
+  findMinimalContagiousSet(threshold: number): Promise<string> {
     return fetch(`https://thaumic.dev/booper/min?graph=${this.getWebGraphJSON()}&threshold=${threshold}`)
       .then(res => res.json());
   }
@@ -235,17 +247,17 @@ export default class Graph {
   /**
    * Given the old force graph data, returns an updated graph data list with
    * current vertex and edge information.
-   * @param {Object} [oldData = {nodes: [], links: []}] An object containing
+   * @param {GraphData} [oldData = {nodes: [], links: []}] An object containing
    * the vertices (as nodes) and edges (as links) lists from the old force
    * graph data.
-   * @return {Object} An object containing the update vertices (as nodes) and
+   * @return {GraphData} An object containing the update vertices (as nodes) and
    * edges (as links) lists for the force graph drawing.
    */
-  getGraphData(oldData = {nodes: [], links: []}) {
-    const nodes = [];
-    const links = [];
+  getGraphData(oldData: GraphData = {nodes: [], links: []}): GraphData {
+    const nodes: (NodeObject & { index?: number })[] = [];
+    const links: (LinkObject & { index?: number })[] = [];
     for (const v of this.getVertices()) {
-      const node = {"id": v, "active": this.activeVertices.has(v.toString()), "recentlyInfected": this.recentlyInfected.has(v)};
+      const node = {"id": v, "active": this.activeVertices.has(v), "recentlyInfected": this.recentlyInfected.has(v)};
       const oldNode = oldData.nodes.find(nod => nod.id === v);
 
       if (oldNode !== undefined) {
@@ -258,7 +270,8 @@ export default class Graph {
 
     for (const [source, target] of this.getEdges()) {
       const forceLink = {"source": nodes[source], "target": nodes[target]};
-      const oldForceLink = oldData.links.find(link => link.source.id === source && link.target.id === target);
+      const oldForceLink = oldData.links.find(link => (typeof link.source === "object" && link.source.id === source)
+                                                && (typeof link.target === "object" && link.target.id === target));
 
       if (oldForceLink !== undefined) {
         links.push({...oldForceLink, ...forceLink});
