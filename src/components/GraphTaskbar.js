@@ -146,15 +146,15 @@ class GraphTaskbar extends Component {
                   <Tooltip title={
                     <React.Fragment>
                       <Typography gutterBottom variant="body2">
-                      The adjacency matrix input should be in the format of a .csv file. The first row should contain
-                      either a &lsquo;+&rsquo; or a &lsquo;-&rsquo;, indicating whether the node is initially infected or not, respectively.
+                        The adjacency matrix input should be in the format of a .csv or .tsv file. The first row should contain one entry for each node in the desired graph:
+                        either a &lsquo;+&rsquo; or a &lsquo;-&rsquo;, indicating whether the node is initially active or not, respectively.
                       </Typography>
                       <Typography gutterBottom variant="body2">
-                      The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
+                        The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
                       </Typography>
                       <Typography gutterBottom variant="body2">
                         <Link onClick={this.helpIconOpen} color="secondary">
-                        See more..
+                          See more..
                         </Link>
                       </Typography>
                     </React.Fragment>
@@ -166,12 +166,12 @@ class GraphTaskbar extends Component {
                   </Tooltip>
                   <Dialog onClose={this.helpIconClose} open={this.state.helpOpen}>
                     <DialogTitle id="customized-dialog-title" onClose={this.helpIconClose}>
-                    Uploading Adjacency Matrices
+                      Uploading Adjacency Matrices
                     </DialogTitle>
                     <DialogContent dividers>
                       <Typography gutterBottom variant="body2">
-                        The adjacency matrix input should be in the format of a .csv file. The first row should contain
-                        either a &lsquo;+&rsquo; or a &lsquo;-&rsquo;, indicating whether the node is initially infected or not, respectively.
+                        The adjacency matrix input should be in the format of a .csv or .tsv file. The first row should contain one entry for each node in the desired graph:
+                        either a &lsquo;+&rsquo; or a &lsquo;-&rsquo;, indicating whether the node is initially active or not, respectively.
                       </Typography>
                       <Typography gutterBottom variant="body2">
                         The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
@@ -219,21 +219,21 @@ class GraphTaskbar extends Component {
                   <Tooltip title={
                     <React.Fragment>
                       <Typography variant="body2" gutterBottom>
-                        Calculates and displays the smallest set of nodes needed to activate the entire graph
+                        Calculates and displays the smallest set of nodes needed to activate the entire graph.
                       </Typography>
                     </React.Fragment>} placement="right">
                     <TaskbarButton variant="contained" onClick={this.getMinContagiousSet} data-tour="min-contagious-set-button">
-                    Minimum Contagious Set
+                      Minimum Contagious Set
                     </TaskbarButton>
                   </Tooltip>
                   <Tooltip title={
                     <React.Fragment>
                       <Typography variant="body2" gutterBottom>
-                        Calculates and displays the smallest set of nodes needed to activate the entire graph using a greedy algorithm.
+                        Approximates the smallest set of nodes needed to activate the entire graph using a greedy algorithm.
                       </Typography>
                     </React.Fragment>} placement="right">
                     <TaskbarButton variant="contained" onClick={this.getGreedyContagiousSet} data-tour="greedy-contagious-set-button">
-                    Greedy Contagious Set
+                      Greedy Contagious Set
                     </TaskbarButton>
                   </Tooltip>
                   <Tooltip title={

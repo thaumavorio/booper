@@ -65,7 +65,7 @@ const TOUR_STEPS = [
   },
   {
     selector: "[data-tour=\"graph-display-pane\"]",
-    content: "This is the graph display pane. It shows the graph that is being percolated on. Active vertices are red, and inactive vertices are blue. You can use the mouse to zoom in or out, pan around, or drag the graph around."
+    content: "This is the graph display pane. It shows the graph that is being percolated on. Vertices are drawn in two different colors, depending on whether they're active or inactive. You can use the mouse to zoom in or out, pan around, or drag the graph around."
   },
   {
     selector: "[data-tour=\"next-iteration-button\"]",
@@ -73,7 +73,7 @@ const TOUR_STEPS = [
   },
   {
     selector: "[data-tour=\"graph-display-pane\"]",
-    content: "Vertices that were infected in the most recent iteration are green. All other active vertices are red."
+    content: "Vertices that were infected in the most recent iteration are given a third color."
   },
   {
     selector: "[data-tour=\"parameter-text-fields\"]",
@@ -89,7 +89,7 @@ const TOUR_STEPS = [
   },
   {
     selector: "[data-tour=\"min-contagious-set-button\"]",
-    content: "This button finds a minimum contagious set of the current graph and renders it in the graph display pane. It uses an exponential-time algorithm, so it might load for a while if the graph is large."
+    content: "This button finds a minimum contagious set of the current graph and renders it in the graph display pane. It uses an exponential-time algorithm, so it might load for a while if the graph is large. We don't recommend using this feature for graphs with more than 50 vertices."
   },
   {
     selector: "[data-tour=\"greedy-contagious-set-button\"]",
