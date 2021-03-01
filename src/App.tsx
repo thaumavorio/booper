@@ -29,23 +29,23 @@ import { MuiThemeProvider } from "@material-ui/core/styles";
 import darkTheme from "./utils/darkTheme";
 import lightTheme from "./utils/lightTheme";
 
-class App extends React.Component{
+interface AppState {
+  darkTheme: boolean;
+}
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      darkTheme: true
-    };
-  }
+class App extends React.Component {
+  state: AppState = {
+    darkTheme: true,
+  };
 
-  getTheme = (event) => {
+  getTheme = (event: boolean): boolean => {
     this.setState({
       darkTheme: !event
     });
     return event;
   }
 
-  render(){
+  render(): JSX.Element {
     return(
       <Router>
         <MuiThemeProvider theme={this.state.darkTheme ? darkTheme : lightTheme}>
