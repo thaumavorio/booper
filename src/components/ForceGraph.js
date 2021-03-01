@@ -314,7 +314,11 @@ class ForceGraph extends React.Component{
             bootstrapPercolationIteration: 0,
             activeVerticesCount: g.getActiveVerticesCount() };
         }))
-        .catch(error => console.error(error.message)));
+        .catch(error => window.alert("Error: " + error.message + "."
+          + " Errors often occur when the graph is too large for the optimal"
+          + " solution to be found before the timeout. The current timeout is"
+          + " 1 minute, which allows for dense graphs of up to about 30"
+          + " vertices and sparse graphs of up to about 50."))); // TODO: Make nicer popup
   };
 
   /**
