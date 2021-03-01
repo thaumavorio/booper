@@ -5,9 +5,10 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended"
     ],
-    "parser": "babel-eslint",
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
@@ -16,7 +17,8 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "@typescript-eslint"
     ],
     "settings": {
         "react": {
@@ -61,7 +63,8 @@
         "prefer-const": [
             "warn"
         ],
-        "no-use-before-define": [
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": [
             "error"
         ],
         "arrow-body-style": [
