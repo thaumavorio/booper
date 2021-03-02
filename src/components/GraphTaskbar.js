@@ -239,7 +239,7 @@ class GraphTaskbar extends Component {
                   <Tooltip title={
                     <React.Fragment>
                       <Typography variant="body2" gutterBottom>
-                        Makes each node a seed independently at random with the probability p.
+                        Makes each node a seed independently at random with the given inclusion probability.
                       </Typography>
                     </React.Fragment>
                   } placement="right">
@@ -247,13 +247,13 @@ class GraphTaskbar extends Component {
                       <Box display="flex" flexDirection="row" alignItems="center" style={{justifyContent: "space-between"}}>
                         <Grid container spacing={1}>
                           <Grid item xs={12} lg={6} alignItems="left">
-                            <TextField label="probability" id="seed-probability"
+                            <TextField label="inclusion" id="seed-probability"
                               type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }}
                               defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
                               variant="outlined" style={{marginTop: 5, textAlign: "left"}} color="secondary" size="small"/>
                           </Grid>
                           <Grid item xs={12} lg={6}>
-                            p-Random Seed Set
+                            Random Seed Set
                           </Grid>
                         </Grid>
                       </Box>
