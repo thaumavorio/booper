@@ -41,8 +41,8 @@ import {
   Typography
 } from "@material-ui/core";
 import RotateLeftIcon from "@material-ui/icons/RotateLeft";
-import FirstPageIcon from "@material-ui/icons/FirstPage";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+// import FirstPageIcon from "@material-ui/icons/FirstPage";
+// import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import PropTypes from "prop-types";
@@ -325,24 +325,24 @@ class GraphTaskbar extends Component {
                         <RotateLeftIcon/>
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title={<React.Fragment>
-                      <Typography variant="body2" gutterBottom>
-                        Return to the first iteration
-                      </Typography>
-                    </React.Fragment>} placement="left" variant="body2">
-                      <IconButton disabled={true}>
-                        <FirstPageIcon/>
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title={<React.Fragment>
-                      <Typography variant="body2" gutterBottom>
-                        Go back an iteration
-                      </Typography>
-                    </React.Fragment>} placement="left" variant="body2">
-                      <IconButton disabled={true}>
-                        <ChevronLeftIcon/>
-                      </IconButton>
-                    </Tooltip>
+                    {/* <Tooltip title={<React.Fragment>*/}
+                    {/*  <Typography variant="body2" gutterBottom>*/}
+                    {/*    Return to the first iteration*/}
+                    {/*  </Typography>*/}
+                    {/* </React.Fragment>} placement="left" variant="body2">*/}
+                    {/*  <IconButton disabled={true}>*/}
+                    {/*    <FirstPageIcon/>*/}
+                    {/*  </IconButton>*/}
+                    {/* </Tooltip>*/}
+                    {/* <Tooltip title={<React.Fragment>*/}
+                    {/*  <Typography variant="body2" gutterBottom>*/}
+                    {/*    Go back an iteration*/}
+                    {/*  </Typography>*/}
+                    {/* </React.Fragment>} placement="left" variant="body2">*/}
+                    {/*  <IconButton disabled={true}>*/}
+                    {/*    <ChevronLeftIcon/>*/}
+                    {/*  </IconButton>*/}
+                    {/* </Tooltip>*/}
                     <Tooltip title={<React.Fragment>
                       <Typography variant="body2" gutterBottom>
                         Perform a single iteration

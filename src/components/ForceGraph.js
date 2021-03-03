@@ -121,7 +121,7 @@ class ForceGraph extends React.Component{
       helpOpen: false,
       tourOpen: true,
       windowSize: {
-        height: document.body.scrollHeight,
+        height: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight),
         width: document.body.scrollWidth
       },
       bootstrapPercolationThreshold: 2,
@@ -491,7 +491,7 @@ class ForceGraph extends React.Component{
 
     return <div>
       <LoadingSpinnerComponent />
-      <div style={{zIndex: 1, float: "left", position: "absolute", alignItems: "center", maxWidth: "25%"}}>
+      <div style={{zIndex: 1, float: "left", position: "absolute", alignItems: "center", maxWidth: "30%"}}>
         <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
           randomGraph={this.randomGraph}
           getMinContagiousSet={this.getMinContagiousSet}
