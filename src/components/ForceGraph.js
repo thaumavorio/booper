@@ -297,20 +297,27 @@ class ForceGraph extends React.Component{
   /**
    * Generates and displays an Erdos-Renyi graph given parameters specified by the user in text fields.
    * Adds the given number of vertices.
-   * For each pair of vertices, adds an edge independently at random with the given edge probability.
+   * Chooses the edges uniformly at random for all edge sets of the given size.
    */
   randomGraph = () => {
     const numNodes = parseInt(document.getElementById("num-nodes").value); // number of nodes in the graph
-    const edgeProbability = parseFloat(document.getElementById("edge-probability").value); // probability that a pair of nodes are adjacent
-    if(!isNaN(numNodes) && !isNaN(edgeProbability)) {
+    let numEdges = parseInt(document.getElementById("num-edges").value); // number of edges in the graph
+    if(!isNaN(numNodes) && !isNaN(numEdges)) {
       const graph = new Graph();
+      const potentialEdges = [];
       for(let i = 0; i < numNodes; i++) {
         graph.addVertex(i);
         for(let j = 0; j < i; j++) {
-          if(Math.random() < edgeProbability) {
-            graph.addEdge(j, i);
-          }
+          potentialEdges.push([i, j]);
         }
+      }
+      if(numEdges > potentialEdges.length) {
+        numEdges = potentialEdges.length;
+      }
+      for(let i = 0; i < numEdges; i++) {
+        const edgeIndex = Math.floor(Math.random() * (potentialEdges.length - i));
+        graph.addEdge(potentialEdges[edgeIndex][0], potentialEdges[edgeIndex][1]);
+        potentialEdges[edgeIndex] = potentialEdges[potentialEdges.length - i - 1];
       }
       this.setState({
         graph,

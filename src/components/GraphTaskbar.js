@@ -217,7 +217,7 @@ class GraphTaskbar extends Component {
                   <Tooltip title={
                     <React.Fragment>
                       <Typography variant="body2" gutterBottom>
-                        Generates an Erdős-Rényi graph with the given number of nodes. Each pair of vertices is made adjacent independently at random with the given edge probability.
+                        Generates an Erdős-Rényi graph with the given number of nodes and the given number of edges. Chooses the edges uniformly at random from all edge sets of this size.
                       </Typography>
                     </React.Fragment>
                   } placement="right">
@@ -231,9 +231,9 @@ class GraphTaskbar extends Component {
                               variant="outlined" style={{marginTop: 5, textAlign: "left"}} color="secondary" size="small"/>
                           </Grid>
                           <Grid item xs={12} lg={6} xl={4}>
-                            <TextField label="edge" id="edge-probability"
-                              type="number" InputProps={{ inputProps: { min: 0, max: "1.0000", step: 0.1 } }}
-                              defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
+                            <TextField label="edges" id="num-edges"
+                              type="number" InputProps={{ inputProps: { min: 0, step: 1 } }}
+                              defaultValue={5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
                               variant="outlined" style={{marginTop: 5, textAlign: "left"}} color="secondary" size="small"/>
                           </Grid>
                           <Grid item xs={12} xl={4}>
