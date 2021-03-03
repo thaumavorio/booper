@@ -97,7 +97,7 @@ const TOUR_STEPS = [
   },
   {
     selector: "[data-tour=\"random-seed-set-button\"]",
-    content: "This button can also generate and display a seed set. It includes each node independently at random with the given probability."
+    content: "This button can also generate and display a seed set. It chooses a random seed set from all seed sets of the given size."
   },
   {
     content: "That's just about everything you need to know. Have fun percolating!"
@@ -330,14 +330,14 @@ class ForceGraph extends React.Component{
 
   /**
    * Generates a random seed set for the currently displayed graph.
-   * Each vertex becomes a seed independently with the given inclusion probability.
+   * Chooses one seed set uniformly at random among all possible seed sets of the given size.
    * Renders the resulting seed set.
    */
   randomSeedSet = () => {
-    const inclusionProbability = parseFloat(document.getElementById("seed-probability").value);
-    if(!isNaN(inclusionProbability)) {
+    const numSeeds = parseInt(document.getElementById("num-seeds").value);
+    if(!isNaN(numSeeds)) {
       this.setState(function(state) {
-        const g = update(state.graph, {$set: state.graph.randomSeedSet(inclusionProbability)});
+        const g = update(state.graph, {$set: state.graph.randomSeedSet(numSeeds)});
         return {
           graph: g,
           forceData: g.getGraphData(state.forceData),
