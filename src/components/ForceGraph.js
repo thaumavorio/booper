@@ -336,6 +336,13 @@ class ForceGraph extends React.Component{
   getMinContagiousSet = () => {
     trackPromise(
       this.state.graph.findMinimalContagiousSet(this.state.bootstrapPercolationThreshold)
+        .then(res => {
+          if (res.status === 504) {
+            throw new Error("Timeout while finding minimum contagious set");
+          }
+          return res;
+        })
+        .then(res => res.json())
         .then(infectedVerts => this.setState(function(state){
           const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
           g.activateVertices(infectedVerts);
@@ -344,7 +351,12 @@ class ForceGraph extends React.Component{
             forceData: g.getGraphData(state.forceData),
             bootstrapPercolationIteration: 0,
             activeVerticesCount: g.getActiveVerticesCount() };
-        })));
+        }))
+        .catch(error => window.alert("Error: " + error.message + "."
+          + " Errors often occur when the graph is too large for the optimal"
+          + " solution to be found before the timeout. The current timeout is"
+          + " 1 minute, which allows for dense graphs of up to about 30"
+          + " vertices and sparse graphs of up to about 50."))); // TODO: Make nicer popup
   };
 
   /**
@@ -355,6 +367,7 @@ class ForceGraph extends React.Component{
   getGreedyContagiousSet = () => {
     trackPromise(
       this.state.graph.findContagiousSetGreedily(this.state.bootstrapPercolationThreshold)
+        .then(res => res.json())
         .then(infectedVerts => this.setState(function(state){
           const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
           g.activateVertices(infectedVerts);
