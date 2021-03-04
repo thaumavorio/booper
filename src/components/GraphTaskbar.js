@@ -79,6 +79,10 @@ class GraphTaskbar extends Component {
       this.props.readAdjacencyMatrix(evt);
     }
 
+    randomGraph = () => {
+      this.props.randomGraph();
+    }
+
     getMinContagiousSet = () => {
       this.props.getMinContagiousSet();
     }
@@ -142,7 +146,7 @@ class GraphTaskbar extends Component {
             <Box style={{paddingTop: "2%", paddingBottom: "2%"}}>
               <Container>
                 <Typography variant="h3">Graph</Typography>
-                <Box display="flex" flexDirection="row" justifyContent="center">
+                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                   <Tooltip title={
                     <React.Fragment>
                       <Typography gutterBottom variant="body2">
@@ -210,6 +214,35 @@ class GraphTaskbar extends Component {
                       </Typography>
                     </DialogContent>
                   </Dialog>
+                  <Tooltip title={
+                    <React.Fragment>
+                      <Typography variant="body2" gutterBottom>
+                        Generates an Erdős-Rényi graph with the given number of nodes and the given number of edges. Chooses the edges uniformly at random from all edge sets of this size.
+                      </Typography>
+                    </React.Fragment>
+                  } placement="right">
+                    <TaskbarButton variant="contained" onClick={this.randomGraph} data-tour="random-graph-button">
+                      <Box display="flex" flexDirection="row" alignItems="center" style={{justifyContent: "space-between"}}>
+                        <Grid container spacing={1} justify="space-between">
+                          <Grid item xs={12} lg={6} xl={4}>
+                            <TextField label="nodes" id="num-nodes"
+                              type="number" InputProps={{ inputProps: { min: 0, step: 1 } }}
+                              defaultValue={5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
+                              variant="outlined" style={{marginTop: 5, textAlign: "left"}} color="secondary" size="small"/>
+                          </Grid>
+                          <Grid item xs={12} lg={6} xl={4}>
+                            <TextField label="edges" id="num-edges"
+                              type="number" InputProps={{ inputProps: { min: 0, step: 1 } }}
+                              defaultValue={5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
+                              variant="outlined" style={{marginTop: 5, textAlign: "left"}} color="secondary" size="small"/>
+                          </Grid>
+                          <Grid item xs={12} xl={4}>
+                            Random Graph
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </TaskbarButton>
+                  </Tooltip>
                 </Box>
               </Container>
               <Divider variant = "middle"/>
@@ -386,6 +419,7 @@ class GraphTaskbar extends Component {
 
 GraphTaskbar.propTypes = {
   readAdjacencyMatrix: PropTypes.func,
+  randomGraph: PropTypes.func,
   getMinContagiousSet: PropTypes.func,
   getGreedyContagiousSet: PropTypes.func,
   randomSeedSet: PropTypes.func,

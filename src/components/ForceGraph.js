@@ -88,6 +88,10 @@ const TOUR_STEPS = [
     content: "If you want to visualize bootstrap percolation on a different graph, upload its adjacency matrix here. See the tooltip for details on the file format."
   },
   {
+    selector: "[data-tour=\"random-graph-button\"]",
+    content: "Or you can use this button to generate a random graph with given parameters."
+  },
+  {
     selector: "[data-tour=\"min-contagious-set-button\"]",
     content: "This button finds a minimum contagious set of the current graph and renders it in the graph display pane. It uses an exponential-time algorithm, so it might load for a while if the graph is large."
   },
@@ -291,6 +295,40 @@ class ForceGraph extends React.Component{
   }
 
   /**
+   * Generates and displays an Erdos-Renyi graph given parameters specified by the user in text fields.
+   * Adds the given number of vertices.
+   * Chooses the edges uniformly at random for all edge sets of the given size.
+   */
+  randomGraph = () => {
+    const numNodes = parseInt(document.getElementById("num-nodes").value); // number of nodes in the graph
+    let numEdges = parseInt(document.getElementById("num-edges").value); // number of edges in the graph
+    if(!isNaN(numNodes) && !isNaN(numEdges)) {
+      const graph = new Graph();
+      const potentialEdges = [];
+      for(let i = 0; i < numNodes; i++) {
+        graph.addVertex(i);
+        for(let j = 0; j < i; j++) {
+          potentialEdges.push([i, j]);
+        }
+      }
+      if(numEdges > potentialEdges.length) {
+        numEdges = potentialEdges.length;
+      }
+      for(let i = 0; i < numEdges; i++) {
+        const edgeIndex = Math.floor(Math.random() * (potentialEdges.length - i));
+        graph.addEdge(potentialEdges[edgeIndex][0], potentialEdges[edgeIndex][1]);
+        potentialEdges[edgeIndex] = potentialEdges[potentialEdges.length - i - 1];
+      }
+      this.setState({
+        graph,
+        forceData: graph.getGraphData(),
+        bootstrapPercolationIteration: 0,
+        activeVerticesCount: 0,
+      });
+    }
+  }
+
+  /**
    * Finds a minimum contagious set of the currently displayed graph.
    * Sends the graph and treshold in an HTTP request to a server, which performs the algorithm and sends the result in a response object.
    * When the response object is received, the minimum contagious set is rendered.
@@ -453,8 +491,9 @@ class ForceGraph extends React.Component{
 
     return <div>
       <LoadingSpinnerComponent />
-      <div style={{zIndex: 2, float: "left", position: "absolute", alignItems: "center", maxWidth: "30%"}}>
+      <div style={{zIndex: 1, float: "left", position: "absolute", alignItems: "center", maxWidth: "30%"}}>
         <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
+          randomGraph={this.randomGraph}
           getMinContagiousSet={this.getMinContagiousSet}
           getGreedyContagiousSet={this.getGreedyContagiousSet}
           randomSeedSet={this.randomSeedSet}
