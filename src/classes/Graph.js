@@ -120,17 +120,21 @@ export default class Graph {
   }
 
   /**
-   * First deactivates every vertex in the graph, then iterates through every
-   * vertex in the graph, activating each with the given probability.
-   * @param {number} inclusionProbability The probability that a vertex will be activated.
+   * Chooses a vertex set of the given size uniformly at random among all vertex sets of this size.
+   * Activates the vertices in this set, and deactivates the vertices outside this set.
+   * @param {number} numSeeds the number of seeds in the new seed set
    * @return {Graph} The graph.
    */
-  randomSeedSet(inclusionProbability) {
+  randomSeedSet(numSeeds) {
     this.deactivateAllVertices();
-    for(const v of this.getVertices()) {
-      if(Math.random() < inclusionProbability){
-        this.activateVertex(v);
-      }
+    const vertices = Array.from(this.getVertices());
+    if(numSeeds > vertices.length) {
+      numSeeds = vertices.length;
+    }
+    for(let i = 0; i < numSeeds; i++) {
+      const seedIndex = Math.floor(Math.random() * (vertices.length - i));
+      this.activateVertex(vertices[seedIndex]);
+      vertices[seedIndex] = vertices[vertices.length - i - 1];
     }
     return this;
   }

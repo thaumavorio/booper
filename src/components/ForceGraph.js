@@ -65,23 +65,23 @@ const TOUR_STEPS = [
   },
   {
     selector: "[data-tour=\"graph-display-pane\"]",
-    content: "This is the graph display pane. It shows the graph that is being percolated on. Active vertices are red, and inactive vertices are blue. You can use the mouse to zoom in or out, pan around, or drag the graph around."
+    content: "This is the graph display pane. It shows the graph that is being percolated on. Nodes are drawn in two different colors, depending on whether they're active or inactive. You can use the mouse to zoom in or out, pan around, or drag the graph around."
   },
   {
     selector: "[data-tour=\"next-iteration-button\"]",
-    content: "Here's where you can visualize the percolation. This button performs one iteration of two-neighbor bootstrap percolation. Each inactive vertex that has at least two active neighbors is infected. Try clicking it now, and see what happens in the graph display pane."
+    content: "Here's where you can visualize the percolation. This button performs one iteration of two-neighbor bootstrap percolation. Each inactive node that has at least two active neighbors is infected. Try clicking it now, and see what happens in the graph display pane."
   },
   {
     selector: "[data-tour=\"graph-display-pane\"]",
-    content: "Vertices that were infected in the most recent iteration are green. All other active vertices are red."
+    content: "Nodes that were infected in the most recent iteration are given a third color."
   },
   {
     selector: "[data-tour=\"parameter-text-fields\"]",
-    content: <p>You can modify the parameters of bootstrap percolation. The <b>threshold</b> is the number of active neighbors required to infect an inactive vertex. The <b>probability</b> is the probability that an inactive vertex becomes infected if it has enough active neighbors.</p>
+    content: <p>You can modify the parameters of bootstrap percolation. The <b>threshold</b> is the number of active neighbors required to infect an inactive node. The <b>probability</b> is the probability that an inactive node becomes infected if it has enough active neighbors.</p>
   },
   {
     selector: "[data-tour=\"last-iteration-button\"]",
-    content: "This button performs percolation iterations until no more vertices can be infected. Then it shows you the final result."
+    content: "This button performs percolation iterations until no more nodes can be infected. Then it shows you the final result."
   },
   {
     selector: "[data-tour=\"upload-adjacency-matrix-button\"]",
@@ -93,15 +93,15 @@ const TOUR_STEPS = [
   },
   {
     selector: "[data-tour=\"min-contagious-set-button\"]",
-    content: "This button finds a minimum contagious set of the current graph and renders it in the graph display pane. It uses an exponential-time algorithm, so it might load for a while if the graph is large."
+    content: "This button finds a minimum contagious set of the current graph and renders it in the graph display pane. It uses an exponential-time algorithm, so it might load for a while if the graph is large. We don't recommend using this feature for graphs with more than 50 nodes."
   },
   {
     selector: "[data-tour=\"greedy-contagious-set-button\"]",
-    content: "This button has similar functionality, but it uses a greedy algorithm instead. It finds a (usually small, but often not minimum) contagious set, which will be displayed much faster."
+    content: "This button has similar functionality, but it uses a greedy algorithm instead. It finds a (usually small, but often not minimum) contagious set, which will be displayed much faster. We don't recommend using this feature for graphs with more than 500 nodes."
   },
   {
     selector: "[data-tour=\"random-seed-set-button\"]",
-    content: "This button can also generate and display a seed set. It includes each vertex independently at random with the given probability."
+    content: "This button can also generate and display a seed set. It chooses a random seed set from all seed sets of the given size."
   },
   {
     content: "That's just about everything you need to know. Have fun percolating!"
@@ -257,7 +257,7 @@ class ForceGraph extends React.Component{
   static hasValidEntries(seeds, matrix) {
     for(const entry of seeds) {
       if(entry !== "+" && entry !== "-") {
-        window.alert("Invalid input. There must be a row of +'s and -'s above the adjacency matrix, indicating which vertices are seeds.");
+        window.alert("Invalid input. There must be a row of +'s and -'s above the adjacency matrix, indicating which nodes are seeds.");
         return false;
       }
     }
@@ -368,14 +368,14 @@ class ForceGraph extends React.Component{
 
   /**
    * Generates a random seed set for the currently displayed graph.
-   * Each vertex becomes a seed independently with the given inclusion probability.
+   * Chooses one seed set uniformly at random among all possible seed sets of the given size.
    * Renders the resulting seed set.
    */
   randomSeedSet = () => {
-    const inclusionProbability = parseFloat(document.getElementById("seed-probability").value);
-    if(!isNaN(inclusionProbability)) {
+    const numSeeds = parseInt(document.getElementById("num-seeds").value);
+    if(!isNaN(numSeeds)) {
       this.setState(function(state) {
-        const g = update(state.graph, {$set: state.graph.randomSeedSet(inclusionProbability)});
+        const g = update(state.graph, {$set: state.graph.randomSeedSet(numSeeds)});
         return {
           graph: g,
           forceData: g.getGraphData(state.forceData),
