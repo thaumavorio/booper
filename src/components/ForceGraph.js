@@ -534,7 +534,7 @@ class ForceGraph extends React.Component{
           ref={this.graphRef}
         />
       </div>
-      <Tour steps={TOUR_STEPS} isOpen={this.state.tourOpen} onRequestClose={this.closeTour} />
+      <Tour steps={TOUR_STEPS} isOpen={this.state.tourOpen} onRequestClose={this.closeTour} lastStepNextButton={"End Tutorial"} />
     </div>;
   }
 }
