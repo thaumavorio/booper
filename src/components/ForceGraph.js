@@ -493,6 +493,9 @@ class ForceGraph extends React.Component{
 
   render() {
 
+    TOUR_STEPS[1].position = [this.state.windowSize.width / 2, this.state.windowSize.height - 250];
+    TOUR_STEPS[3].position = TOUR_STEPS[1].position;
+
     setTimeout(() => {
       this.graphRef.current.d3Force("collide", forceCollide());
       this.graphRef.current.d3Force("center", null);
