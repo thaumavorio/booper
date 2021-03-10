@@ -28,6 +28,7 @@ import PropTypes from "prop-types";
 import { LoadingSpinnerComponent } from "./LoadingSpinnerComponent";
 import Tour from "reactour";
 import { readString } from "react-papaparse";
+import Cookies from "js-cookie";
 
 /**
  * Create the default graph. Users will see this graph in the display pane when they first open the Study tab in Booper.
@@ -119,7 +120,7 @@ class ForceGraph extends React.Component{
       graph: initGraph,
       forceData: initGraph.getGraphData(),
       helpOpen: false,
-      tourOpen: true,
+      tourOpen: Cookies.get("tourDone") === undefined,
       windowSize: {
         height: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight),
         width: document.body.scrollWidth
@@ -480,6 +481,7 @@ class ForceGraph extends React.Component{
    * Closes the tour that shows users how to use Booper, allowing them to start actually using it.
    */
   closeTour = () => {
+    Cookies.set("tourDone", "true", { expires: 365 });
     this.setState({tourOpen: false});
   }
 
