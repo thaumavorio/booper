@@ -545,7 +545,7 @@ class ForceGraph extends React.Component{
           ref={this.graphRef}
         />
       </div>
-      <Tour steps={TOUR_STEPS} isOpen={this.state.tourOpen} onRequestClose={this.closeTour} />
+      <Tour steps={TOUR_STEPS} isOpen={this.state.tourOpen} onRequestClose={this.closeTour} startAt={0} />
       <div style={{zIndex: 1, position: "absolute", top: 0, right: 0}}>
         <IconButton onClick={this.showTour} color="secondary">
           <HelpOutlineIcon />
