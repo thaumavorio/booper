@@ -202,12 +202,24 @@ export default class Graph {
   }
 
   /**
-   * Returns a JSON string representing the graph for communication with the
-   * back-end.
-   * @return {string} A JSON string representing the graph.
+   * Grabs a contagious set by contacting the back-end server at the given endpoint.
+   * @param {string} endpoint The endpoint to contact.
+   * @param {threshold} threshold The threshold we use for bootstrap
+   * percolation.
+   * @return {Promise} A Promise whose result will be a vertex list which will
+   * contain some sort of contagious set of the graph.
    */
-  getWebGraphJSON() {
-    return JSON.stringify({ webGraphVertices: Array.from(this.getVertices()), webGraphEdges: Array.from(this.getEdges()) });
+  fetchContagiousSet(endpoint, threshold) {
+    return fetch(`https://thaumic.dev/booper/${endpoint}`, {
+      method: "post",
+      body: JSON.stringify({
+        graph: {
+          vertices: Array.from(this.getVertices()),
+          edges: Array.from(this.getEdges())
+        },
+        threshold
+      })
+    });
   }
 
   /**
@@ -219,7 +231,7 @@ export default class Graph {
    * approximates a minimal contagious set of the graph.
    */
   findContagiousSetGreedily(threshold) {
-    return fetch(`https://thaumic.dev/booper/greedy?graph=${this.getWebGraphJSON()}&threshold=${threshold}`);
+    return this.fetchContagiousSet("greedy", threshold);
   }
 
   /**
@@ -231,7 +243,7 @@ export default class Graph {
    * represents a minimal contagious set of the graph.
    */
   findMinimalContagiousSet(threshold) {
-    return fetch(`https://thaumic.dev/booper/min?graph=${this.getWebGraphJSON()}&threshold=${threshold}`);
+    return this.fetchContagiousSet("min", threshold);
   }
 
   /**
