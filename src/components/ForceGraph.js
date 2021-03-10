@@ -69,7 +69,7 @@ const TOUR_STEPS = [
   },
   {
     selector: "[data-tour=\"next-iteration-button\"]",
-    content: "Here's where you can visualize the percolation. This button performs one iteration of two-neighbor bootstrap percolation. Each inactive node that has at least two active neighbors is infected. Try clicking it now, and see what happens in the graph display pane."
+    content: "Here's where you can visualize the percolation. This button performs one iteration of two-neighbor bootstrap percolation. Each inactive node that has at least two active neighbors is infected. Try clicking it now; the next step in the tutorial will show you what happens in the graph display pane."
   },
   {
     selector: "[data-tour=\"graph-display-pane\"]",
