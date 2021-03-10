@@ -24,6 +24,8 @@ import update from "immutability-helper";
 import { trackPromise } from "react-promise-tracker";
 import GraphTaskbar from "./GraphTaskbar";
 import { withTheme } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import PropTypes from "prop-types";
 import { LoadingSpinnerComponent } from "./LoadingSpinnerComponent";
 import Tour from "reactour";
@@ -486,6 +488,13 @@ class ForceGraph extends React.Component{
   }
 
   /**
+   * Shows the tour that shows users how to use Booper, allowing them to start actually using it.
+   */
+  showTour = () => {
+    this.setState({tourOpen: true});
+  }
+
+  /**
    * When a component is inside another component and the user clicks on the child component, prevents the parent component from reacting the click.
    * @param {Object} event an event object representing a mouse click
    */
@@ -504,7 +513,7 @@ class ForceGraph extends React.Component{
       this.graphRef.current.d3Force("charge").strength(-100);
     }, 100);
 
-    return <div>
+    return <div style={{position: "relative"}}>
       <LoadingSpinnerComponent />
       <div style={{zIndex: 1, float: "left", position: "absolute", alignItems: "center", maxWidth: "30%"}}>
         <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
@@ -537,6 +546,11 @@ class ForceGraph extends React.Component{
         />
       </div>
       <Tour steps={TOUR_STEPS} isOpen={this.state.tourOpen} onRequestClose={this.closeTour} />
+      <div style={{zIndex: 1, position: "absolute", top: 0, right: 0}}>
+        <IconButton onClick={this.showTour} color="secondary">
+          <HelpOutlineIcon />
+        </IconButton>
+      </div>
     </div>;
   }
 }
