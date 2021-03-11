@@ -82,7 +82,8 @@ let darkTheme = createMuiTheme({
   overrides: {
     MuiFormLabel: {
       root: {
-        color: "inherit"
+        color: "inherit",
+        fontSize: "0.8rem"
       }
     },
     MuiListItem: {
