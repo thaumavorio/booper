@@ -457,7 +457,7 @@ class ForceGraph extends React.Component{
    * @param {Object} evt an object that contains the new threshold
    */
   updateBootstrapPercolationThreshold = (evt) => {
-    const newThreshold = evt.target.value;
+    const newThreshold = parseInt(evt.target.value);
     this.setState({
       bootstrapPercolationThreshold: newThreshold,
     });
