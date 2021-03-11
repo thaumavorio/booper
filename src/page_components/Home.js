@@ -34,7 +34,8 @@ const useStyles = makeStyles(() => ({
     position: "sticky",
     left: "2rem",
     bottom: "3rem",
-    alignSelf: "flex-end"
+    alignSelf: "flex-end",
+    color: "#002F38"
   },
   booText: {
     color: "#B591FA"

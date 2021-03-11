@@ -363,22 +363,22 @@ class GraphTaskbar extends Component {
                     </Tooltip>
                   </ButtonGroup>
                   <Grid container alignItems="center" spacing={1}>
-                    <Grid item xs={8} style={{textAlign: "right"}}>
+                    <Grid item xs={7} style={{textAlign: "right"}}>
                       <Typography variant="overline" gutterBottom>Iteration:</Typography>
                     </Grid>
-                    <Grid item xs={4} style={{textAlign: "left"}}>
+                    <Grid item xs={5} style={{textAlign: "left"}}>
                       <Typography variant="caption">{this.props.iteration}</Typography>
                     </Grid>
-                    <Grid item xs={8} style={{textAlign: "right"}}>
+                    <Grid item xs={7} style={{textAlign: "right"}}>
                       <Typography variant="overline" gutterBottom>Active Vertices:</Typography>
                     </Grid>
-                    <Grid item xs={4} style={{textAlign: "left"}}>
+                    <Grid item xs={5} style={{textAlign: "left"}}>
                       <Typography variant="caption" gutterBottom>{this.props.activeVerticesCount}</Typography>
                     </Grid>
-                    <Grid item xs={8} style={{textAlign: "right"}}>
+                    <Grid item xs={7} style={{textAlign: "right"}}>
                       <Typography variant="overline" gutterBottom>Inactive Vertices:</Typography>
                     </Grid>
-                    <Grid item xs={4} style={{textAlign: "left"}}>
+                    <Grid item xs={5} style={{textAlign: "left"}}>
                       <Typography variant="caption" gutterBottom>{this.props.inactiveVerticesCount}</Typography>
                     </Grid>
                   </Grid>
@@ -388,22 +388,22 @@ class GraphTaskbar extends Component {
               <Container>
                 <Typography variant="h3">Legend</Typography>
                 <Grid container spacing={1}>
-                  <Grid item xs={8} style={{textAlign: "right"}}>
+                  <Grid item xs={7} style={{textAlign: "right"}}>
                     <Typography variant="overline" gutterBottom>Inactive</Typography>
                   </Grid>
-                  <Grid item xs={4} style={{textAlign: "left", alignContent: "center"}}>
+                  <Grid item xs={5} style={{textAlign: "left", alignContent: "center"}}>
                     <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.inactive.main}} />
                   </Grid>
-                  <Grid item xs={8} style={{textAlign: "right"}}>
+                  <Grid item xs={7} style={{textAlign: "right"}}>
                     <Typography variant="overline" gutterBottom>Active</Typography>
                   </Grid>
-                  <Grid item xs={4} style={{textAlign: "left"}}>
+                  <Grid item xs={5} style={{textAlign: "left"}}>
                     <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.active.main}} />
                   </Grid>
-                  <Grid item xs={8} style={{textAlign: "right"}}>
+                  <Grid item xs={7} style={{textAlign: "right"}}>
                     <Typography variant="overline" gutterBottom>Recently Activated</Typography>
                   </Grid>
-                  <Grid item xs={4} style={{textAlign: "left"}}>
+                  <Grid item xs={5} style={{textAlign: "left"}}>
                     <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.recentlyActive.main}}/>
                   </Grid>
                 </Grid>
