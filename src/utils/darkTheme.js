@@ -20,6 +20,11 @@ import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
 let darkTheme = createMuiTheme({
   typography: {
+    h1: {
+      fontSize: "6rem",
+      fontWeight: 800,
+      fontFamily: "Ubuntu"
+    },
     h3: {
       fontSize: "1.75rem",
       fontWeight: 600,

@@ -16,23 +16,77 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import React, {Component} from "react";
+import {React, useEffect, useState} from "react";
+import { Button, CssBaseline, Fade, makeStyles, Typography } from "@material-ui/core";
 
-class Home extends Component {
-  render() {
-    return (
-      <div className="text-page">
-        <div className="title-pane">
-          {/* <span className="title-pane-title">Booper</span>
-          <span className="title-pane-subtitle">A visualization tool for bootstrap percolation.</span> */}
-          <h1>Booper</h1>
-          <p>A visualization tool for bootstrap percolation</p>
-          <br/>
-          <p>Booper is free (libre) software built during a project at WPI. The source code is available on <a href="https://github.com/thaumavorio/booper">GitHub</a>. For more info, see our <a href="about-us">About Us</a> page.</p>
-        </div>
-      </div>
-    );
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    minHeight: "100vh",
+    backgroundImage: `url(${process.env.PUBLIC_URL + "/Booper_Background_4K.png"})`,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center"
+  },
+  landingIntro: {
+    position: "sticky",
+    left: "2rem",
+    bottom: "1rem",
+    alignSelf: "flex-end",
+    color: "#002F38"
+  },
+  booText: {
+    color: "#B591FA"
+  },
+  perText: {
+    color: "#FA8878"
+  },
+  startButton: {
+    fontSize: "5rem",
+    fontFamily: "inherit",
+    fontWeight: "inherit",
+    left: "1rem",
+    lineHeight: "6rem",
+    bottom: "0.5rem",
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.main,
+    "&:hover": {
+      background: theme.palette.primary.hover,
+    }
   }
+}));
+
+function Home() {
+  const classes = useStyles();
+  const [checked,setChecked] = useState(false);
+  useEffect(()=>{
+    setChecked(true);
+  },[]);
+  return (
+    <div className={classes.root}>
+      <CssBaseline/>
+      <div className={classes.landingIntro}>
+        <Fade in={checked} {...(checked ? { timeout: 1000 } : {})}>
+          <Typography variant="h1" align="left">
+            <span className={classes.booText}>Boo</span>tstrap
+            <br/>
+            <span className={classes.perText}>Per</span>colation,
+            <br/>
+          </Typography>
+        </Fade>
+        <Fade in={checked} {...(checked ? { timeout: 2000 } : {})}>
+          <Typography variant="h1" align="left">
+            for everyone.
+            <Button size="small" variant="contained" className={classes.startButton} href="study">
+              Start Here
+            </Button>
+          </Typography>
+        </Fade>
+      </div>
+    </div>
+  );
 }
 
 export default Home;
