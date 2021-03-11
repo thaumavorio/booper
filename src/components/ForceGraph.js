@@ -72,7 +72,7 @@ const TOUR_STEPS = [
   },
   {
     selector: "[data-tour=\"next-iteration-button\"]",
-    content: "Here's where you can visualize the percolation. This button performs one iteration of two-neighbor bootstrap percolation. Each inactive node that has at least two active neighbors is infected. Try clicking it now, and see what happens in the graph display pane."
+    content: "Here's where you can visualize the percolation. This button performs one iteration of two-neighbor bootstrap percolation. Each inactive node that has at least two active neighbors is infected. Try clicking it now; the next step in the tutorial will show you what happens in the graph display pane."
   },
   {
     selector: "[data-tour=\"graph-display-pane\"]",
@@ -504,6 +504,9 @@ class ForceGraph extends React.Component{
 
   render() {
 
+    TOUR_STEPS[1].position = [this.state.windowSize.width / 2, this.state.windowSize.height - 250];
+    TOUR_STEPS[3].position = TOUR_STEPS[1].position;
+
     setTimeout(() => {
       this.graphRef.current.d3Force("collide", forceCollide());
       this.graphRef.current.d3Force("center", null);
@@ -546,7 +549,7 @@ class ForceGraph extends React.Component{
           ref={this.graphRef}
         />
       </div>
-      <Tour steps={TOUR_STEPS} isOpen={this.state.tourOpen} onRequestClose={this.closeTour} startAt={0} />
+      <Tour steps={TOUR_STEPS} isOpen={this.state.tourOpen} onRequestClose={this.closeTour} startAt={0} lastStepNextButton={"End Tutorial"} />
       <div style={{zIndex: 1, position: "absolute", top: 0, right: 0}}>
         <IconButton onClick={this.showTour} color="secondary">
           <HelpOutlineIcon />
