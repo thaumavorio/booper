@@ -21,7 +21,7 @@ import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 let lightTheme = createMuiTheme({
   typography: {
     h1: {
-      fontSize: "7.5rem",
+      fontSize: "6rem",
       fontWeight: 800,
       fontFamily: "Ubuntu"
     },

@@ -17,10 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { React } from "react";
-import {CssBaseline, makeStyles, Typography} from "@material-ui/core";
+import { Button, CssBaseline, makeStyles, Typography } from "@material-ui/core";
 
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     minHeight: "100vh",
     backgroundImage: `url(${process.env.PUBLIC_URL + "/Booper_Background_4K.png"})`,
@@ -33,15 +33,28 @@ const useStyles = makeStyles(() => ({
   landingIntro: {
     position: "sticky",
     left: "2rem",
-    bottom: "3rem",
+    bottom: "1rem",
     alignSelf: "flex-end",
     color: "#002F38"
   },
   booText: {
     color: "#B591FA"
   },
-  perText:{
+  perText: {
     color: "#FA8878"
+  },
+  startButton: {
+    fontSize: "5rem",
+    fontFamily: "inherit",
+    fontWeight: "inherit",
+    left: "1rem",
+    lineHeight: "6rem",
+    bottom: "0.5rem",
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.main,
+    "&:hover": {
+      background: theme.palette.primary.hover,
+    }
   }
 }));
 
@@ -50,16 +63,6 @@ function Home() {
   return (
     <div className={classes.root}>
       <CssBaseline/>
-      {/* <div className="title-pane">*/}
-      {/*  /!* <span className="title-pane-title">Booper</span>*/}
-      {/*  <span className="title-pane-subtitle">A visualization tool for bootstrap percolation.</span> *!/*/}
-      {/*  <h1>Booper</h1>*/}
-      {/*  <p>A visualization tool for bootstrap percolation</p>*/}
-      {/*  <br/>*/}
-      {/*  <p>Booper is free (libre) software built during a project at WPI. The source code is available on <a*/}
-      {/*    href="https://github.com/thaumavorio/booper">GitHub</a>. For more info, see our <a href="about-us">About*/}
-      {/*    Us</a> page.</p>*/}
-      {/* </div>*/}
       <div className={classes.landingIntro}>
         <Typography variant="h1" align="left">
           <span className={classes.booText}>Boo</span>tstrap
@@ -67,6 +70,9 @@ function Home() {
           <span className={classes.perText}>Per</span>colation,
           <br/>
           for everyone.
+          <Button size="small" variant="contained" className={classes.startButton} href="study">
+            Start Here
+          </Button>
         </Typography>
       </div>
     </div>
