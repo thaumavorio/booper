@@ -121,8 +121,8 @@ class ForceGraph extends React.Component{
       helpOpen: false,
       tourOpen: true,
       windowSize: {
-        height: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight),
-        width: document.body.scrollWidth
+        height: window.innerHeight,
+        width: window.innerWidth
       },
       bootstrapPercolationThreshold: 2,
       bootstrapPercolationProbability: 1,
@@ -502,7 +502,7 @@ class ForceGraph extends React.Component{
       this.graphRef.current.d3Force("charge").strength(-100);
     }, 100);
 
-    return <div>
+    return <div style={{height: this.state.windowSize.height, backgroundColor: this.props.theme.palette.background.main}}>
       <LoadingSpinnerComponent />
       <div style={{zIndex: 1, float: "left", position: "absolute", alignItems: "center", maxWidth: "30%"}}>
         <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
@@ -520,6 +520,7 @@ class ForceGraph extends React.Component{
           iteration={this.state.bootstrapPercolationIteration}
           activeVerticesCount={this.state.activeVerticesCount}
           inactiveVerticesCount={this.state.forceData.nodes.length - this.state.activeVerticesCount}
+          height = {this.state.windowSize.height - 150}
         />
       </div>
       <div data-tour="graph-display-pane">
@@ -530,7 +531,7 @@ class ForceGraph extends React.Component{
           linkOpacity={0.7}
           linkWidth={3.5}
           width={this.state.windowSize.width}
-          height={this.state.windowSize.height}
+          height={this.state.windowSize.height - 100}
           ref={this.graphRef}
         />
       </div>

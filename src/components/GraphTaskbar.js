@@ -142,7 +142,7 @@ class GraphTaskbar extends Component {
       return (
         <Box>
           <Paper className='toolbar-surface' elevation={10}>
-            <Box style={{paddingTop: "2%", paddingBottom: "2%"}}>
+            <Box style={{paddingTop: "2%", paddingBottom: "2%", height: this.props.height, overflowY: "scroll"}}>
               <Container>
                 <Typography variant="h3">Graph</Typography>
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
@@ -450,7 +450,8 @@ GraphTaskbar.propTypes = {
         main: PropTypes.string.isRequired
       }).isRequired
     }).isRequired
-  }).isRequired
+  }).isRequired,
+  height: PropTypes.number.isRequired
 };
 
 export default withTheme(GraphTaskbar);
