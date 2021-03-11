@@ -24,10 +24,13 @@ import update from "immutability-helper";
 import { trackPromise } from "react-promise-tracker";
 import GraphTaskbar from "./GraphTaskbar";
 import { withTheme } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import PropTypes from "prop-types";
 import { LoadingSpinnerComponent } from "./LoadingSpinnerComponent";
 import Tour from "reactour";
 import { readString } from "react-papaparse";
+import Cookies from "js-cookie";
 
 /**
  * Create the default graph. Users will see this graph in the display pane when they first open the Study tab in Booper.
@@ -119,7 +122,7 @@ class ForceGraph extends React.Component{
       graph: initGraph,
       forceData: initGraph.getGraphData(),
       helpOpen: false,
-      tourOpen: true,
+      tourOpen: Cookies.get("tourDone") === undefined,
       windowSize: {
         height: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight),
         width: document.body.scrollWidth
@@ -480,7 +483,15 @@ class ForceGraph extends React.Component{
    * Closes the tour that shows users how to use Booper, allowing them to start actually using it.
    */
   closeTour = () => {
+    Cookies.set("tourDone", "true", { expires: 365 });
     this.setState({tourOpen: false});
+  }
+
+  /**
+   * Shows the tour that shows users how to use Booper, allowing them to start actually using it.
+   */
+  showTour = () => {
+    this.setState({tourOpen: true});
   }
 
   /**
@@ -502,7 +513,7 @@ class ForceGraph extends React.Component{
       this.graphRef.current.d3Force("charge").strength(-100);
     }, 100);
 
-    return <div>
+    return <div style={{position: "relative"}}>
       <LoadingSpinnerComponent />
       <div style={{zIndex: 1, float: "left", position: "absolute", alignItems: "center", maxWidth: "30%"}}>
         <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
@@ -534,7 +545,12 @@ class ForceGraph extends React.Component{
           ref={this.graphRef}
         />
       </div>
-      <Tour steps={TOUR_STEPS} isOpen={this.state.tourOpen} onRequestClose={this.closeTour} />
+      <Tour steps={TOUR_STEPS} isOpen={this.state.tourOpen} onRequestClose={this.closeTour} startAt={0} />
+      <div style={{zIndex: 1, position: "absolute", top: 0, right: 0}}>
+        <IconButton onClick={this.showTour} color="secondary">
+          <HelpOutlineIcon />
+        </IconButton>
+      </div>
     </div>;
   }
 }
