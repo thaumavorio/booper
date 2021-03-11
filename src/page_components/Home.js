@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { React } from "react";
-import { Button, CssBaseline, makeStyles, Typography } from "@material-ui/core";
+import {React, useEffect, useState} from "react";
+import { Button, CssBaseline, Fade, makeStyles, Typography } from "@material-ui/core";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -60,20 +60,30 @@ const useStyles = makeStyles((theme) => ({
 
 function Home() {
   const classes = useStyles();
+  const [checked,setChecked] = useState(false);
+  useEffect(()=>{
+    setChecked(true);
+  },[]);
   return (
     <div className={classes.root}>
       <CssBaseline/>
       <div className={classes.landingIntro}>
-        <Typography variant="h1" align="left">
-          <span className={classes.booText}>Boo</span>tstrap
-          <br/>
-          <span className={classes.perText}>Per</span>colation,
-          <br/>
-          for everyone.
-          <Button size="small" variant="contained" className={classes.startButton} href="study">
-            Start Here
-          </Button>
-        </Typography>
+        <Fade in={checked} {...(checked ? { timeout: 1000 } : {})}>
+          <Typography variant="h1" align="left">
+            <span className={classes.booText}>Boo</span>tstrap
+            <br/>
+            <span className={classes.perText}>Per</span>colation,
+            <br/>
+          </Typography>
+        </Fade>
+        <Fade in={checked} {...(checked ? { timeout: 2000 } : {})}>
+          <Typography variant="h1" align="left">
+            for everyone.
+            <Button size="small" variant="contained" className={classes.startButton} href="study">
+              Start Here
+            </Button>
+          </Typography>
+        </Fade>
       </div>
     </div>
   );
