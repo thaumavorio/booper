@@ -41,3 +41,7 @@
   width: 60rem;
   margin: 0 auto;
 }
+
+body {
+  overflow: hidden;
+}

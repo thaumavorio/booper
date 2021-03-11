@@ -69,7 +69,6 @@ class GraphTaskbar extends Component {
     super(props);
     this.state = {
       helpOpen: false,
-      useMinAlgorithm: true
     };
   }
 
