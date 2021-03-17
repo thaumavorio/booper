@@ -22,9 +22,16 @@ import { Home } from "@material-ui/icons";
 import { styled } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import { Checkbox } from "@material-ui/core";
-import PropTypes from "prop-types";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
+
+interface HeaderProps {
+  sendTheme: (event: boolean) => void;
+}
+
+interface HeaderState {
+  darkMode: boolean;
+}
 
 const navLinks = [
   { title: "Study", path: "/bp/study" },
@@ -46,20 +53,16 @@ const LinkBox = styled(Box)({
   flexDirection: "row"
 });
 
-class Header extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      darkMode: true
-    };
+class Header extends Component<HeaderProps, HeaderState> {
+  state: HeaderState = {
+    darkMode: true
   }
 
-  updateTheme(){
+  updateTheme(): void {
     this.props.sendTheme(this.state.darkMode);
   }
 
-  toggleDarkMode = (event, value) => {
+  toggleDarkMode = (_event: React.ChangeEvent, value: boolean): void => {
     // value is true when the user engages the checkbox for light mode
     this.setState({
       darkMode: !value
@@ -67,7 +70,7 @@ class Header extends Component {
     this.updateTheme();
   }
 
-  render() {
+  render(): JSX.Element {
     return (
       <AppBar color="primary" position="sticky">
         <Toolbar>
@@ -101,11 +104,5 @@ class Header extends Component {
     );
   }
 }
-
-
-
-Header.propTypes = {
-  sendTheme: PropTypes.func
-};
 
 export default Header;

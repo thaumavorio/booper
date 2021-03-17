@@ -29,7 +29,7 @@ import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import PropTypes from "prop-types";
 import { LoadingSpinnerComponent } from "./LoadingSpinnerComponent";
 import Tour from "reactour";
-import { readString } from "react-papaparse";
+import PapaParse from "papaparse";
 import Cookies from "js-cookie";
 
 /**
@@ -185,7 +185,7 @@ class ForceGraph extends React.Component{
     reader.onload = (event) => {
       // Parse input file into a 2-D array so each entry is eaily accessible.
       const string = event.target.result.trim();
-      const parseResults = readString(string, {delimitersToGuess: [",", "\t"]});
+      const parseResults = PapaParse.parse(string, {delimitersToGuess: [",", "\t"]});
       // Check for parsing errors.
       if(parseResults.errors.length > 0) {
         let errorMessage = "Parsing error.\n";

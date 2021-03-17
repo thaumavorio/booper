@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 
 class AboutUs extends Component {
-  render() {
+  render(): JSX.Element {
     return (
       <div className="text-page">
         <h1>About Us</h1>

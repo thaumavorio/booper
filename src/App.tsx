@@ -20,30 +20,30 @@ import "./App.css";
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./page_components/Home";
-import Study from "./page_components/Study.js";
+import Study from "./page_components/Study";
 import AboutUs from "./page_components/AboutUs";
 import Header from "./components/Header";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import darkTheme from "./utils/darkTheme";
 import lightTheme from "./utils/lightTheme";
 
-class App extends React.Component{
+interface AppState {
+  darkTheme: boolean;
+}
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      darkTheme: true
-    };
-  }
+class App extends React.Component {
+  state: AppState = {
+    darkTheme: true,
+  };
 
-  getTheme = (event) => {
+  getTheme = (event: boolean): boolean => {
     this.setState({
       darkTheme: !event
     });
     return event;
   }
 
-  render(){
+  render(): JSX.Element {
     return(
       <Router>
         <MuiThemeProvider theme={this.state.darkTheme ? darkTheme : lightTheme}>

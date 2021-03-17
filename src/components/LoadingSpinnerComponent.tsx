@@ -20,7 +20,7 @@ import React from "react";
 import { usePromiseTracker } from "react-promise-tracker";
 import Loader from "react-loader-spinner";
  
-export const LoadingSpinnerComponent = () => {
+export const LoadingSpinnerComponent = (): boolean | JSX.Element => {
   const { promiseInProgress } = usePromiseTracker({delay: 500});
   const ICON_WIDTH = 100;
  

@@ -16,17 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import React, {Component} from "react";
-import ForceGraph from "../components/ForceGraph";
+import { ReportHandler } from "web-vitals";
 
-class Study extends Component {
-  render() {
-    return (
-      <div>
-        <ForceGraph />
-      </div>
-    );
+const reportWebVitals = (onPerfEntry?: ReportHandler): void => {
+  if (onPerfEntry && onPerfEntry instanceof Function) {
+    import("web-vitals").then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+      getCLS(onPerfEntry);
+      getFID(onPerfEntry);
+      getFCP(onPerfEntry);
+      getLCP(onPerfEntry);
+      getTTFB(onPerfEntry);
+    });
   }
-}
+};
 
-export default Study;
+export default reportWebVitals;

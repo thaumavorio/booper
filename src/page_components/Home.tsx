@@ -16,9 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {React, useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Button, CssBaseline, Fade, makeStyles, Typography } from "@material-ui/core";
 
+declare module "@material-ui/core/styles/createPalette" {
+  interface PaletteColor {
+    hover: string;
+  }
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Home() {
+function Home(): JSX.Element {
   const classes = useStyles();
   const [checked,setChecked] = useState(false);
   useEffect(()=>{
