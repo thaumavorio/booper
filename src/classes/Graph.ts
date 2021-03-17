@@ -132,17 +132,21 @@ export default class Graph {
   }
 
   /**
-   * First deactivates every vertex in the graph, then iterates through every
-   * vertex in the graph, activating each with the given probability.
-   * @param {number} inclusionProbability The probability that a vertex will be activated.
+   * Chooses a vertex set of the given size uniformly at random among all vertex sets of this size.
+   * Activates the vertices in this set, and deactivates the vertices outside this set.
+   * @param {number} numSeeds the number of seeds in the new seed set
    * @return {Graph} The graph.
    */
-  randomSeedSet(inclusionProbability: number): this {
+  randomSeedSet(numSeeds: number): this {
     this.deactivateAllVertices();
-    for(const v of this.getVertices()) {
-      if(Math.random() < inclusionProbability){
-        this.activateVertex(v);
-      }
+    const vertices = Array.from(this.getVertices());
+    if(numSeeds > vertices.length) {
+      numSeeds = vertices.length;
+    }
+    for(let i = 0; i < numSeeds; i++) {
+      const seedIndex = Math.floor(Math.random() * (vertices.length - i));
+      this.activateVertex(vertices[seedIndex]);
+      vertices[seedIndex] = vertices[vertices.length - i - 1];
     }
     return this;
   }
@@ -210,38 +214,48 @@ export default class Graph {
   }
 
   /**
-   * Returns a JSON string representing the graph for communication with the
-   * back-end.
-   * @return {string} A JSON string representing the graph.
+   * Grabs a contagious set by contacting the back-end server at the given endpoint.
+   * @param {string} endpoint The endpoint to contact.
+   * @param {number} threshold The threshold we use for bootstrap
+   * percolation.
+   * @return {Promise} A Promise whose result will be a vertex list which will
+   * contain some sort of contagious set of the graph.
    */
-  getWebGraphJSON(): string {
-    return JSON.stringify({ webGraphVertices: Array.from(this.getVertices()), webGraphEdges: Array.from(this.getEdges()) });
+  fetchContagiousSet(endpoint: string, threshold: number): Promise<Response> {
+    return fetch(`https://thaumic.dev/booper/${endpoint}`, {
+      method: "post",
+      body: JSON.stringify({
+        graph: {
+          vertices: Array.from(this.getVertices()),
+          edges: Array.from(this.getEdges())
+        },
+        threshold
+      })
+    });
   }
 
   /**
    * Approximates a minimum contagious set by contacting the back-end server
    * which greedily finds such a set.
-   * @param {threshold} threshold The threshold we use for bootstrap
+   * @param {number} threshold The threshold we use for bootstrap
    * percolation.
-   * @return {Promise<string>} A Promise whose result will be a vertex list
+   * @return {Promise<Response>} A Promise whose result will be a vertex list
    * which approximates a minimal contagious set of the graph.
    */
-  findContagiousSetGreedily(threshold: number): Promise<string> {
-    return fetch(`https://thaumic.dev/booper/greedy?graph=${this.getWebGraphJSON()}&threshold=${threshold}`)
-      .then(res => res.json());
+  findContagiousSetGreedily(threshold: number): Promise<Response> {
+    return this.fetchContagiousSet("greedy", threshold);
   }
 
   /**
    * Returns a minimum contagious set by contacting the back-end server
    * which finds such a set.
-   * @param {threshold} threshold The threshold we use for bootstrap
+   * @param {number} threshold The threshold we use for bootstrap
    * percolation.
-   * @return {Promise<string>} A Promise whose result will be a vertex list
+   * @return {Promise<Response>} A Promise whose result will be a vertex list
    * which represents a minimal contagious set of the graph.
    */
-  findMinimalContagiousSet(threshold: number): Promise<string> {
-    return fetch(`https://thaumic.dev/booper/min?graph=${this.getWebGraphJSON()}&threshold=${threshold}`)
-      .then(res => res.json());
+  findMinimalContagiousSet(threshold: number): Promise<Response> {
+    return this.fetchContagiousSet("min", threshold);
   }
 
   /**

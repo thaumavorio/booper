@@ -15,7 +15,7 @@ The production build for Booper is available [here](https://thaumic.dev/bp/). Th
 ### Development
 To install the dependencies, open a terminal, navigate to the home directory of this project, and run
 ```bash
-npm install
+npm ci
 ```
 Run this command when you clone this repository and every time you add/remove a package or switch branches.
 
@@ -42,3 +42,10 @@ Booper is built with [React.js](https://reactjs.org/), a popular framework for i
 Some of the computations that Booper performs are too expensive for web browsers to handle. We set up a server to perform the algorithms for finding contagious sets. When a user clicks either the **Minimum Contagious Set** or **Greedy Contagious Set** button, Booper sends an HTTP request to the server, with a JSON representation of the graph and the threshold as arguments. Then, the server computes the requested contagious set and sends the result back to Booper in the response object.
 
 ## License
+
+Copyright (C) 2020-2021 Connor Anderson <<canderson@thaumavor.io>>, Akshaj
+Balasubramanian <<bakshaj99@gmail.com>>, Henry Poskanzer
+<<hposkanzer@gmail.com>>
+
+Booper is licensed under the GPL v3 or later. See LICENSE for the full license
+text.

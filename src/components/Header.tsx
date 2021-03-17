@@ -34,8 +34,6 @@ interface HeaderState {
 }
 
 const navLinks = [
-  { title: "Learn", path: "/bp/learn" },
-  { title: "Research", path: "/bp/research" },
   { title: "Study", path: "/bp/study" },
   { title: "About Us", path: "/bp/about-us" },
 ];

@@ -24,10 +24,13 @@ import update from "immutability-helper";
 import { trackPromise } from "react-promise-tracker";
 import GraphTaskbar from "./GraphTaskbar";
 import { withTheme } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import PropTypes from "prop-types";
 import { LoadingSpinnerComponent } from "./LoadingSpinnerComponent";
 import Tour from "reactour";
 import PapaParse from "papaparse";
+import Cookies from "js-cookie";
 
 /**
  * Create the default graph. Users will see this graph in the display pane when they first open the Study tab in Booper.
@@ -65,39 +68,43 @@ const TOUR_STEPS = [
   },
   {
     selector: "[data-tour=\"graph-display-pane\"]",
-    content: "This is the graph display pane. It shows the graph that is being percolated on. Active vertices are red, and inactive vertices are blue. You can use the mouse to zoom in or out, pan around, or drag the graph around."
+    content: "This is the graph display pane. It shows the graph that is being percolated on. Nodes are drawn in two different colors, depending on whether they're active or inactive. You can use the mouse to zoom in or out, pan around, or drag the graph around."
   },
   {
     selector: "[data-tour=\"next-iteration-button\"]",
-    content: "Here's where you can visualize the percolation. This button performs one iteration of two-neighbor bootstrap percolation. Each inactive vertex that has at least two active neighbors is infected. Try clicking it now, and see what happens in the graph display pane."
+    content: "Here's where you can visualize the percolation. This button performs one iteration of two-neighbor bootstrap percolation. Each inactive node that has at least two active neighbors is infected. Try clicking it now; the next step in the tutorial will show you what happens in the graph display pane."
   },
   {
     selector: "[data-tour=\"graph-display-pane\"]",
-    content: "Vertices that were infected in the most recent iteration are green. All other active vertices are red."
+    content: "Nodes that were infected in the most recent iteration are given a third color."
   },
   {
     selector: "[data-tour=\"parameter-text-fields\"]",
-    content: <p>You can modify the parameters of bootstrap percolation. The <b>threshold</b> is the number of active neighbors required to infect an inactive vertex. The <b>probability</b> is the probability that an inactive vertex becomes infected if it has enough active neighbors.</p>
+    content: <p>You can modify the parameters of bootstrap percolation. The <b>threshold</b> is the number of active neighbors required to infect an inactive node. The <b>probability</b> is the probability that an inactive node becomes infected if it has enough active neighbors.</p>
   },
   {
     selector: "[data-tour=\"last-iteration-button\"]",
-    content: "This button performs percolation iterations until no more vertices can be infected. Then it shows you the final result."
+    content: "This button performs percolation iterations until no more nodes can be infected. Then it shows you the final result."
   },
   {
     selector: "[data-tour=\"upload-adjacency-matrix-button\"]",
     content: "If you want to visualize bootstrap percolation on a different graph, upload its adjacency matrix here. See the tooltip for details on the file format."
   },
   {
+    selector: "[data-tour=\"random-graph-button\"]",
+    content: "Or you can use this button to generate a random graph with given parameters."
+  },
+  {
     selector: "[data-tour=\"min-contagious-set-button\"]",
-    content: "This button finds a minimum contagious set of the current graph and renders it in the graph display pane. It uses an exponential-time algorithm, so it might load for a while if the graph is large."
+    content: "This button finds a minimum contagious set of the current graph and renders it in the graph display pane. It uses an exponential-time algorithm, so it might load for a while if the graph is large. We don't recommend using this feature for graphs with more than 50 nodes."
   },
   {
     selector: "[data-tour=\"greedy-contagious-set-button\"]",
-    content: "This button has similar functionality, but it uses a greedy algorithm instead. It finds a (usually small, but often not minimum) contagious set, which will be displayed much faster."
+    content: "This button has similar functionality, but it uses a greedy algorithm instead. It finds a (usually small, but often not minimum) contagious set, which will be displayed much faster. We don't recommend using this feature for graphs with more than 500 nodes."
   },
   {
     selector: "[data-tour=\"random-seed-set-button\"]",
-    content: "This button can also generate and display a seed set. It includes each vertex independently at random with the given probability."
+    content: "This button can also generate and display a seed set. It chooses a random seed set from all seed sets of the given size."
   },
   {
     content: "That's just about everything you need to know. Have fun percolating!"
@@ -115,10 +122,10 @@ class ForceGraph extends React.Component{
       graph: initGraph,
       forceData: initGraph.getGraphData(),
       helpOpen: false,
-      tourOpen: true,
+      tourOpen: Cookies.get("tourDone") === undefined,
       windowSize: {
-        height: document.body.scrollHeight,
-        width: document.body.scrollWidth
+        height: window.innerHeight,
+        width: window.innerWidth
       },
       bootstrapPercolationThreshold: 2,
       bootstrapPercolationProbability: 1,
@@ -253,7 +260,7 @@ class ForceGraph extends React.Component{
   static hasValidEntries(seeds, matrix) {
     for(const entry of seeds) {
       if(entry !== "+" && entry !== "-") {
-        window.alert("Invalid input. There must be a row of +'s and -'s above the adjacency matrix, indicating which vertices are seeds.");
+        window.alert("Invalid input. There must be a row of +'s and -'s above the adjacency matrix, indicating which nodes are seeds.");
         return false;
       }
     }
@@ -291,6 +298,40 @@ class ForceGraph extends React.Component{
   }
 
   /**
+   * Generates and displays an Erdos-Renyi graph given parameters specified by the user in text fields.
+   * Adds the given number of vertices.
+   * Chooses the edges uniformly at random for all edge sets of the given size.
+   */
+  randomGraph = () => {
+    const numNodes = parseInt(document.getElementById("num-nodes").value); // number of nodes in the graph
+    let numEdges = parseInt(document.getElementById("num-edges").value); // number of edges in the graph
+    if(!isNaN(numNodes) && !isNaN(numEdges)) {
+      const graph = new Graph();
+      const potentialEdges = [];
+      for(let i = 0; i < numNodes; i++) {
+        graph.addVertex(i);
+        for(let j = 0; j < i; j++) {
+          potentialEdges.push([i, j]);
+        }
+      }
+      if(numEdges > potentialEdges.length) {
+        numEdges = potentialEdges.length;
+      }
+      for(let i = 0; i < numEdges; i++) {
+        const edgeIndex = Math.floor(Math.random() * (potentialEdges.length - i));
+        graph.addEdge(potentialEdges[edgeIndex][0], potentialEdges[edgeIndex][1]);
+        potentialEdges[edgeIndex] = potentialEdges[potentialEdges.length - i - 1];
+      }
+      this.setState({
+        graph,
+        forceData: graph.getGraphData(),
+        bootstrapPercolationIteration: 0,
+        activeVerticesCount: 0,
+      });
+    }
+  }
+
+  /**
    * Finds a minimum contagious set of the currently displayed graph.
    * Sends the graph and treshold in an HTTP request to a server, which performs the algorithm and sends the result in a response object.
    * When the response object is received, the minimum contagious set is rendered.
@@ -298,6 +339,13 @@ class ForceGraph extends React.Component{
   getMinContagiousSet = () => {
     trackPromise(
       this.state.graph.findMinimalContagiousSet(this.state.bootstrapPercolationThreshold)
+        .then(res => {
+          if (res.status === 504) {
+            throw new Error("Timeout while finding minimum contagious set");
+          }
+          return res;
+        })
+        .then(res => res.json())
         .then(infectedVerts => this.setState(function(state){
           const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
           g.activateVertices(infectedVerts);
@@ -306,7 +354,12 @@ class ForceGraph extends React.Component{
             forceData: g.getGraphData(state.forceData),
             bootstrapPercolationIteration: 0,
             activeVerticesCount: g.getActiveVerticesCount() };
-        })));
+        }))
+        .catch(error => window.alert("Error: " + error.message + "."
+          + " Errors often occur when the graph is too large for the optimal"
+          + " solution to be found before the timeout. The current timeout is"
+          + " 1 minute, which allows for dense graphs of up to about 30"
+          + " vertices and sparse graphs of up to about 50."))); // TODO: Make nicer popup
   };
 
   /**
@@ -317,6 +370,7 @@ class ForceGraph extends React.Component{
   getGreedyContagiousSet = () => {
     trackPromise(
       this.state.graph.findContagiousSetGreedily(this.state.bootstrapPercolationThreshold)
+        .then(res => res.json())
         .then(infectedVerts => this.setState(function(state){
           const g = update(state.graph, {$set: state.graph.deactivateAllVertices()});
           g.activateVertices(infectedVerts);
@@ -330,14 +384,14 @@ class ForceGraph extends React.Component{
 
   /**
    * Generates a random seed set for the currently displayed graph.
-   * Each vertex becomes a seed independently with the given inclusion probability.
+   * Chooses one seed set uniformly at random among all possible seed sets of the given size.
    * Renders the resulting seed set.
    */
   randomSeedSet = () => {
-    const inclusionProbability = parseFloat(document.getElementById("seed-probability").value);
-    if(!isNaN(inclusionProbability)) {
+    const numSeeds = parseInt(document.getElementById("num-seeds").value);
+    if(!isNaN(numSeeds)) {
       this.setState(function(state) {
-        const g = update(state.graph, {$set: state.graph.randomSeedSet(inclusionProbability)});
+        const g = update(state.graph, {$set: state.graph.randomSeedSet(numSeeds)});
         return {
           graph: g,
           forceData: g.getGraphData(state.forceData),
@@ -406,7 +460,7 @@ class ForceGraph extends React.Component{
    * @param {Object} evt an object that contains the new threshold
    */
   updateBootstrapPercolationThreshold = (evt) => {
-    const newThreshold = evt.target.value;
+    const newThreshold = parseInt(evt.target.value);
     this.setState({
       bootstrapPercolationThreshold: newThreshold,
     });
@@ -429,7 +483,15 @@ class ForceGraph extends React.Component{
    * Closes the tour that shows users how to use Booper, allowing them to start actually using it.
    */
   closeTour = () => {
+    Cookies.set("tourDone", "true", { expires: 365 });
     this.setState({tourOpen: false});
+  }
+
+  /**
+   * Shows the tour that shows users how to use Booper, allowing them to start actually using it.
+   */
+  showTour = () => {
+    this.setState({tourOpen: true});
   }
 
   /**
@@ -442,6 +504,9 @@ class ForceGraph extends React.Component{
 
   render() {
 
+    TOUR_STEPS[1].position = [this.state.windowSize.width / 2, this.state.windowSize.height - 250];
+    TOUR_STEPS[3].position = TOUR_STEPS[1].position;
+
     setTimeout(() => {
       this.graphRef.current.d3Force("collide", forceCollide());
       this.graphRef.current.d3Force("center", null);
@@ -451,10 +516,11 @@ class ForceGraph extends React.Component{
       this.graphRef.current.d3Force("charge").strength(-100);
     }, 100);
 
-    return <div>
+    return <div style={{position: "relative", height: this.state.windowSize.height, backgroundColor: this.props.theme.palette.background.main}}>
       <LoadingSpinnerComponent />
-      <div style={{zIndex: 2, float: "left", position: "absolute", alignItems: "center", maxWidth: "25%"}}>
+      <div style={{zIndex: 1, float: "left", position: "absolute", alignItems: "center", maxWidth: "30%"}}>
         <GraphTaskbar readAdjacencyMatrix={this.readAdjacencyMatrix}
+          randomGraph={this.randomGraph}
           getMinContagiousSet={this.getMinContagiousSet}
           getGreedyContagiousSet={this.getGreedyContagiousSet}
           randomSeedSet={this.randomSeedSet}
@@ -468,6 +534,7 @@ class ForceGraph extends React.Component{
           iteration={this.state.bootstrapPercolationIteration}
           activeVerticesCount={this.state.activeVerticesCount}
           inactiveVerticesCount={this.state.forceData.nodes.length - this.state.activeVerticesCount}
+          height = {this.state.windowSize.height - 150}
         />
       </div>
       <div data-tour="graph-display-pane">
@@ -478,11 +545,16 @@ class ForceGraph extends React.Component{
           linkOpacity={0.7}
           linkWidth={3.5}
           width={this.state.windowSize.width}
-          height={this.state.windowSize.height}
+          height={this.state.windowSize.height - 100}
           ref={this.graphRef}
         />
       </div>
-      <Tour steps={TOUR_STEPS} isOpen={this.state.tourOpen} onRequestClose={this.closeTour} />
+      <Tour steps={TOUR_STEPS} isOpen={this.state.tourOpen} onRequestClose={this.closeTour} startAt={0} lastStepNextButton={"End Tutorial"} />
+      <div style={{zIndex: 1, position: "absolute", top: 0, right: 0}}>
+        <IconButton onClick={this.showTour} color="secondary">
+          <HelpOutlineIcon />
+        </IconButton>
+      </div>
     </div>;
   }
 }

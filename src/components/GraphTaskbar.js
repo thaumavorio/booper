@@ -41,8 +41,8 @@ import {
   Typography
 } from "@material-ui/core";
 import RotateLeftIcon from "@material-ui/icons/RotateLeft";
-import FirstPageIcon from "@material-ui/icons/FirstPage";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+// import FirstPageIcon from "@material-ui/icons/FirstPage";
+// import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import PropTypes from "prop-types";
@@ -69,7 +69,6 @@ class GraphTaskbar extends Component {
     super(props);
     this.state = {
       helpOpen: false,
-      useMinAlgorithm: true
     };
   }
 
@@ -77,6 +76,10 @@ class GraphTaskbar extends Component {
 
     readAdjacencyMatrix = (evt) => {
       this.props.readAdjacencyMatrix(evt);
+    }
+
+    randomGraph = () => {
+      this.props.randomGraph();
     }
 
     getMinContagiousSet = () => {
@@ -139,22 +142,22 @@ class GraphTaskbar extends Component {
       return (
         <Box>
           <Paper className='toolbar-surface' elevation={10}>
-            <Box style={{paddingTop: "2%", paddingBottom: "2%"}}>
+            <Box style={{paddingTop: "2%", paddingBottom: "2%", height: this.props.height, overflowY: "scroll"}}>
               <Container>
                 <Typography variant="h3">Graph</Typography>
-                <Box display="flex" flexDirection="row" justifyContent="center">
+                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                   <Tooltip title={
                     <React.Fragment>
                       <Typography gutterBottom variant="body2">
-                      The adjacency matrix input should be in the format of a .csv file. The first row should contain
-                      either a &lsquo;+&rsquo; or a &lsquo;-&rsquo;, indicating whether the node is initially infected or not, respectively.
+                        The adjacency matrix input should be in the format of a .csv or .tsv file. The first row should contain one entry for each node in the desired graph:
+                        either a &lsquo;+&rsquo; or a &lsquo;-&rsquo;, indicating whether the node is initially active or not, respectively.
                       </Typography>
                       <Typography gutterBottom variant="body2">
-                      The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
+                        The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
                       </Typography>
                       <Typography gutterBottom variant="body2">
                         <Link onClick={this.helpIconOpen} color="secondary">
-                        See more..
+                          See more..
                         </Link>
                       </Typography>
                     </React.Fragment>
@@ -166,12 +169,12 @@ class GraphTaskbar extends Component {
                   </Tooltip>
                   <Dialog onClose={this.helpIconClose} open={this.state.helpOpen}>
                     <DialogTitle id="customized-dialog-title" onClose={this.helpIconClose}>
-                    Uploading Adjacency Matrices
+                      Uploading Adjacency Matrices
                     </DialogTitle>
                     <DialogContent dividers>
                       <Typography gutterBottom variant="body2">
-                        The adjacency matrix input should be in the format of a .csv file. The first row should contain
-                        either a &lsquo;+&rsquo; or a &lsquo;-&rsquo;, indicating whether the node is initially infected or not, respectively.
+                        The adjacency matrix input should be in the format of a .csv or .tsv file. The first row should contain one entry for each node in the desired graph:
+                        either a &lsquo;+&rsquo; or a &lsquo;-&rsquo;, indicating whether the node is initially active or not, respectively.
                       </Typography>
                       <Typography gutterBottom variant="body2">
                         The adjacency matrix starts the row after, and this follows the normal format for an adjacency matrix.
@@ -210,6 +213,35 @@ class GraphTaskbar extends Component {
                       </Typography>
                     </DialogContent>
                   </Dialog>
+                  <Tooltip title={
+                    <React.Fragment>
+                      <Typography variant="body2" gutterBottom>
+                        Generates an Erdős-Rényi graph with the given number of nodes and the given number of edges. Chooses the edges uniformly at random from all edge sets of this size.
+                      </Typography>
+                    </React.Fragment>
+                  } placement="right">
+                    <TaskbarButton variant="contained" onClick={this.randomGraph} data-tour="random-graph-button">
+                      <Box display="flex" flexDirection="row" alignItems="center" style={{justifyContent: "space-between"}}>
+                        <Grid container spacing={1} justify="space-between">
+                          <Grid item xs={12} lg={6} xl={4}>
+                            <TextField label="nodes" id="num-nodes"
+                              type="number" InputProps={{ inputProps: { min: 0, step: 1 } }}
+                              defaultValue={5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
+                              variant="outlined" style={{marginTop: 5, textAlign: "left"}} color="secondary" size="small"/>
+                          </Grid>
+                          <Grid item xs={12} lg={6} xl={4}>
+                            <TextField label="edges" id="num-edges"
+                              type="number" InputProps={{ inputProps: { min: 0, step: 1 } }}
+                              defaultValue={5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
+                              variant="outlined" style={{marginTop: 5, textAlign: "left"}} color="secondary" size="small"/>
+                          </Grid>
+                          <Grid item xs={12} xl={4}>
+                            Random Graph
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </TaskbarButton>
+                  </Tooltip>
                 </Box>
               </Container>
               <Divider variant = "middle"/>
@@ -219,27 +251,27 @@ class GraphTaskbar extends Component {
                   <Tooltip title={
                     <React.Fragment>
                       <Typography variant="body2" gutterBottom>
-                        Calculates and displays the smallest set of nodes needed to activate the entire graph
+                        Calculates and displays the smallest set of nodes needed to activate the entire graph.
                       </Typography>
                     </React.Fragment>} placement="right">
                     <TaskbarButton variant="contained" onClick={this.getMinContagiousSet} data-tour="min-contagious-set-button">
-                    Minimum Contagious Set
+                      Minimum Contagious Set
                     </TaskbarButton>
                   </Tooltip>
                   <Tooltip title={
                     <React.Fragment>
                       <Typography variant="body2" gutterBottom>
-                        Calculates and displays the smallest set of nodes needed to activate the entire graph using a greedy algorithm.
+                        Approximates the smallest set of nodes needed to activate the entire graph using a greedy algorithm.
                       </Typography>
                     </React.Fragment>} placement="right">
                     <TaskbarButton variant="contained" onClick={this.getGreedyContagiousSet} data-tour="greedy-contagious-set-button">
-                    Greedy Contagious Set
+                      Greedy Contagious Set
                     </TaskbarButton>
                   </Tooltip>
                   <Tooltip title={
                     <React.Fragment>
                       <Typography variant="body2" gutterBottom>
-                        Makes each node a seed independently at random with the probability p.
+                        Chooses a seed set uniformly at random from all seed sets of the given size.
                       </Typography>
                     </React.Fragment>
                   } placement="right">
@@ -247,13 +279,13 @@ class GraphTaskbar extends Component {
                       <Box display="flex" flexDirection="row" alignItems="center" style={{justifyContent: "space-between"}}>
                         <Grid container spacing={1}>
                           <Grid item xs={12} lg={6} alignItems="left">
-                            <TextField label="probability" id="seed-probability"
-                              type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }}
-                              defaultValue={0.5} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
+                            <TextField label="seeds" id="num-seeds"
+                              type="number" InputProps={{ inputProps: { min: 0, step: 1 } }}
+                              defaultValue={2} onClick={this.stopPropagation} onMouseDown={this.stopPropagation}
                               variant="outlined" style={{marginTop: 5, textAlign: "left"}} color="secondary" size="small"/>
                           </Grid>
                           <Grid item xs={12} lg={6}>
-                            p-Random Seed Set
+                            Random Seed Set
                           </Grid>
                         </Grid>
                       </Box>
@@ -292,24 +324,24 @@ class GraphTaskbar extends Component {
                         <RotateLeftIcon/>
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title={<React.Fragment>
-                      <Typography variant="body2" gutterBottom>
-                        Return to the first iteration
-                      </Typography>
-                    </React.Fragment>} placement="left" variant="body2">
-                      <IconButton disabled={true}>
-                        <FirstPageIcon/>
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title={<React.Fragment>
-                      <Typography variant="body2" gutterBottom>
-                        Go back an iteration
-                      </Typography>
-                    </React.Fragment>} placement="left" variant="body2">
-                      <IconButton disabled={true}>
-                        <ChevronLeftIcon/>
-                      </IconButton>
-                    </Tooltip>
+                    {/* <Tooltip title={<React.Fragment>*/}
+                    {/*  <Typography variant="body2" gutterBottom>*/}
+                    {/*    Return to the first iteration*/}
+                    {/*  </Typography>*/}
+                    {/* </React.Fragment>} placement="left" variant="body2">*/}
+                    {/*  <IconButton disabled={true}>*/}
+                    {/*    <FirstPageIcon/>*/}
+                    {/*  </IconButton>*/}
+                    {/* </Tooltip>*/}
+                    {/* <Tooltip title={<React.Fragment>*/}
+                    {/*  <Typography variant="body2" gutterBottom>*/}
+                    {/*    Go back an iteration*/}
+                    {/*  </Typography>*/}
+                    {/* </React.Fragment>} placement="left" variant="body2">*/}
+                    {/*  <IconButton disabled={true}>*/}
+                    {/*    <ChevronLeftIcon/>*/}
+                    {/*  </IconButton>*/}
+                    {/* </Tooltip>*/}
                     <Tooltip title={<React.Fragment>
                       <Typography variant="body2" gutterBottom>
                         Perform a single iteration
@@ -330,22 +362,22 @@ class GraphTaskbar extends Component {
                     </Tooltip>
                   </ButtonGroup>
                   <Grid container alignItems="center" spacing={1}>
-                    <Grid item xs={8} style={{textAlign: "right"}}>
+                    <Grid item xs={7} style={{textAlign: "right"}}>
                       <Typography variant="overline" gutterBottom>Iteration:</Typography>
                     </Grid>
-                    <Grid item xs={4} style={{textAlign: "left"}}>
+                    <Grid item xs={5} style={{textAlign: "left"}}>
                       <Typography variant="caption">{this.props.iteration}</Typography>
                     </Grid>
-                    <Grid item xs={8} style={{textAlign: "right"}}>
+                    <Grid item xs={7} style={{textAlign: "right"}}>
                       <Typography variant="overline" gutterBottom>Active Vertices:</Typography>
                     </Grid>
-                    <Grid item xs={4} style={{textAlign: "left"}}>
+                    <Grid item xs={5} style={{textAlign: "left"}}>
                       <Typography variant="caption" gutterBottom>{this.props.activeVerticesCount}</Typography>
                     </Grid>
-                    <Grid item xs={8} style={{textAlign: "right"}}>
+                    <Grid item xs={7} style={{textAlign: "right"}}>
                       <Typography variant="overline" gutterBottom>Inactive Vertices:</Typography>
                     </Grid>
-                    <Grid item xs={4} style={{textAlign: "left"}}>
+                    <Grid item xs={5} style={{textAlign: "left"}}>
                       <Typography variant="caption" gutterBottom>{this.props.inactiveVerticesCount}</Typography>
                     </Grid>
                   </Grid>
@@ -355,22 +387,22 @@ class GraphTaskbar extends Component {
               <Container>
                 <Typography variant="h3">Legend</Typography>
                 <Grid container spacing={1}>
-                  <Grid item xs={8} style={{textAlign: "right"}}>
+                  <Grid item xs={7} style={{textAlign: "right"}}>
                     <Typography variant="overline" gutterBottom>Inactive</Typography>
                   </Grid>
-                  <Grid item xs={4} style={{textAlign: "left", alignContent: "center"}}>
+                  <Grid item xs={5} style={{textAlign: "left", alignContent: "center"}}>
                     <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.inactive.main}} />
                   </Grid>
-                  <Grid item xs={8} style={{textAlign: "right"}}>
+                  <Grid item xs={7} style={{textAlign: "right"}}>
                     <Typography variant="overline" gutterBottom>Active</Typography>
                   </Grid>
-                  <Grid item xs={4} style={{textAlign: "left"}}>
+                  <Grid item xs={5} style={{textAlign: "left"}}>
                     <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.active.main}} />
                   </Grid>
-                  <Grid item xs={8} style={{textAlign: "right"}}>
+                  <Grid item xs={7} style={{textAlign: "right"}}>
                     <Typography variant="overline" gutterBottom>Recently Activated</Typography>
                   </Grid>
-                  <Grid item xs={4} style={{textAlign: "left"}}>
+                  <Grid item xs={5} style={{textAlign: "left"}}>
                     <div style={{width: 14, height: 14, marginTop: 7, borderRadius: "50%", display: "inline-block", backgroundColor: this.props.theme.palette.recentlyActive.main}}/>
                   </Grid>
                 </Grid>
@@ -386,6 +418,7 @@ class GraphTaskbar extends Component {
 
 GraphTaskbar.propTypes = {
   readAdjacencyMatrix: PropTypes.func,
+  randomGraph: PropTypes.func,
   getMinContagiousSet: PropTypes.func,
   getGreedyContagiousSet: PropTypes.func,
   randomSeedSet: PropTypes.func,
@@ -417,7 +450,8 @@ GraphTaskbar.propTypes = {
         main: PropTypes.string.isRequired
       }).isRequired
     }).isRequired
-  }).isRequired
+  }).isRequired,
+  height: PropTypes.number.isRequired
 };
 
 export default withTheme(GraphTaskbar);
